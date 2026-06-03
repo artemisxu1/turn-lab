@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Publications — Turn Lab</title>
+<meta name="description" content="Selected publications from Dr. Rachel E. Turn and the Turn Lab, with links to Google Scholar." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ===================== SVG SPRITE ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg-cell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15a3b2"/><stop offset="1" stop-color="#0a4a54"/>
+    </linearGradient>
+    <symbol id="turnmark" viewBox="0 0 48 48">
+      <clipPath id="cellHalf"><path d="M24 2 A22 22 0 0 0 24 46 Z"/></clipPath>
+      <g clip-path="url(#cellHalf)">
+        <rect x="1" y="1" width="23" height="46" fill="url(#lg-cell)"/>
+        <circle cx="9" cy="13" r="1.7" fill="#bfeef2" opacity=".85"/>
+        <circle cx="17" cy="37" r="1.5" fill="#bfeef2" opacity=".8"/>
+        <circle cx="8" cy="31" r="1.3" fill="#bfeef2" opacity=".7"/>
+        <circle cx="19" cy="10" r="1.2" fill="#bfeef2" opacity=".7"/>
+        <circle cx="14" cy="24" r="6.6" fill="#eafaff" opacity=".94"/>
+        <circle cx="14" cy="24" r="2.6" fill="#0a4a54"/>
+      </g>
+      <path d="M24 2 A22 22 0 0 0 24 46" fill="none" stroke="#0a4a54" stroke-width="2.4"/>
+      <g stroke="#e2864a" stroke-width="1.7" stroke-linecap="round" fill="none">
+        <path d="M24 24 L34 12"/><path d="M24 24 L41 26"/><path d="M24 24 L33 39"/><path d="M34 12 L41 26"/><path d="M41 26 L33 39"/>
+      </g>
+      <g fill="#e2864a"><circle cx="34" cy="12" r="2.7"/><circle cx="41" cy="26" r="2.7"/><circle cx="33" cy="39" r="2.7"/></g>
+      <circle cx="24" cy="24" r="3.5" fill="#0a4a54"/><circle cx="24" cy="24" r="1.4" fill="#eafaff"/>
+    </symbol>
+    <symbol id="netmotif" viewBox="0 0 1200 400">
+      <g stroke="#7fd3da" stroke-width="1.1" opacity="0.55">
+        <line x1="600" y1="200" x2="300" y2="60"/><line x1="600" y1="200" x2="900" y2="60"/>
+        <line x1="600" y1="200" x2="170" y2="320"/><line x1="600" y1="200" x2="1020" y2="330"/>
+        <line x1="300" y1="60" x2="120" y2="210"/><line x1="900" y1="60" x2="1080" y2="210"/>
+        <line x1="300" y1="60" x2="600" y2="200"/><line x1="120" y1="210" x2="170" y2="320"/>
+        <line x1="1080" y1="210" x2="1020" y2="330"/><line x1="300" y1="60" x2="900" y2="60"/>
+      </g>
+      <g fill="#bfeef2">
+        <circle cx="600" cy="200" r="6" fill="#e2864a"/>
+        <circle cx="300" cy="60" r="4"/><circle cx="900" cy="60" r="4"/>
+        <circle cx="170" cy="320" r="4"/><circle cx="1020" cy="330" r="4"/>
+        <circle cx="120" cy="210" r="3"/><circle cx="1080" cy="210" r="3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="Turn Lab home">
+      <svg class="brandmark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+      Turn Lab
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="research.html">Research</a>
+      <a href="people.html">People</a>
+      <a href="publications.html" class="active" aria-current="page">Publications</a>
+      <a href="news.html">News</a>
+      <a href="join.html">Join</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<!-- ===================== PAGE HEAD ===================== -->
+<section class="page-head">
+  <svg class="ph-motif" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#netmotif"/></svg>
+  <div class="wrap">
+    <p class="eyebrow">Publications</p>
+    <h1><a class="pub-heading-link" href="https://scholar.google.com/citations?user=8KMypXsAAAAJ" target="_blank" rel="noopener" style="color:#fff;">Selected publications</a></h1>
+    <p>A complete and current list lives on <a href="https://scholar.google.com/citations?user=8KMypXsAAAAJ" target="_blank" rel="noopener" style="color:#fff;">Google Scholar</a>. <span style="color:var(--accent);font-weight:700;">*</span> denotes co-first author.</p>
+  </div>
+</section>
+
+<!-- ===================== PUBLICATIONS ===================== -->
+<section id="publications">
+  <div class="wrap">
+    <ul class="pub-list reveal">
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">ARF: the most misunderstood GTPase I ever knew. Why study ARF GAPs.</div>
+        <div class="meta">Turn RE, Dacks J, Soubias O, Rosenberg EM, Northup JK, Randazzo PA. <em>Frontiers in Molecular Biosciences</em>, 2025 (in press).</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Multimodal Strategies for Spatiotemporal Profiling of Phosphorylation in Cilia Biology.</div>
+        <div class="meta">Turn RE, Aziz-Zanjani MO, Asthana A, Jackson PK. <em>Journal of Cell Science</em>, 2025 (in press).</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">A CRISPR-based genome-wide screen for adipogenesis reveals new insights into mitotic expansion and lipogenesis.</div>
+        <div class="meta">Turn RE<span class="cofirst">*</span>, Hilgendorf KI, Johnson CT, Han K, Rabiee A, Demeter J, Aziz-Zanjani MO, Cheng R, Domizi P, Zhu Y, Jiang Z, Svensson KJ, Bassik MC, Jackson PK. <em>Genes &amp; Development</em>, 2025.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Synchronized temporal-spatial analysis via microscopy and phosphoproteomics (STAMP) of quiescence.</div>
+        <div class="meta">Aziz-Zanjani MO<span class="cofirst">*</span>, Turn RE<span class="cofirst">*</span>, Asthana A, Linde-Garelli KY, Xu LA, Labrie LE, Mobedi M, Jackson PK. <em>Science Advances</em>, 2025;11(17):eadt9712. <a href="https://doi.org/10.1126/sciadv.adt9712" target="_blank" rel="noopener">doi:10.1126/sciadv.adt9712</a></div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Antibody characterization is critical to enhance reproducibility in biomedical research.</div>
+        <div class="meta">Kahn RA, … Turn RE, … et al. <em>eLife</em>, 2024;13:e100211. <a href="https://doi.org/10.7554/eLife.100211" target="_blank" rel="noopener">doi:10.7554/eLife.100211</a></div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">SARS-CoV-2 replication in airway epithelia requires motile cilia and microvillar reprogramming.</div>
+        <div class="meta">Wu CT, … Turn RE, … Jackson PK. <em>Cell</em>, 2023;186(1):112-130.e20.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">The ARF GAPs ELMOD1 and ELMOD3 act at the Golgi and cilia to regulate ciliogenesis and ciliary protein traffic.</div>
+        <div class="meta">Turn RE<span class="cofirst">*</span>, Hu Y, Dewees SI, et al. <em>Molecular Biology of the Cell</em>, 2022;33(7).</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Phylogenetic profiling and cellular analyses of ARL16 reveal roles in traffic of IFT140 and INPP5E.</div>
+        <div class="meta">Dewees SI, Vargová R, Hardin KR, Turn RE, et al. <em>Molecular Biology of the Cell</em>, 2022;33(4):ar33.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Roles for ELMOD2 and Rootletin in ciliogenesis.</div>
+        <div class="meta">Turn RE, Linnert J, Gigante ED, Wolfrum U, Caspary T, Kahn RA. <em>Molecular Biology of the Cell</em>, 2021;32(8):800-822.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">The ARF GAP ELMOD2 acts with different GTPases to regulate centrosomal microtubule nucleation and cytokinesis.</div>
+        <div class="meta">Turn RE, East MP, Prekeris R, Kahn RA. <em>Molecular Biology of the Cell</em>, 2020;31(18):2070-2091.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">ELMOD2 regulates mitochondrial fusion in a mitofusin-dependent manner, downstream of ARL2.</div>
+        <div class="meta">Schiavon CR<span class="cofirst">*</span>, Turn RE<span class="cofirst">*</span>, Newman LE, Kahn RA. <em>Molecular Biology of the Cell</em>, 2019;30(10):1198-1213.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Meeting report — Small GTPases in membrane processes: FASEB summer research conference.</div>
+        <div class="meta">Turn RE, D'Souza RS, Wall AA. <em>Traffic</em>, 2019;20(3):259-262.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">The ARL2 GTPase regulates mitochondrial fusion from the intermembrane space.</div>
+        <div class="meta">Newman LE, Schiavon CR, Turn RE, Kahn RA. <em>Cellular Logistics</em>, 2017;7(3):e1340104.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Higher order signaling: ARL2 as regulator of both mitochondrial fusion and microtubule dynamics.</div>
+        <div class="meta">Francis JW, Turn RE, Newman LE, Schiavon C, Kahn RA. <em>Small GTPases</em>, 2016;7(4):188-196.</div>
+      </div></li>
+      <li><span class="pub-bullet"></span><div>
+        <div class="title">Autocrine selection of a GLP-1R G-protein biased agonist with potent antidiabetic effects.</div>
+        <div class="meta">Zhang H, … Turn R, … Lerner RA. <em>Nature Communications</em>, 2015;6:8918.</div>
+      </div></li>
+    </ul>
+
+    <h3 class="pub-subhead reveal">In preparation &amp; preprints</h3>
+    <ul class="pub-list reveal">
+      <li><span class="pub-bullet" style="background:var(--teal);"></span><div>
+        <div class="title">Higher Order Signaling of GPCR-mediated Glucose Stimulated Insulin Secretion in Pancreatic Beta Cells via metabolic STAMP.</div>
+        <div class="meta">Aziz-Zanjani MO, Turn RE, et al. <em>bioRxiv</em> (preprint).</div>
+      </div></li>
+      <li><span class="pub-bullet" style="background:var(--teal);"></span><div>
+        <div class="title">TULP3 Regulates Axonemogenesis and Golgi-to-Cilia Membrane Traffic.</div>
+        <div class="meta">Turn RE, et al. In preparation.</div>
+      </div></li>
+      <li><span class="pub-bullet" style="background:var(--teal);"></span><div>
+        <div class="title">ARF GEFs BIG1 and BIG2 have opposing roles in ciliogenesis.</div>
+        <div class="meta">Turn RE, et al. In preparation.</div>
+      </div></li>
+    </ul>
+
+    <div class="scholar-cta reveal">
+      <a class="btn btn-teal" href="https://scholar.google.com/citations?user=8KMypXsAAAAJ" target="_blank" rel="noopener">View Google Scholar profile →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <svg class="foot-mark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+    <p>Turn Lab · University of Wisconsin–Madison<br/>
+    Signaling in time and space &nbsp;·&nbsp; cell fate change</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
