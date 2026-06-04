@@ -50,11 +50,23 @@
   }
   function resize() {
     const rect = canvas.getBoundingClientRect();
+    const newW = rect.width, newH = rect.height;
+    // ignore no-op resizes
+    if (newW === w && newH === h) return;
+    // mobile scroll only changes height (address bar) — don't rebuild, just keep particles in bounds
+    const widthChanged = Math.abs(newW - w) > 2;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width; h = rect.height;
+    w = newW; h = newH;
     canvas.width = w * dpr; canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    init();
+    if (!parts.length || widthChanged) {
+      init();
+    } else {
+      for (const p of parts) {
+        if (p.x > w - p.r) p.x = w - p.r; else if (p.x < p.r) p.x = p.r;
+        if (p.y > h - p.r) p.y = h - p.r; else if (p.y < p.r) p.y = p.r;
+      }
+    }
   }
   function frame() {
     ctx.clearRect(0, 0, w, h);
