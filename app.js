@@ -128,9 +128,12 @@
     mouse.y = pt.clientY - rect.top;
     mouse.active = true;
   }
-  hero.addEventListener('mousemove', setMouse);
-  hero.addEventListener('touchmove', setMouse, { passive: true });
-  hero.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = mouse.y = -9999; });
+  // Only react to a real cursor — never to touch (avoids glitches / scroll fights on mobile)
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (finePointer) {
+    hero.addEventListener('mousemove', setMouse);
+    hero.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = mouse.y = -9999; });
+  }
   window.addEventListener('resize', resize);
   resize();
   if (reduce) { frame(); cancelAnimationFrame(raf); }  // draw one static frame
