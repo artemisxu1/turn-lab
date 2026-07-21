@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lab Members — Turn Lab</title>
+<meta name="description" content="Password-protected internal resources for Turn Lab members." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ===================== SVG SPRITE ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg-cell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15a3b2"/><stop offset="1" stop-color="#0a4a54"/>
+    </linearGradient>
+    <symbol id="turnmark" viewBox="0 0 48 48">
+      <clipPath id="cellHalf"><path d="M24 2 A22 22 0 0 0 24 46 Z"/></clipPath>
+      <g clip-path="url(#cellHalf)">
+        <rect x="1" y="1" width="23" height="46" fill="url(#lg-cell)"/>
+        <circle cx="9" cy="13" r="1.7" fill="#bfeef2" opacity=".85"/>
+        <circle cx="17" cy="37" r="1.5" fill="#bfeef2" opacity=".8"/>
+        <circle cx="8" cy="31" r="1.3" fill="#bfeef2" opacity=".7"/>
+        <circle cx="19" cy="10" r="1.2" fill="#bfeef2" opacity=".7"/>
+        <circle cx="14" cy="24" r="6.6" fill="#eafaff" opacity=".94"/>
+        <circle cx="14" cy="24" r="2.6" fill="#0a4a54"/>
+      </g>
+      <path d="M24 2 A22 22 0 0 0 24 46" fill="none" stroke="#0a4a54" stroke-width="2.4"/>
+      <g stroke="#e2864a" stroke-width="1.7" stroke-linecap="round" fill="none">
+        <path d="M24 24 L34 12"/><path d="M24 24 L41 26"/><path d="M24 24 L33 39"/><path d="M34 12 L41 26"/><path d="M41 26 L33 39"/>
+      </g>
+      <g fill="#e2864a"><circle cx="34" cy="12" r="2.7"/><circle cx="41" cy="26" r="2.7"/><circle cx="33" cy="39" r="2.7"/></g>
+      <circle cx="24" cy="24" r="3.5" fill="#0a4a54"/><circle cx="24" cy="24" r="1.4" fill="#eafaff"/>
+    </symbol>
+    <symbol id="netmotif" viewBox="0 0 1200 400">
+      <g stroke="#7fd3da" stroke-width="1.1" opacity="0.55">
+        <line x1="600" y1="200" x2="300" y2="60"/><line x1="600" y1="200" x2="900" y2="60"/>
+        <line x1="600" y1="200" x2="170" y2="320"/><line x1="600" y1="200" x2="1020" y2="330"/>
+        <line x1="300" y1="60" x2="120" y2="210"/><line x1="900" y1="60" x2="1080" y2="210"/>
+        <line x1="300" y1="60" x2="600" y2="200"/><line x1="120" y1="210" x2="170" y2="320"/>
+        <line x1="1080" y1="210" x2="1020" y2="330"/><line x1="300" y1="60" x2="900" y2="60"/>
+      </g>
+      <g fill="#bfeef2">
+        <circle cx="600" cy="200" r="6" fill="#e2864a"/>
+        <circle cx="300" cy="60" r="4"/><circle cx="900" cy="60" r="4"/>
+        <circle cx="170" cy="320" r="4"/><circle cx="1020" cy="330" r="4"/>
+        <circle cx="120" cy="210" r="3"/><circle cx="1080" cy="210" r="3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="Turn Lab home">
+      <svg class="brandmark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+      Turn Lab
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="research.html">Research</a>
+      <a href="philosophy.html">Philosophy</a>
+      <a href="people.html">People</a>
+      <a href="publications.html">Publications</a>
+      <a href="news.html">News</a>
+      <a href="join.html">Join</a>
+      <a href="contact.html">Contact</a>
+      <a href="members.html" class="nav-lock active"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2.5"/></svg>Members</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<!-- ===================== PAGE HEAD ===================== -->
+<section class="page-head">
+  <svg class="ph-motif" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#netmotif"/></svg>
+  <div class="wrap">
+    <p class="eyebrow">Lab Members Only</p>
+    <h1>Lab resources</h1>
+    <p>Protocols, SOPs, reagents, sample locations, and internal links. Ask Dr. Turn for the lab password.</p>
+  </div>
+</section>
+
+<!-- ===================== GATE ===================== -->
+<section id="gate">
+  <div class="wrap">
+    <div class="gate-card reveal" id="gateCard">
+      <svg class="gate-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2.5"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/>
+      </svg>
+      <h2>Members sign in</h2>
+      <p>This area is for Turn Lab members. Enter the shared lab password to continue.</p>
+      <form id="gateForm" autocomplete="off">
+        <label class="sr-only" for="gatePass">Lab password</label>
+        <input type="password" id="gatePass" name="password" placeholder="Lab password" autocomplete="current-password" />
+        <button class="btn btn-primary" type="submit">Unlock</button>
+      </form>
+      <p class="gate-error" id="gateError" role="alert" hidden>That password isn&rsquo;t right &mdash; try again.</p>
+      <p class="gate-note">Forgot it? Email <span class="placeholder">[PLACEHOLDER — lab email]</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROTECTED CONTENT ===================== -->
+<div id="memberArea" hidden>
+
+<section id="resources" style="padding-top:0;">
+  <div class="wrap">
+    <div class="member-bar">
+      <span class="member-badge">Signed in as a lab member</span>
+      <button class="linkbtn" id="signOut" type="button">Sign out</button>
+    </div>
+
+    <div class="section-head">
+      <p class="eyebrow">Internal</p>
+      <h2>Everything you need at the bench</h2>
+      <p class="lead">Living documents &mdash; if something is out of date or missing, tell Dr. Turn and we&rsquo;ll fix it.</p>
+    </div>
+
+    <div class="res-grid">
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="12" y="7" width="24" height="34" rx="3"/><line x1="18" y1="17" x2="30" y2="17"/><line x1="18" y1="24" x2="30" y2="24"/><line x1="18" y1="31" x2="26" y2="31"/></svg>
+        <h3>Protocols</h3>
+        <p>Bench protocols for transfection, immunofluorescence, serum starvation / G0 induction, cilia scoring, and proximity labeling.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — protocol link]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — protocol link]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — protocol link]</span></li>
+        </ul>
+      </article>
+
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 6v12L8 34a6 6 0 0 0 5.6 8h20.8A6 6 0 0 0 40 34l-6-16V6"/><line x1="12" y1="6" x2="36" y2="6"/><line x1="11" y1="28" x2="37" y2="28"/></svg>
+        <h3>SOPs &amp; safety</h3>
+        <p>Standard operating procedures, chemical hygiene plan, biosafety, waste handling, and lab-specific training checklists.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — SOP link]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — safety / training link]</span></li>
+        </ul>
+      </article>
+
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M24 6v10"/><path d="M24 16c-7 0-12 5-12 12s5 14 12 14 12-6 12-14-5-12-12-12z"/><path d="M17 30h14"/><circle cx="21" cy="35" r="1.6" fill="currentColor" stroke="none"/><circle cx="27" cy="34" r="1.2" fill="currentColor" stroke="none"/></svg>
+        <h3>Sample &amp; strain locations</h3>
+        <p>Where things live: &minus;80&deg;C boxes, LN2 tower positions, cell line inventory, plasmid and antibody boxes.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — freezer inventory sheet]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — cell line / stock database]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — plasmid map repository]</span></li>
+        </ul>
+      </article>
+
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="16" cy="16" r="6"/><circle cx="33" cy="21" r="5"/><circle cx="22" cy="34" r="5.5"/><line x1="21" y1="19" x2="28" y2="21"/><line x1="18" y1="22" x2="21" y2="29"/><line x1="30" y1="25" x2="25" y2="30"/></svg>
+        <h3>Reagents &amp; ordering</h3>
+        <p>Antibody and reagent catalog numbers, preferred vendors, standing orders, and how to request a purchase.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — reagent / antibody list]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — ordering form or contact]</span></li>
+        </ul>
+      </article>
+
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 34V14a2 2 0 0 1 2-2h11l3 4h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z"/><line x1="20" y1="26" x2="30" y2="26" stroke-width="2.6"/></svg>
+        <h3>Methods &amp; analysis</h3>
+        <p>Mass-spec sample prep, imaging acquisition settings, analysis pipelines, and code repositories.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — methods doc]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — analysis pipeline / GitHub link]</span></li>
+        </ul>
+      </article>
+
+      <article class="res-card">
+        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="7" y="10" width="34" height="30" rx="3"/><line x1="7" y1="19" x2="41" y2="19"/><line x1="16" y1="6" x2="16" y2="13"/><line x1="32" y1="6" x2="32" y2="13"/><circle cx="17" cy="28" r="1.8" fill="currentColor" stroke="none"/><circle cx="24" cy="28" r="1.8" fill="currentColor" stroke="none"/></svg>
+        <h3>Lab logistics</h3>
+        <p>Meeting schedule, equipment sign-up calendars, core facility booking, onboarding checklist, and shared drive.</p>
+        <ul class="res-links">
+          <li><span class="placeholder">[PLACEHOLDER — lab calendar]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — shared drive / Box folder]</span></li>
+          <li><span class="placeholder">[PLACEHOLDER — onboarding checklist]</span></li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="res-footnote">Keep internal links inside institutional accounts (UW Box, Google Drive, Benchling). Nothing here should contain protected or personally identifying data.</p>
+  </div>
+</section>
+
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <svg class="foot-mark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+    <p>Turn Lab · University of Wisconsin–Madison<br/>
+    Signaling in time and space &nbsp;·&nbsp; cell fate change</p>
+    <p style="margin-top:18px;font-size:.62rem;color:rgba(255,255,255,.35);">Website courtesy of Lucy Artemis Xu</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="members.js"></script>
+</body>
+</html>

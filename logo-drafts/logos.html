@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Turn Lab — logo drafts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink:#e7f1f2; --teal:#37c6d4; --teal-deep:#0b3a43; --teal-soft:#2c4f59;
+    --accent:#ef9356; --bg:#07191e; --paper:#16363f; --muted:#9fb9bd;
+    --line:rgba(255,255,255,.09);
+    /* logo colour tokens — symbols read these, so a container can restyle a mark */
+    --c1:#0f5563;   /* cell body fill      */
+    --c2:#bfeef2;   /* nucleus / highlights */
+    --c3:#ef9356;   /* protein network      */
+    --c4:#37c6d4;   /* membrane / outline   */
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6; }
+  h1,h2,h3 { font-family:"Fraunces",Georgia,serif; line-height:1.15; font-weight:600; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 24px; }
+  header.top { padding:56px 0 28px; border-bottom:1px solid var(--line); }
+  header.top h1 { font-size:2.4rem; margin:0 0 10px; }
+  header.top p { color:var(--muted); max-width:64ch; margin:0; }
+  .note { font-size:.9rem; color:var(--muted); }
+
+  .design { padding:56px 0; border-bottom:1px solid var(--line); }
+  .design h2 { font-size:1.7rem; margin:0 0 6px; }
+  .design .brief { color:var(--muted); max-width:70ch; margin:0 0 32px; }
+  .eyebrow { font-size:.75rem; letter-spacing:.16em; text-transform:uppercase; color:var(--teal); font-weight:600; margin:0 0 8px; }
+
+  .row { display:flex; flex-wrap:wrap; gap:20px; align-items:stretch; }
+  .panel { background:var(--paper); border:1px solid var(--teal-soft); border-radius:18px; padding:26px;
+           display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
+  .panel.light { background:#f4fafb; border-color:#cfe4e7; }
+  .panel .cap { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .panel.light .cap { color:#5b7b80; }
+
+  .sizes { display:flex; align-items:flex-end; gap:22px; }
+  .sizes svg { display:block; }
+
+  /* lockup */
+  .lockup { display:flex; align-items:center; gap:14px; font-family:"Fraunces",serif; font-weight:600; font-size:1.5rem; }
+  .lockup.light-txt { color:#0b3a43; }
+  .lockup small { display:block; font-family:"Inter",sans-serif; font-weight:500; font-size:.6rem;
+                  letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  .lockup.light-txt small { color:#5b7b80; }
+
+  /* colour variants driven by the shared tokens */
+  .var-light { --c1:#0f5563; --c2:#eafaff; --c3:#d9702f; --c4:#0f5563; }
+  .var-mono-dark { --c1:#e7f1f2; --c2:#07191e; --c3:#e7f1f2; --c4:#e7f1f2; }
+  .var-mono-light { --c1:#0b3a43; --c2:#f4fafb; --c3:#0b3a43; --c4:#0b3a43; }
+  .var-teal { --c1:#0b3a43; --c2:#bfeef2; --c3:#37c6d4; --c4:#37c6d4; }
+
+  .callout { background:rgba(55,198,212,.08); border:1px solid var(--teal-soft); border-radius:14px;
+             padding:18px 22px; margin-top:28px; font-size:.92rem; color:var(--muted); }
+  .callout strong { color:var(--ink); }
+
+  /* ---- animated Design 3 ---- */
+  .stage { position:relative; width:170px; height:170px; }
+  .lay { position:absolute; inset:0; }
+  .disc, .runner { transform-origin:60px 60px; }
+  .lay-cycle { animation:cycleLife 9s linear infinite; }
+  .lay-cycle .disc { animation:spin 9s cubic-bezier(.3,0,.2,1) infinite; }
+  .lay-escape { animation:escape 9s linear infinite; }
+  .lay-net { animation:netIn 9s linear infinite; opacity:0; }
+
+  @keyframes spin { 0%{transform:rotate(0)} 58%,100%{transform:rotate(720deg)} }
+  @keyframes cycleLife {
+    0%,58% { opacity:1; transform:scale(1); }
+    76%    { opacity:0; transform:scale(.82); }
+    93%    { opacity:0; transform:scale(.9); }
+    100%   { opacity:1; transform:scale(1); }
+  }
+  @keyframes escape {
+    0%,57%  { opacity:0; transform:translate(0,0) scale(.7); }
+    62%     { opacity:1; transform:translate(14px,-13px) scale(1); }
+    74%     { opacity:1; transform:translate(46px,-42px) scale(1); }
+    82%,100%{ opacity:0; transform:translate(58px,-53px) scale(1); }
+  }
+  @keyframes netIn {
+    0%,64% { opacity:0; transform:scale(.88); }
+    80%    { opacity:1; transform:scale(1); }
+    92%    { opacity:1; transform:scale(1); }
+    99%,100%{ opacity:0; transform:scale(.88); }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .lay-cycle,.lay-cycle .disc,.lay-escape,.lay-net { animation:none; }
+    .lay-escape,.lay-net { opacity:0; }
+  }
+  footer { padding:44px 0 70px; color:var(--muted); font-size:.86rem; }
+</style>
+</head>
+<body>
+
+<!-- ============ SYMBOL DEFINITIONS ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+
+  <!-- ---------- DESIGN 1 — "T-crossroads": half-cell rotated to the bottom, protein network on top forming a T ---------- -->
+  <symbol id="d1" viewBox="0 0 120 120">
+    <!-- lower half-disc: the cell -->
+    <path d="M16 60 A44 44 0 0 0 104 60 Z" fill="var(--c1)"/>
+    <!-- nucleus + cytoplasmic specks -->
+    <circle cx="60" cy="82" r="13" fill="var(--c2)" opacity=".95"/>
+    <circle cx="60" cy="82" r="5"  fill="var(--c1)"/>
+    <circle cx="33" cy="72" r="2.6" fill="var(--c2)" opacity=".75"/>
+    <circle cx="88" cy="70" r="2.2" fill="var(--c2)" opacity=".7"/>
+    <circle cx="44" cy="95" r="2"   fill="var(--c2)" opacity=".6"/>
+    <circle cx="79" cy="93" r="2.4" fill="var(--c2)" opacity=".65"/>
+    <!-- membrane -->
+    <path d="M16 60 A44 44 0 0 0 104 60" fill="none" stroke="var(--c4)" stroke-width="3.4" stroke-linecap="round"/>
+    <!-- protein network above, drawn as a T: crossbar + stem into the cell -->
+    <g stroke="var(--c3)" stroke-width="3.4" stroke-linecap="round" fill="none">
+      <path d="M26 24 H94"/>
+      <path d="M60 24 V60"/>
+      <path d="M26 24 L60 42"/>
+      <path d="M94 24 L60 42"/>
+    </g>
+    <g fill="var(--c3)">
+      <circle cx="26" cy="24" r="6.5"/>
+      <circle cx="94" cy="24" r="6.5"/>
+      <circle cx="60" cy="42" r="5"/>
+    </g>
+    <!-- the decision point, sitting on the membrane -->
+    <circle cx="60" cy="60" r="7" fill="var(--c4)"/>
+    <circle cx="60" cy="60" r="2.8" fill="var(--c2)"/>
+  </symbol>
+
+  <!-- ---------- DESIGN 2 — "signal network": simpler, unmistakably a protein interaction network ---------- -->
+  <symbol id="d2" viewBox="0 0 120 120">
+    <!-- left half-cell reduced to a single confident arc -->
+    <path d="M60 12 A48 48 0 0 0 60 108" fill="none" stroke="var(--c4)" stroke-width="5" stroke-linecap="round"/>
+    <!-- network: one hub, four partners, edges of two weights (strong / weak interaction) -->
+    <g stroke="var(--c3)" stroke-linecap="round" fill="none">
+      <path d="M60 60 L96 34" stroke-width="4"/>
+      <path d="M60 60 L102 66" stroke-width="4"/>
+      <path d="M60 60 L88 94" stroke-width="4"/>
+      <path d="M96 34 L102 66" stroke-width="2" stroke-dasharray="1 7"/>
+      <path d="M102 66 L88 94" stroke-width="2" stroke-dasharray="1 7"/>
+    </g>
+    <g fill="var(--c3)">
+      <circle cx="96" cy="34" r="9"/>
+      <circle cx="102" cy="66" r="7"/>
+      <circle cx="88" cy="94" r="7.5"/>
+    </g>
+    <!-- hub sits on the membrane: the signal entering the cell -->
+    <circle cx="60" cy="60" r="12" fill="var(--c1)"/>
+    <circle cx="60" cy="60" r="12" fill="none" stroke="var(--c4)" stroke-width="3"/>
+    <circle cx="60" cy="60" r="4"  fill="var(--c2)"/>
+  </symbol>
+
+  <!-- ---------- DESIGN 3 — "G0 escape": four cell-cycle phases, each drawn as the cell actually looks ---------- -->
+  <symbol id="d3" viewBox="0 0 120 120">
+    <!-- four 90-degree phase wedges, alternating tint so the quarters read apart -->
+    <g>
+      <path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z" fill="var(--c1)" opacity=".45"/>
+      <path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z" fill="var(--c1)" opacity=".75"/>
+      <path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z" fill="var(--c1)" opacity=".45"/>
+      <path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z" fill="var(--c1)" opacity=".75"/>
+    </g>
+
+    <!-- G1 (top right): one nucleus, one centrosome, the cell simply growing -->
+    <g>
+      <circle cx="77" cy="43" r="9" fill="var(--c2)"/>
+      <circle cx="77" cy="43" r="3.4" fill="var(--c1)"/>
+      <circle cx="66" cy="31" r="2.4" fill="var(--c3)"/>
+    </g>
+
+    <!-- S (bottom right): DNA replicating — a bubble opening in the strand, centrosome duplicated -->
+    <g>
+      <circle cx="77" cy="77" r="9.5" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="1.8" fill="none" stroke-linecap="round">
+        <path d="M70 77 Q77 71.5 84 77"/>
+        <path d="M70 77 Q77 82.5 84 77"/>
+      </g>
+      <circle cx="88" cy="89" r="2.2" fill="var(--c3)"/>
+      <circle cx="93" cy="85" r="2.2" fill="var(--c3)"/>
+    </g>
+
+    <!-- G2 (bottom left): replication done — paired sister chromatids, centrosomes migrating apart -->
+    <g>
+      <circle cx="43" cy="77" r="10" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="2" stroke-linecap="round">
+        <path d="M38 72 V82"/><path d="M41 72 V82"/>
+        <path d="M46 74 V81"/><path d="M49 74 V81"/>
+      </g>
+      <circle cx="30" cy="88" r="2.2" fill="var(--c3)"/>
+      <circle cx="43" cy="92" r="2.2" fill="var(--c3)"/>
+    </g>
+
+    <!-- M (top left): chromosomes on the metaphase plate, spindle fibres from two poles -->
+    <g>
+      <g stroke="var(--c2)" stroke-width="1.1" opacity=".85" fill="none" stroke-linecap="round">
+        <path d="M28 33 L41 41"/><path d="M28 33 L40 45"/><path d="M28 33 L37 47"/>
+        <path d="M56 51 L45 44"/><path d="M56 51 L45 48"/><path d="M56 51 L42 50"/>
+      </g>
+      <g fill="var(--c3)"><circle cx="27" cy="32" r="2.6"/><circle cx="57" cy="52" r="2.6"/></g>
+      <g stroke="var(--c2)" stroke-width="2.6" stroke-linecap="round">
+        <path d="M39 39 L45 47"/><path d="M45 39 L39 47"/>
+        <path d="M36 46 L42 54"/><path d="M42 46 L36 54"/>
+      </g>
+    </g>
+
+    <!-- phase boundaries + the ring itself -->
+    <g stroke="var(--c4)" stroke-width="1.8" opacity=".55" stroke-linecap="round">
+      <path d="M60 60 V18"/><path d="M60 60 H102"/><path d="M60 60 V102"/><path d="M60 60 H18"/>
+    </g>
+    <circle cx="60" cy="60" r="42" fill="none" stroke="var(--c4)" stroke-width="3"/>
+
+    <!-- the exit: a cell leaving the cycle out of G1, into G0 -->
+    <path d="M86 34 L97 23" stroke="var(--c3)" stroke-width="2.6" stroke-linecap="round"
+          stroke-dasharray="4 5" fill="none"/>
+    <circle cx="104" cy="16" r="9" fill="var(--c1)" stroke="var(--c3)" stroke-width="2.8"/>
+    <circle cx="104" cy="16" r="3.2" fill="var(--c2)"/>
+  </symbol>
+
+  <!-- Design 3 without the escaping cell — used by the animated version -->
+  <symbol id="d3-nocell" viewBox="0 0 120 120">
+    <!-- four 90-degree phase wedges, alternating tint so the quarters read apart -->
+    <g>
+      <path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z" fill="var(--c1)" opacity=".45"/>
+      <path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z" fill="var(--c1)" opacity=".75"/>
+      <path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z" fill="var(--c1)" opacity=".45"/>
+      <path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z" fill="var(--c1)" opacity=".75"/>
+    </g>
+
+    <!-- G1 (top right): one nucleus, one centrosome, the cell simply growing -->
+    <g>
+      <circle cx="77" cy="43" r="9" fill="var(--c2)"/>
+      <circle cx="77" cy="43" r="3.4" fill="var(--c1)"/>
+      <circle cx="66" cy="31" r="2.4" fill="var(--c3)"/>
+    </g>
+
+    <!-- S (bottom right): DNA replicating — a bubble opening in the strand, centrosome duplicated -->
+    <g>
+      <circle cx="77" cy="77" r="9.5" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="1.8" fill="none" stroke-linecap="round">
+        <path d="M70 77 Q77 71.5 84 77"/>
+        <path d="M70 77 Q77 82.5 84 77"/>
+      </g>
+      <circle cx="88" cy="89" r="2.2" fill="var(--c3)"/>
+      <circle cx="93" cy="85" r="2.2" fill="var(--c3)"/>
+    </g>
+
+    <!-- G2 (bottom left): replication done — paired sister chromatids, centrosomes migrating apart -->
+    <g>
+      <circle cx="43" cy="77" r="10" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="2" stroke-linecap="round">
+        <path d="M38 72 V82"/><path d="M41 72 V82"/>
+        <path d="M46 74 V81"/><path d="M49 74 V81"/>
+      </g>
+      <circle cx="30" cy="88" r="2.2" fill="var(--c3)"/>
+      <circle cx="43" cy="92" r="2.2" fill="var(--c3)"/>
+    </g>
+
+    <!-- M (top left): chromosomes on the metaphase plate, spindle fibres from two poles -->
+    <g>
+      <g stroke="var(--c2)" stroke-width="1.1" opacity=".85" fill="none" stroke-linecap="round">
+        <path d="M28 33 L41 41"/><path d="M28 33 L40 45"/><path d="M28 33 L37 47"/>
+        <path d="M56 51 L45 44"/><path d="M56 51 L45 48"/><path d="M56 51 L42 50"/>
+      </g>
+      <g fill="var(--c3)"><circle cx="27" cy="32" r="2.6"/><circle cx="57" cy="52" r="2.6"/></g>
+      <g stroke="var(--c2)" stroke-width="2.6" stroke-linecap="round">
+        <path d="M39 39 L45 47"/><path d="M45 39 L39 47"/>
+        <path d="M36 46 L42 54"/><path d="M42 46 L36 54"/>
+      </g>
+    </g>
+
+    <!-- phase boundaries + the ring itself -->
+    <g stroke="var(--c4)" stroke-width="1.8" opacity=".55" stroke-linecap="round">
+      <path d="M60 60 V18"/><path d="M60 60 H102"/><path d="M60 60 V102"/><path d="M60 60 H18"/>
+    </g>
+    <circle cx="60" cy="60" r="42" fill="none" stroke="var(--c4)" stroke-width="3"/>
+
+</symbol>
+
+  <!-- current mark, for side-by-side comparison -->
+  <symbol id="d0" viewBox="0 0 48 48">
+    <path d="M24 2 A22 22 0 0 0 24 46 Z" fill="var(--c1)"/>
+    <circle cx="14" cy="24" r="6.6" fill="var(--c2)" opacity=".94"/>
+    <circle cx="14" cy="24" r="2.6" fill="var(--c1)"/>
+    <circle cx="9" cy="13" r="1.7" fill="var(--c2)" opacity=".85"/>
+    <circle cx="17" cy="37" r="1.5" fill="var(--c2)" opacity=".8"/>
+    <path d="M24 2 A22 22 0 0 0 24 46" fill="none" stroke="var(--c4)" stroke-width="2.4"/>
+    <g stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round" fill="none">
+      <path d="M24 24 L34 12"/><path d="M24 24 L41 26"/><path d="M24 24 L33 39"/><path d="M34 12 L41 26"/><path d="M41 26 L33 39"/>
+    </g>
+    <g fill="var(--c3)"><circle cx="34" cy="12" r="2.7"/><circle cx="41" cy="26" r="2.7"/><circle cx="33" cy="39" r="2.7"/></g>
+    <circle cx="24" cy="24" r="3.5" fill="var(--c4)"/><circle cx="24" cy="24" r="1.4" fill="var(--c2)"/>
+  </symbol>
+
+</defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Internal — not linked from the site</p>
+    <h1>Turn Lab logo drafts</h1>
+    <p>Three directions, each shown at display size, nav size and favicon size, on dark and light backgrounds, plus a one-colour version. Everything is vector, so any of these can be exported at any size or handed to a printer.</p>
+  </div>
+</header>
+
+<!-- ============ CURRENT ============ -->
+<section class="design">
+  <div class="wrap">
+    <p class="eyebrow">For reference</p>
+    <h2>Current mark</h2>
+    <p class="brief">Half-cell on the left, protein interaction network on the right.</p>
+    <div class="row">
+      <div class="panel"><svg width="120" height="120"><use href="#d0"/></svg><span class="cap">Today</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="56" height="56"><use href="#d0"/></svg>
+        <svg width="32" height="32"><use href="#d0"/></svg>
+        <svg width="20" height="20"><use href="#d0"/></svg>
+      </div><span class="cap">Small sizes</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGN 1 ============ -->
+<section class="design">
+  <div class="wrap">
+    <p class="eyebrow">Design 1</p>
+    <h2>T-crossroads</h2>
+    <p class="brief">The half-cell rotated so it sits along the bottom like ground, with the protein network standing above it. The network's own geometry is the <strong>T</strong> of Turn — a crossbar of interacting partners, and a stem carrying the signal down into the cell. The teal dot where the stem meets the membrane is the decision point: the crossroads.</p>
+    <div class="row">
+      <div class="panel"><svg width="130" height="130"><use href="#d1"/></svg><span class="cap">Dark background</span></div>
+      <div class="panel light var-light"><svg width="130" height="130"><use href="#d1"/></svg><span class="cap">Light background</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#d1"/></svg>
+        <svg width="36" height="36"><use href="#d1"/></svg>
+        <svg width="22" height="22"><use href="#d1"/></svg>
+      </div><span class="cap">Nav &amp; favicon sizes</span></div>
+      <div class="panel var-mono-dark"><svg width="90" height="90"><use href="#d1"/></svg><span class="cap">One colour</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="52" height="52"><use href="#d1"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="52" height="52"><use href="#d1"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGN 2 ============ -->
+<section class="design">
+  <div class="wrap">
+    <p class="eyebrow">Design 2</p>
+    <h2>Signal network</h2>
+    <p class="brief">Stripped back until only the essentials remain. The cell is a single arc. The network is one hub plus three partners, with solid edges for strong interactions and dotted edges for transient ones — the visual grammar of an actual interaction map, so it reads as a protein network rather than generic dots. Different node sizes hint at hub versus partner.</p>
+    <div class="row">
+      <div class="panel"><svg width="130" height="130"><use href="#d2"/></svg><span class="cap">Dark background</span></div>
+      <div class="panel light var-light"><svg width="130" height="130"><use href="#d2"/></svg><span class="cap">Light background</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#d2"/></svg>
+        <svg width="36" height="36"><use href="#d2"/></svg>
+        <svg width="22" height="22"><use href="#d2"/></svg>
+      </div><span class="cap">Nav &amp; favicon sizes</span></div>
+      <div class="panel var-teal"><svg width="90" height="90"><use href="#d2"/></svg><span class="cap">All teal</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="52" height="52"><use href="#d2"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="52" height="52"><use href="#d2"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGN 3 ============ -->
+<section class="design">
+  <div class="wrap">
+    <p class="eyebrow">Design 3</p>
+    <h2>G0 escape</h2>
+    <p class="brief">One cell cut into the four phases, each quarter drawn as the cell actually looks at that moment: <strong>G1</strong> a single nucleus and one centrosome, <strong>S</strong> a replication bubble opening in the DNA with the centrosome duplicated, <strong>G2</strong> paired sister chromatids and centrosomes migrating apart, <strong>M</strong> chromosomes on the metaphase plate with spindle fibres running to two poles. A cell exits out of G1 into G0 — the decision the lab studies.</p>
+    <div class="row">
+      <div class="panel"><svg width="130" height="130"><use href="#d3"/></svg><span class="cap">Dark background</span></div>
+      <div class="panel light var-light"><svg width="130" height="130"><use href="#d3"/></svg><span class="cap">Light background</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#d3"/></svg>
+        <svg width="36" height="36"><use href="#d3"/></svg>
+        <svg width="22" height="22"><use href="#d3"/></svg>
+      </div><span class="cap">Nav &amp; favicon sizes</span></div>
+      <div class="panel var-mono-dark"><svg width="90" height="90"><use href="#d3"/></svg><span class="cap">One colour</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="52" height="52"><use href="#d3"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="52" height="52"><use href="#d3"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+    </div>
+
+    <p class="eyebrow" style="margin-top:44px;">Animated version</p>
+    <p class="brief">The cycle turns, a cell commits and escapes into G0, and the mark resolves into Design 2. Loops.</p>
+    <div class="row">
+      <div class="panel">
+        <div class="stage">
+          <svg class="lay lay-cycle" width="170" height="170" viewBox="0 0 120 120">
+            <g class="disc"><use href="#d3-nocell"/></g>
+          </svg>
+          <svg class="lay lay-escape" width="170" height="170" viewBox="0 0 120 120">
+            <g class="runner">
+              <circle cx="60" cy="60" r="9" fill="var(--c1)" stroke="var(--c3)" stroke-width="2.8"/>
+              <circle cx="60" cy="60" r="3.2" fill="var(--c2)"/>
+            </g>
+          </svg>
+          <svg class="lay lay-net" width="170" height="170" viewBox="0 0 120 120"><use href="#d2"/></svg>
+        </div>
+        <span class="cap">Loop — cycle &rarr; escape &rarr; G0</span>
+      </div>
+      <div class="panel light var-light">
+        <div class="stage">
+          <svg class="lay lay-cycle" width="170" height="170" viewBox="0 0 120 120">
+            <g class="disc"><use href="#d3-nocell"/></g>
+          </svg>
+          <svg class="lay lay-escape" width="170" height="170" viewBox="0 0 120 120">
+            <g class="runner">
+              <circle cx="60" cy="60" r="9" fill="var(--c1)" stroke="var(--c3)" stroke-width="2.8"/>
+              <circle cx="60" cy="60" r="3.2" fill="var(--c2)"/>
+            </g>
+          </svg>
+          <svg class="lay lay-net" width="170" height="170" viewBox="0 0 120 120"><use href="#d2"/></svg>
+        </div>
+        <span class="cap">On light</span>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Rough draft.</strong> The phase vignettes are legible at display size and turn to mush below about 40&nbsp;px, so a simplified version would be needed for the favicon. Say which parts land and I'll refine the drawing.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Tell me which direction to take further — or mix them (e.g. Design 2's simplified network sitting on Design 1's grounded half-cell). Once you pick one I'll swap it into the site, generate the favicon, and export PNG/SVG files for slides and posters.</p>
+  </div>
+</footer>
+
+</body>
+</html>
