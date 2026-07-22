@@ -154,65 +154,64 @@
     <circle cx="60" cy="60" r="4"  fill="var(--c2)"/>
   </symbol>
 
-  <!-- ---------- DESIGN 3 — "G0 escape": four cell-cycle phases, each drawn as the cell actually looks ---------- -->
+  <!-- ---------- DESIGN 3 — "G0 escape": ONE cell, quartered; each quarter is the same cell at a different phase ---------- -->
   <symbol id="d3" viewBox="0 0 120 120">
-    <!-- four 90-degree phase wedges, alternating tint so the quarters read apart -->
-    <g>
-      <path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z" fill="var(--c1)" opacity=".45"/>
-      <path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z" fill="var(--c1)" opacity=".75"/>
-      <path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z" fill="var(--c1)" opacity=".45"/>
-      <path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z" fill="var(--c1)" opacity=".75"/>
+    <clipPath id="qG1"><path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z"/></clipPath>
+    <clipPath id="qS"><path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z"/></clipPath>
+    <clipPath id="qG2"><path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z"/></clipPath>
+    <clipPath id="qM"><path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z"/></clipPath>
+
+    <!-- cytoplasm of the one cell -->
+    <circle cx="60" cy="60" r="42" fill="var(--c1)" opacity=".5"/>
+
+    <!-- G1 — nucleus at its starting size, one centrosome -->
+    <g clip-path="url(#qG1)">
+      <circle cx="60" cy="60" r="17" fill="var(--c2)"/>
+      <circle cx="70" cy="50" r="4.5" fill="var(--c1)" opacity=".55"/>
+      <circle cx="86" cy="44" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- G1 (top right): one nucleus, one centrosome, the cell simply growing -->
-    <g>
-      <circle cx="77" cy="43" r="9" fill="var(--c2)"/>
-      <circle cx="77" cy="43" r="3.4" fill="var(--c1)"/>
-      <circle cx="66" cy="31" r="2.4" fill="var(--c3)"/>
-    </g>
-
-    <!-- S (bottom right): DNA replicating — a bubble opening in the strand, centrosome duplicated -->
-    <g>
-      <circle cx="77" cy="77" r="9.5" fill="var(--c2)"/>
-      <g stroke="var(--c1)" stroke-width="1.8" fill="none" stroke-linecap="round">
-        <path d="M70 77 Q77 71.5 84 77"/>
-        <path d="M70 77 Q77 82.5 84 77"/>
+    <!-- S — nucleus grown, replication bubbles opening in the DNA, centrosome duplicated -->
+    <g clip-path="url(#qS)">
+      <circle cx="60" cy="60" r="20" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="1.7" fill="none" stroke-linecap="round">
+        <path d="M66 68 Q71 64 76 68"/><path d="M66 68 Q71 72 76 68"/>
+        <path d="M64 76 Q68 73 72 76"/><path d="M64 76 Q68 79 72 76"/>
       </g>
-      <circle cx="88" cy="89" r="2.2" fill="var(--c3)"/>
-      <circle cx="93" cy="85" r="2.2" fill="var(--c3)"/>
+      <circle cx="88" cy="82" r="2.6" fill="var(--c3)"/>
+      <circle cx="94" cy="76" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- G2 (bottom left): replication done — paired sister chromatids, centrosomes migrating apart -->
-    <g>
-      <circle cx="43" cy="77" r="10" fill="var(--c2)"/>
-      <g stroke="var(--c1)" stroke-width="2" stroke-linecap="round">
-        <path d="M38 72 V82"/><path d="M41 72 V82"/>
-        <path d="M46 74 V81"/><path d="M49 74 V81"/>
+    <!-- G2 — nucleus at full size, chromosomes condensed into pairs, centrosomes moving apart -->
+    <g clip-path="url(#qG2)">
+      <circle cx="60" cy="60" r="23" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="2.1" stroke-linecap="round">
+        <path d="M48 66 V76"/><path d="M51.5 66 V76"/>
+        <path d="M40 70 V79"/><path d="M43.5 70 V79"/>
       </g>
-      <circle cx="30" cy="88" r="2.2" fill="var(--c3)"/>
-      <circle cx="43" cy="92" r="2.2" fill="var(--c3)"/>
+      <circle cx="30" cy="80" r="2.6" fill="var(--c3)"/>
+      <circle cx="46" cy="93" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- M (top left): chromosomes on the metaphase plate, spindle fibres from two poles -->
-    <g>
-      <g stroke="var(--c2)" stroke-width="1.1" opacity=".85" fill="none" stroke-linecap="round">
-        <path d="M28 33 L41 41"/><path d="M28 33 L40 45"/><path d="M28 33 L37 47"/>
-        <path d="M56 51 L45 44"/><path d="M56 51 L45 48"/><path d="M56 51 L42 50"/>
+    <!-- M — nuclear envelope broken down; spindle pole, fibres, chromosomes on the plate -->
+    <g clip-path="url(#qM)">
+      <g stroke="var(--c2)" stroke-width="1.2" opacity=".8" fill="none" stroke-linecap="round">
+        <path d="M32 32 L52 48"/><path d="M32 32 L47 52"/><path d="M32 32 L42 55"/><path d="M32 32 L55 43"/>
       </g>
-      <g fill="var(--c3)"><circle cx="27" cy="32" r="2.6"/><circle cx="57" cy="52" r="2.6"/></g>
-      <g stroke="var(--c2)" stroke-width="2.6" stroke-linecap="round">
-        <path d="M39 39 L45 47"/><path d="M45 39 L39 47"/>
-        <path d="M36 46 L42 54"/><path d="M42 46 L36 54"/>
+      <circle cx="31" cy="31" r="3" fill="var(--c3)"/>
+      <g stroke="var(--c2)" stroke-width="2.8" stroke-linecap="round">
+        <path d="M50 44 L57 52"/><path d="M56 44 L49 52"/>
+        <path d="M43 51 L50 59"/><path d="M49 51 L42 59"/>
       </g>
     </g>
 
-    <!-- phase boundaries + the ring itself -->
-    <g stroke="var(--c4)" stroke-width="1.8" opacity=".55" stroke-linecap="round">
+    <!-- phase boundaries + the plasma membrane -->
+    <g stroke="var(--c4)" stroke-width="1.6" opacity=".45" stroke-linecap="round">
       <path d="M60 60 V18"/><path d="M60 60 H102"/><path d="M60 60 V102"/><path d="M60 60 H18"/>
     </g>
     <circle cx="60" cy="60" r="42" fill="none" stroke="var(--c4)" stroke-width="3"/>
 
-    <!-- the exit: a cell leaving the cycle out of G1, into G0 -->
+    <!-- the exit: the cell leaves the cycle out of G1, into G0 -->
     <path d="M86 34 L97 23" stroke="var(--c3)" stroke-width="2.6" stroke-linecap="round"
           stroke-dasharray="4 5" fill="none"/>
     <circle cx="104" cy="16" r="9" fill="var(--c1)" stroke="var(--c3)" stroke-width="2.8"/>
@@ -221,58 +220,57 @@
 
   <!-- Design 3 without the escaping cell — used by the animated version -->
   <symbol id="d3-nocell" viewBox="0 0 120 120">
-    <!-- four 90-degree phase wedges, alternating tint so the quarters read apart -->
-    <g>
-      <path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z" fill="var(--c1)" opacity=".45"/>
-      <path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z" fill="var(--c1)" opacity=".75"/>
-      <path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z" fill="var(--c1)" opacity=".45"/>
-      <path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z" fill="var(--c1)" opacity=".75"/>
+    <clipPath id="n-qG1"><path d="M60 60 L60 18 A42 42 0 0 1 102 60 Z"/></clipPath>
+    <clipPath id="n-qS"><path d="M60 60 L102 60 A42 42 0 0 1 60 102 Z"/></clipPath>
+    <clipPath id="n-qG2"><path d="M60 60 L60 102 A42 42 0 0 1 18 60 Z"/></clipPath>
+    <clipPath id="n-qM"><path d="M60 60 L18 60 A42 42 0 0 1 60 18 Z"/></clipPath>
+
+    <!-- cytoplasm of the one cell -->
+    <circle cx="60" cy="60" r="42" fill="var(--c1)" opacity=".5"/>
+
+    <!-- G1 — nucleus at its starting size, one centrosome -->
+    <g clip-path="url(#n-qG1)">
+      <circle cx="60" cy="60" r="17" fill="var(--c2)"/>
+      <circle cx="70" cy="50" r="4.5" fill="var(--c1)" opacity=".55"/>
+      <circle cx="86" cy="44" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- G1 (top right): one nucleus, one centrosome, the cell simply growing -->
-    <g>
-      <circle cx="77" cy="43" r="9" fill="var(--c2)"/>
-      <circle cx="77" cy="43" r="3.4" fill="var(--c1)"/>
-      <circle cx="66" cy="31" r="2.4" fill="var(--c3)"/>
-    </g>
-
-    <!-- S (bottom right): DNA replicating — a bubble opening in the strand, centrosome duplicated -->
-    <g>
-      <circle cx="77" cy="77" r="9.5" fill="var(--c2)"/>
-      <g stroke="var(--c1)" stroke-width="1.8" fill="none" stroke-linecap="round">
-        <path d="M70 77 Q77 71.5 84 77"/>
-        <path d="M70 77 Q77 82.5 84 77"/>
+    <!-- S — nucleus grown, replication bubbles opening in the DNA, centrosome duplicated -->
+    <g clip-path="url(#n-qS)">
+      <circle cx="60" cy="60" r="20" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="1.7" fill="none" stroke-linecap="round">
+        <path d="M66 68 Q71 64 76 68"/><path d="M66 68 Q71 72 76 68"/>
+        <path d="M64 76 Q68 73 72 76"/><path d="M64 76 Q68 79 72 76"/>
       </g>
-      <circle cx="88" cy="89" r="2.2" fill="var(--c3)"/>
-      <circle cx="93" cy="85" r="2.2" fill="var(--c3)"/>
+      <circle cx="88" cy="82" r="2.6" fill="var(--c3)"/>
+      <circle cx="94" cy="76" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- G2 (bottom left): replication done — paired sister chromatids, centrosomes migrating apart -->
-    <g>
-      <circle cx="43" cy="77" r="10" fill="var(--c2)"/>
-      <g stroke="var(--c1)" stroke-width="2" stroke-linecap="round">
-        <path d="M38 72 V82"/><path d="M41 72 V82"/>
-        <path d="M46 74 V81"/><path d="M49 74 V81"/>
+    <!-- G2 — nucleus at full size, chromosomes condensed into pairs, centrosomes moving apart -->
+    <g clip-path="url(#n-qG2)">
+      <circle cx="60" cy="60" r="23" fill="var(--c2)"/>
+      <g stroke="var(--c1)" stroke-width="2.1" stroke-linecap="round">
+        <path d="M48 66 V76"/><path d="M51.5 66 V76"/>
+        <path d="M40 70 V79"/><path d="M43.5 70 V79"/>
       </g>
-      <circle cx="30" cy="88" r="2.2" fill="var(--c3)"/>
-      <circle cx="43" cy="92" r="2.2" fill="var(--c3)"/>
+      <circle cx="30" cy="80" r="2.6" fill="var(--c3)"/>
+      <circle cx="46" cy="93" r="2.6" fill="var(--c3)"/>
     </g>
 
-    <!-- M (top left): chromosomes on the metaphase plate, spindle fibres from two poles -->
-    <g>
-      <g stroke="var(--c2)" stroke-width="1.1" opacity=".85" fill="none" stroke-linecap="round">
-        <path d="M28 33 L41 41"/><path d="M28 33 L40 45"/><path d="M28 33 L37 47"/>
-        <path d="M56 51 L45 44"/><path d="M56 51 L45 48"/><path d="M56 51 L42 50"/>
+    <!-- M — nuclear envelope broken down; spindle pole, fibres, chromosomes on the plate -->
+    <g clip-path="url(#n-qM)">
+      <g stroke="var(--c2)" stroke-width="1.2" opacity=".8" fill="none" stroke-linecap="round">
+        <path d="M32 32 L52 48"/><path d="M32 32 L47 52"/><path d="M32 32 L42 55"/><path d="M32 32 L55 43"/>
       </g>
-      <g fill="var(--c3)"><circle cx="27" cy="32" r="2.6"/><circle cx="57" cy="52" r="2.6"/></g>
-      <g stroke="var(--c2)" stroke-width="2.6" stroke-linecap="round">
-        <path d="M39 39 L45 47"/><path d="M45 39 L39 47"/>
-        <path d="M36 46 L42 54"/><path d="M42 46 L36 54"/>
+      <circle cx="31" cy="31" r="3" fill="var(--c3)"/>
+      <g stroke="var(--c2)" stroke-width="2.8" stroke-linecap="round">
+        <path d="M50 44 L57 52"/><path d="M56 44 L49 52"/>
+        <path d="M43 51 L50 59"/><path d="M49 51 L42 59"/>
       </g>
     </g>
 
-    <!-- phase boundaries + the ring itself -->
-    <g stroke="var(--c4)" stroke-width="1.8" opacity=".55" stroke-linecap="round">
+    <!-- phase boundaries + the plasma membrane -->
+    <g stroke="var(--c4)" stroke-width="1.6" opacity=".45" stroke-linecap="round">
       <path d="M60 60 V18"/><path d="M60 60 H102"/><path d="M60 60 V102"/><path d="M60 60 H18"/>
     </g>
     <circle cx="60" cy="60" r="42" fill="none" stroke="var(--c4)" stroke-width="3"/>
@@ -381,7 +379,7 @@
   <div class="wrap">
     <p class="eyebrow">Design 3</p>
     <h2>G0 escape</h2>
-    <p class="brief">One cell cut into the four phases, each quarter drawn as the cell actually looks at that moment: <strong>G1</strong> a single nucleus and one centrosome, <strong>S</strong> a replication bubble opening in the DNA with the centrosome duplicated, <strong>G2</strong> paired sister chromatids and centrosomes migrating apart, <strong>M</strong> chromosomes on the metaphase plate with spindle fibres running to two poles. A cell exits out of G1 into G0 — the decision the lab studies.</p>
+    <p class="brief">The whole circle is <strong>one cell</strong>. Each quarter is a window onto that same cell at a different moment, so the nucleus is continuous around the ring but steps outward as you go — <strong>G1</strong> nucleus at starting size with one centrosome, <strong>S</strong> grown, with replication bubbles opening in the DNA and the centrosome duplicated, <strong>G2</strong> full size with chromosomes condensed into sister pairs and centrosomes moving apart, <strong>M</strong> nuclear envelope gone, a spindle pole throwing fibres onto chromosomes at the plate. The cell exits out of G1 into G0.</p>
     <div class="row">
       <div class="panel"><svg width="130" height="130"><use href="#d3"/></svg><span class="cap">Dark background</span></div>
       <div class="panel light var-light"><svg width="130" height="130"><use href="#d3"/></svg><span class="cap">Light background</span></div>

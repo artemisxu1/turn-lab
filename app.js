@@ -19,7 +19,7 @@
   if (!els.length) return;
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.18, rootMargin: '0px 0px -12% 0px' });
   els.forEach(el => io.observe(el));
 })();
 
@@ -30,7 +30,8 @@
   if (!canvas || !hero) return;
   const ctx = canvas.getContext('2d');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const COLORS = ['#7fd3da', '#34c6d4', '#bfeef2', '#e2864a', '#9c7bd6'];
+  // neon night palette — light-blue, cyan, soft white, violet, bright pink (no orange)
+  const COLORS = ['#5b8cff', '#38d6f0', '#cdd6ff', '#9a5bff', '#ff3fbe'];
   let w = 0, h = 0, dpr = 1, parts = [], raf = 0;
   const mouse = { x: -9999, y: -9999, active: false };
   const LINK = 124, REPEL = 140;
@@ -91,7 +92,7 @@
           }
         }
         if (d < LINK) {
-          ctx.strokeStyle = 'rgba(127,211,218,' + (1 - d / LINK) * 0.45 + ')';
+          ctx.strokeStyle = 'rgba(130,160,255,' + (1 - d / LINK) * 0.42 + ')';
           ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
@@ -122,14 +123,18 @@
       else if (p.x > w - p.r) { p.x = w - p.r; p.vx = -Math.abs(p.vx) * 0.9; }
       if (p.y < p.r) { p.y = p.r; p.vy = Math.abs(p.vy) * 0.9; }
       else if (p.y > h - p.r) { p.y = h - p.r; p.vy = -Math.abs(p.vy) * 0.9; }
-      // soft glow
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4.2);
-      g.addColorStop(0, p.c); g.addColorStop(1, 'rgba(0,0,0,0)');
+      // soft neon bloom — additive so overlapping glows brighten like light
+      ctx.globalCompositeOperation = 'lighter';
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      g.addColorStop(0, p.c); g.addColorStop(.55, p.c + '55'); g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 4.2, 0, Math.PI * 2); ctx.fill();
-      // core
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2); ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      // bright core with a crisp white centre
       ctx.fillStyle = p.c;
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.85)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.42, 0, Math.PI * 2); ctx.fill();
     }
     raf = requestAnimationFrame(frame);
   }
