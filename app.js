@@ -41,7 +41,7 @@
     parts = [];
     for (let i = 0; i < count; i++) {
       const r = 3 + Math.random() * 4;
-      const ang = Math.random() * Math.PI * 2, sp = 0.4 + Math.random() * 0.7;
+      const ang = Math.random() * Math.PI * 2, sp = 0.2 + Math.random() * 0.35;
       parts.push({
         x: Math.random() * w, y: Math.random() * h,
         vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
@@ -105,18 +105,18 @@
         const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
         if (d < REPEL && d > 0.01) {
           const f = (REPEL - d) / REPEL;
-          p.vx += (dx / d) * f * 1.1;
-          p.vy += (dy / d) * f * 1.1;
+          p.vx += (dx / d) * f * 0.62;
+          p.vy += (dy / d) * f * 0.62;
         }
       }
       // spontaneous brownian wander
-      p.vx += (Math.random() - .5) * 0.06;
-      p.vy += (Math.random() - .5) * 0.06;
+      p.vx += (Math.random() - .5) * 0.032;
+      p.vy += (Math.random() - .5) * 0.032;
       p.vx *= 0.992; p.vy *= 0.992;
-      // keep a lively floor and a sane ceiling on speed
+      // keep a gentle drifting floor and a sane ceiling on speed
       let sp = Math.hypot(p.vx, p.vy);
-      if (sp < 0.28) { const a2 = Math.random() * Math.PI * 2; p.vx += Math.cos(a2) * .28; p.vy += Math.sin(a2) * .28; sp = Math.hypot(p.vx, p.vy); }
-      if (sp > 2.0) { p.vx = p.vx / sp * 2.0; p.vy = p.vy / sp * 2.0; }
+      if (sp < 0.15) { const a2 = Math.random() * Math.PI * 2; p.vx += Math.cos(a2) * .15; p.vy += Math.sin(a2) * .15; sp = Math.hypot(p.vx, p.vy); }
+      if (sp > 1.0) { p.vx = p.vx / sp * 1.0; p.vy = p.vy / sp * 1.0; }
       p.x += p.vx; p.y += p.vy;
       // bounce off the walls of the cytoplasm
       if (p.x < p.r) { p.x = p.r; p.vx = Math.abs(p.vx) * 0.9; }
