@@ -19,6 +19,7 @@
     --c2:#eafaff;   /* nucleus / highlights  */
     --c3:#ff54c4;   /* network / time accent */
     --c4:#5b8cff;   /* membrane / outline    */
+    --fill-op:1;    /* cytoplasm fill opacity — dropped for one-colour marks */
   }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6; }
@@ -74,6 +75,30 @@
   @keyframes popB  { 0%,46%{opacity:0;transform:scale(.2);} 56%,84%{opacity:1;transform:scale(1);} 92%,100%{opacity:0;transform:scale(.2);} }
   @keyframes seedPulse { 0%,4%{transform:scale(.85);} 14%{transform:scale(1.15);} 24%,100%{transform:scale(1);} }
 
+  /* ---- round 2: the cell is drawn as a cell, so it needs its own colourways.
+         In light mode the cytoplasm becomes the pale field and the organelles
+         carry the dark line; in one colour the fill drops to a tint so the
+         interior detail still reads. ---- */
+  .var-r2-light      { --c1:#e1e8ff; --c2:#2f4fbe; --c3:#b81f83; --c4:#2a49ad; }
+  .var-r2-mono-dark  { --c1:#ecedff; --c2:#ecedff; --c3:#ecedff; --c4:#ecedff; --fill-op:.14; }
+  .var-r2-mono-light { --c1:#150c3c; --c2:#150c3c; --c3:#150c3c; --c4:#150c3c; --fill-op:.14; }
+
+  /* ---- animated phenotype/signature clock (variant G): the hand sweeps and
+         each pair lights as it is reached — signature and phenotype together ---- */
+  .g-sweep { transform-origin:60px 60px; animation:orbit 16s linear infinite; }
+  .p12 { animation:lit12 16s linear infinite; }
+  .p3  { animation:lit3  16s linear infinite; }
+  .p6  { animation:lit6  16s linear infinite; }
+  .p9  { animation:lit9  16s linear infinite; }
+  @keyframes lit12 { 0%{opacity:1} 9%{opacity:.3} 91%{opacity:.3} 100%{opacity:1} }
+  @keyframes lit3  { 0%,16%{opacity:.3} 25%{opacity:1} 34%,100%{opacity:.3} }
+  @keyframes lit6  { 0%,41%{opacity:.3} 50%{opacity:1} 59%,100%{opacity:.3} }
+  @keyframes lit9  { 0%,66%{opacity:.3} 75%{opacity:1} 84%,100%{opacity:.3} }
+
+  /* ---- the free-form cell breathes ---- */
+  .breathe { transform-box:fill-box; transform-origin:center; animation:breathe 7s ease-in-out infinite; }
+  @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.022)} }
+
   /* ---- animated clockwork (variant D): hands turn at clock ratios, sped up ---- */
   .h-hour   { transform-origin:60px 60px; animation:orbit 96s linear infinite; }
   .h-minute { transform-origin:60px 60px; animation:orbit 24s linear infinite; }
@@ -84,6 +109,8 @@
     .orbit, .h-hour, .h-minute, .h-second, .seed { animation:none; }
     .gA, .gB { animation:none; stroke-dashoffset:0; }
     .nA, .nB { animation:none; opacity:1; }
+    .g-sweep, .breathe { animation:none; }
+    .p12, .p3, .p6, .p9 { animation:none; opacity:1; }
   }
 </style>
 </head>
@@ -245,6 +272,340 @@
     <circle cx="60" cy="60" r="12" fill="var(--c1)"/>
     <circle cx="60" cy="60" r="12" fill="none" stroke="var(--c4)" stroke-width="3"/>
     <circle cx="60" cy="60" r="4"  fill="var(--c2)"/>
+  </symbol>
+
+  <!-- ==================================================================
+       ROUND 2 — the cell drawn as a cell, filling the whole circle
+       ================================================================== -->
+
+  <!-- a mitochondrion: capsule with cristae. Drawn about the origin so it
+       can be dropped anywhere with translate() rotate(). -->
+  <g id="mito">
+    <rect x="-9.8" y="-4.4" width="19.6" height="8.8" rx="4.4"
+          fill="var(--c2)" fill-opacity=".14" stroke="var(--c2)" stroke-width="2"/>
+    <path d="M-5.6 -4.4 C-3.6 -1.6 -3.6 1.6 -5.6 4.4 M-0.6 -4.4 C1.4 -1.6 1.4 1.6 -0.6 4.4 M4.4 -4.4 C6.4 -1.6 6.4 1.6 4.4 4.4"
+          fill="none" stroke="var(--c2)" stroke-width="1.5" opacity=".7"/>
+  </g>
+
+  <!-- ruffled membrane: a circle of r≈45 pushed in and out by a few units,
+       so the outline reads as living rather than geometric -->
+  <path id="membrane" d="M60 14 C76.4 14 89.56 25.21 97.24 38.5 C104.92 51.79 108.57 68.88 100.27 83.25
+                         C91.97 97.62 75.5 103.5 60 103.5 C44.5 103.5 28.36 97.2 20.16 83
+                         C11.96 68.8 14.05 51.6 21.9 38 C29.75 24.4 43.6 14 60 14 Z"/>
+
+  <!-- free-form membrane: same idea, but lobed and openly asymmetric -->
+  <path id="membrane-free" d="M60 16 C71.67 16 79.74 26 86.87 33.13 C94 40.26 106 47.8 106 60
+                              C106 72.2 95.78 80.78 88.28 88.28 C80.78 95.78 71.4 103 60 103
+                              C48.6 103 35.58 102.04 26.77 93.23 C17.96 84.42 23 69.81 23 60
+                              C23 50.19 19.74 40.26 28.18 31.82 C36.62 23.38 48.33 16 60 16 Z"/>
+
+  <!-- the cytoplasm: fully furnished. Nucleus sits off-centre so the pivot at
+       60,60 falls on the centrosome — the hands are microtubules from it. -->
+  <g id="cyto-full">
+    <use href="#membrane" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+         stroke="var(--c4)" stroke-width="4.4" stroke-linejoin="round"/>
+    <g fill="none" stroke="var(--c2)" stroke-width="1.9" stroke-linecap="round" opacity=".48">
+      <path d="M31 45 C39 39 47 41 53 36"/>
+      <path d="M28 53 C37 46 46 48 52 43"/>
+      <path d="M62 34 C68 30 74 32 79 29"/>
+    </g>
+    <g fill="none" stroke="var(--c2)" stroke-width="2.1" stroke-linecap="round" opacity=".6">
+      <path d="M74 82 C80 86.5 88 85 92 79"/>
+      <path d="M75.5 77 C81 80.5 88 79 91.5 73.5"/>
+      <path d="M77 72 C82 75 88 74 91 69"/>
+    </g>
+    <g transform="translate(84,44) rotate(-40)"><use href="#mito"/></g>
+    <g transform="translate(46,92) rotate(-12)"><use href="#mito"/></g>
+    <g fill="var(--c2)">
+      <circle cx="66" cy="26" r="2.5" opacity=".8"/>
+      <circle cx="30" cy="44" r="2"   opacity=".62"/>
+      <circle cx="72" cy="98" r="2.2" opacity=".7"/>
+      <circle cx="98" cy="58" r="2.4" opacity=".72"/>
+      <circle cx="24" cy="78" r="1.9" opacity=".6"/>
+      <circle cx="88" cy="86" r="1.8" opacity=".55"/>
+    </g>
+    <g transform="translate(42,66) rotate(-12)">
+      <ellipse rx="16.5" ry="15" fill="var(--c2)" fill-opacity=".16" stroke="var(--c2)" stroke-width="2.6"/>
+      <ellipse rx="11.4" ry="10" fill="none" stroke="var(--c2)" stroke-width="1.2" opacity=".38"/>
+      <circle cx="-4" cy="2" r="4.4" fill="var(--c2)" opacity=".75"/>
+    </g>
+  </g>
+
+  <!-- the same cell, thinned out for small sizes -->
+  <g id="cyto-lite">
+    <use href="#membrane" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+         stroke="var(--c4)" stroke-width="5.2" stroke-linejoin="round"/>
+    <g transform="translate(84,44) rotate(-40)"><use href="#mito"/></g>
+    <g fill="var(--c2)">
+      <circle cx="66" cy="26" r="3"/><circle cx="88" cy="86" r="2.6" opacity=".8"/>
+    </g>
+    <g transform="translate(42,66) rotate(-12)">
+      <ellipse rx="16.5" ry="15" fill="var(--c2)" fill-opacity=".18" stroke="var(--c2)" stroke-width="3"/>
+      <circle cx="-4" cy="2" r="4.6" fill="var(--c2)" opacity=".8"/>
+    </g>
+  </g>
+
+  <!-- free-form cytoplasm -->
+  <g id="cyto-free">
+    <use href="#membrane-free" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+         stroke="var(--c4)" stroke-width="4.4" stroke-linejoin="round"/>
+    <g fill="none" stroke="var(--c2)" stroke-width="1.9" stroke-linecap="round" opacity=".45">
+      <path d="M34 44 C42 38 50 41 55 36"/>
+      <path d="M32 52 C40 45 48 48 54 43"/>
+    </g>
+    <g fill="none" stroke="var(--c2)" stroke-width="2" stroke-linecap="round" opacity=".58">
+      <path d="M70 84 C76 88 84 86.5 88 81"/>
+      <path d="M71.5 79 C77 82.5 84 81 87.5 76"/>
+      <path d="M73 74 C78 77 84 76 87 71"/>
+    </g>
+    <g transform="translate(80,42) rotate(-32)"><use href="#mito"/></g>
+    <g transform="translate(44,88) rotate(-8)"><use href="#mito"/></g>
+    <g fill="var(--c2)">
+      <circle cx="64" cy="27" r="2.5" opacity=".8"/>
+      <circle cx="33" cy="72" r="2.1" opacity=".62"/>
+      <circle cx="94" cy="60" r="2.3" opacity=".7"/>
+      <circle cx="70" cy="96" r="2"   opacity=".6"/>
+    </g>
+    <g transform="translate(44,62) rotate(-16)">
+      <ellipse rx="16" ry="14.4" fill="var(--c2)" fill-opacity=".16" stroke="var(--c2)" stroke-width="2.6"/>
+      <ellipse rx="11" ry="9.6" fill="none" stroke="var(--c2)" stroke-width="1.2" opacity=".38"/>
+      <circle cx="-3.6" cy="2" r="4.2" fill="var(--c2)" opacity=".75"/>
+    </g>
+  </g>
+
+  <!-- dial furniture, split so the pairs can take over the hour positions -->
+  <g id="g-ticks-maj">
+    <g stroke="var(--c4)" stroke-width="3.4" stroke-linecap="round" opacity=".85">
+      <path d="M60 13 L60 4"/><path d="M107 60 L116 60"/>
+      <path d="M60 107 L60 116"/><path d="M13 60 L4 60"/>
+    </g>
+  </g>
+  <g id="g-ticks-min">
+    <g stroke="var(--c4)" stroke-width="2" stroke-linecap="round" opacity=".5">
+      <path d="M85 16.7 L87.75 11.94"/><path d="M103.3 35 L108.06 32.25"/>
+      <path d="M103.3 85 L108.06 87.75"/><path d="M85 103.3 L87.75 108.06"/>
+      <path d="M35 103.3 L32.25 108.06"/><path d="M16.7 85 L11.94 87.75"/>
+      <path d="M16.7 35 L11.94 32.25"/><path d="M35 16.7 L32.25 11.94"/>
+    </g>
+  </g>
+
+  <!-- microtubule hands radiating from the centrosome, tipped with molecules -->
+  <g id="mt-hour">
+    <path d="M60 60 L81.65 72.5" fill="none" stroke="var(--c3)" stroke-width="5.2" stroke-linecap="round"/>
+    <circle cx="81.65" cy="72.5" r="6.6" fill="var(--c3)"/>
+    <circle cx="81.65" cy="72.5" r="2.5" fill="var(--c2)"/>
+  </g>
+  <g id="mt-minute">
+    <path d="M60 60 L79 27.09" fill="none" stroke="var(--c3)" stroke-width="3.4" stroke-linecap="round"/>
+    <circle cx="79" cy="27.09" r="5.2" fill="var(--c3)"/>
+    <circle cx="79" cy="27.09" r="1.9" fill="var(--c2)"/>
+  </g>
+  <g id="mt-second">
+    <path d="M67.79 55.5 L24.5 80.5" fill="none" stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round"/>
+    <circle cx="24.5" cy="80.5" r="3.2" fill="var(--c3)"/>
+    <circle cx="24.5" cy="80.5" r="1.2" fill="var(--c2)"/>
+  </g>
+
+  <!-- the centrosome: where the hands pivot -->
+  <g id="g-mtoc">
+    <circle cx="60" cy="60" r="6.6" fill="var(--c4)"/>
+    <circle cx="60" cy="60" r="2.6" fill="var(--c2)"/>
+  </g>
+
+  <!-- ---------- PHENOTYPES: what the cell became, at each hour ---------- -->
+  <g id="ph-round">
+    <circle r="6.2" fill="none" stroke="var(--c3)" stroke-width="2.3"/>
+    <circle r="2.1" fill="var(--c3)"/>
+  </g>
+  <g id="ph-polar">
+    <path d="M-6.4 4.2 C-8.4 -1.6 -3.4 -6.6 2.2 -6 C7.4 -5.4 9 -0.8 6.6 3.2 C4.4 6.8 -1 7.4 -3.6 5.8 Z"
+          fill="none" stroke="var(--c3)" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M5.6 -5.4 L9 -8.4 M7.8 1.6 L11.6 2.2" stroke="var(--c3)" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="-1.4" cy="0.4" r="2" fill="var(--c3)"/>
+  </g>
+  <g id="ph-divide">
+    <circle cx="-4" cy="0" r="5" fill="none" stroke="var(--c3)" stroke-width="2.2"/>
+    <circle cx="4"  cy="0" r="5" fill="none" stroke="var(--c3)" stroke-width="2.2"/>
+    <circle cx="-4" cy="0" r="1.8" fill="var(--c3)"/>
+    <circle cx="4"  cy="0" r="1.8" fill="var(--c3)"/>
+  </g>
+  <g id="ph-spread">
+    <path d="M-6.6 -2 C-6.2 -5.8 -2 -7.2 2 -6 C6.2 -4.8 7.8 -1 6.4 2.8 C5 6.6 0.4 8.2 -3.2 6.6 C-6 5.4 -7 1.6 -6.6 -2 Z"
+          fill="none" stroke="var(--c3)" stroke-width="2.2" stroke-linejoin="round"/>
+    <g stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round">
+      <path d="M-5.6 -4.4 L-8.8 -7.4"/><path d="M4.6 -5.2 L6.6 -8.8"/><path d="M-1.4 7.6 L-2.2 11"/>
+    </g>
+    <circle cx="0" cy="0.4" r="2" fill="var(--c3)"/>
+  </g>
+
+  <!-- ---------- SIGNATURES: the molecular state that goes with it ---------- -->
+  <g id="sig-a">
+    <path d="M-4.6 2.6 L0 -4.4 L4.6 2.6" fill="none" stroke="var(--c3)" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="0" cy="-4.4" r="2.6" fill="var(--c3)"/>
+    <circle cx="-4.6" cy="2.6" r="2" fill="var(--c3)"/>
+    <circle cx="4.6" cy="2.6" r="2" fill="var(--c3)"/>
+  </g>
+  <g id="sig-b">
+    <path d="M-5.4 2 L0 -3 L5.4 1.4" fill="none" stroke="var(--c3)" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="-5.4" cy="2" r="1.7" fill="var(--c3)"/>
+    <circle cx="0" cy="-3" r="3.4" fill="var(--c3)"/>
+    <circle cx="5.4" cy="1.4" r="2" fill="var(--c3)"/>
+  </g>
+  <g id="sig-c">
+    <path d="M-4.4 -2.6 L1 -4.2 L4.8 0.6 L-0.6 3.8 Z" fill="none" stroke="var(--c3)" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="-4.4" cy="-2.6" r="2.2" fill="var(--c3)"/>
+    <circle cx="1" cy="-4.2" r="2.4" fill="var(--c3)"/>
+    <circle cx="4.8" cy="0.6" r="2.2" fill="var(--c3)"/>
+    <circle cx="-0.6" cy="3.8" r="2.6" fill="var(--c3)"/>
+  </g>
+  <g id="sig-d">
+    <path d="M-4.8 -1.4 L0.6 -3.4 L3.4 3.6" fill="none" stroke="var(--c3)" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="-4.8" cy="-1.4" r="2.8" fill="var(--c3)"/>
+    <circle cx="0.6" cy="-3.4" r="1.8" fill="var(--c3)"/>
+    <circle cx="3.4" cy="3.6" r="2.3" fill="var(--c3)"/>
+  </g>
+
+  <!-- A PAIR: a molecular signature sitting in the cytoplasm, a tie crossing
+       the membrane, and the phenotype it produces standing at that hour. -->
+  <g id="pair-12">
+    <g transform="translate(60,38)"><use href="#sig-a"/></g>
+    <path d="M60 30 L60 18" stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="1.6 3.6"/>
+    <g transform="translate(60,11)"><use href="#ph-round"/></g>
+  </g>
+  <g id="pair-3">
+    <g transform="translate(82,60)"><use href="#sig-b"/></g>
+    <path d="M90 60 L102 60" stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="1.6 3.6"/>
+    <g transform="translate(109,60)"><use href="#ph-polar"/></g>
+  </g>
+  <g id="pair-6">
+    <g transform="translate(60,82)"><use href="#sig-c"/></g>
+    <path d="M60 90 L60 102" stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="1.6 3.6"/>
+    <g transform="translate(60,109)"><use href="#ph-divide"/></g>
+  </g>
+  <g id="pair-9">
+    <g transform="translate(38,60)"><use href="#sig-d"/></g>
+    <path d="M30 60 L18 60" stroke="var(--c3)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="1.6 3.6"/>
+    <g transform="translate(11,60)"><use href="#ph-spread"/></g>
+  </g>
+
+  <!-- the current hour, drawn as a wedge of light rather than a hand, so the
+       pairs stay legible underneath it -->
+  <g id="g-wedge">
+    <path d="M52.24 31.02 L45.25 4.94 A57 57 0 0 1 74.75 4.94 L67.76 31.02 A30 30 0 0 0 52.24 31.02 Z"
+          fill="var(--c3)" opacity=".14"/>
+    <g stroke="var(--c3)" stroke-width="1.1" opacity=".32" fill="none">
+      <path d="M52.24 31.02 L45.25 4.94"/><path d="M67.76 31.02 L74.75 4.94"/>
+    </g>
+  </g>
+
+  <!-- the live tie: latent links are dashed, the one being read is solid, with
+       a receptor where it crosses the membrane -->
+  <g id="tie-live">
+    <path d="M60 30 L60 18" stroke="var(--c3)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="60" cy="24.1" r="2.8" fill="var(--c3)"/>
+    <circle cx="60" cy="24.1" r="1.1" fill="var(--c2)"/>
+  </g>
+
+  <!-- G's smaller cell: the cytoplasm belongs to the four signatures, so the
+       interior is kept to a nucleus, a little ER, and a few vesicles -->
+  <g id="cyto-core">
+    <g transform="translate(60,60) scale(.78) translate(-60,-60)">
+      <use href="#membrane" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+           stroke="var(--c4)" stroke-width="5.4" stroke-linejoin="round"/>
+    </g>
+    <g fill="none" stroke="var(--c2)" stroke-width="1.6" stroke-linecap="round" opacity=".4">
+      <path d="M72 45 C77 48 78 52 76 56"/>
+      <path d="M46 82 C41 79 40 75 42 71"/>
+    </g>
+    <g fill="var(--c2)">
+      <circle cx="78" cy="72" r="2.2" opacity=".6"/>
+      <circle cx="44" cy="46" r="1.9" opacity=".55"/>
+      <circle cx="52" cy="80" r="1.5" opacity=".45"/>
+    </g>
+    <g transform="translate(56,62.5) rotate(-14)">
+      <ellipse rx="12.4" ry="11.4" fill="var(--c2)" fill-opacity=".15" stroke="var(--c2)" stroke-width="2.4"/>
+      <ellipse rx="7.8" ry="7" fill="none" stroke="var(--c2)" stroke-width="1" opacity=".32"/>
+    </g>
+  </g>
+
+  <!-- ---------- E — WHOLE CELL ---------- -->
+  <symbol id="ea" viewBox="0 0 120 120">
+    <use href="#g-ticks-maj"/><use href="#g-ticks-min"/>
+    <use href="#cyto-full"/>
+    <use href="#mt-hour"/><use href="#mt-minute"/>
+    <use href="#g-mtoc"/>
+  </symbol>
+
+  <symbol id="ea-bare" viewBox="0 0 120 120">
+    <use href="#cyto-full"/><use href="#mt-hour"/><use href="#mt-minute"/><use href="#g-mtoc"/>
+  </symbol>
+
+  <symbol id="ea-base" viewBox="0 0 120 120">
+    <use href="#g-ticks-maj"/><use href="#g-ticks-min"/><use href="#cyto-full"/>
+  </symbol>
+
+  <symbol id="ea-sm" viewBox="0 0 120 120">
+    <use href="#g-ticks-maj"/><use href="#cyto-lite"/>
+    <use href="#mt-hour"/><use href="#mt-minute"/><use href="#g-mtoc"/>
+  </symbol>
+
+  <!-- ---------- F — FREE-FORM CELL ---------- -->
+  <symbol id="fa" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="52" fill="none" stroke="var(--c4)" stroke-width="1.6" opacity=".22"/>
+    <use href="#g-ticks-maj"/><use href="#g-ticks-min"/>
+    <use href="#cyto-free"/>
+    <use href="#mt-hour"/><use href="#mt-minute"/>
+    <use href="#g-mtoc"/>
+  </symbol>
+
+  <symbol id="fa-sm" viewBox="0 0 120 120">
+    <use href="#g-ticks-maj"/>
+    <use href="#membrane-free" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+         stroke="var(--c4)" stroke-width="5.2" stroke-linejoin="round"/>
+    <g transform="translate(44,62) rotate(-16)">
+      <ellipse rx="16" ry="14.4" fill="var(--c2)" fill-opacity=".18" stroke="var(--c2)" stroke-width="3"/>
+      <circle cx="-3.6" cy="2" r="4.4" fill="var(--c2)" opacity=".8"/>
+    </g>
+    <use href="#mt-hour"/><use href="#mt-minute"/><use href="#g-mtoc"/>
+  </symbol>
+
+  <!-- ---------- G — PHENOTYPE ⇄ SIGNATURE CLOCK ---------- -->
+  <!-- the sweep has reached 3 o'clock: that pair is current, the rest recede -->
+  <symbol id="ga" viewBox="0 0 120 120">
+    <use href="#g-ticks-min"/>
+    <use href="#cyto-core"/>
+    <g transform="rotate(90,60,60)"><use href="#g-wedge"/></g>
+    <use href="#pair-12" opacity=".3"/>
+    <use href="#pair-6"  opacity=".3"/>
+    <use href="#pair-9"  opacity=".3"/>
+    <use href="#pair-3"/>
+    <g transform="rotate(90,60,60)"><use href="#tie-live"/></g>
+    <use href="#g-mtoc"/>
+  </symbol>
+
+  <!-- all four pairs equal, for when the mark has to sit still -->
+  <symbol id="ga-flat" viewBox="0 0 120 120">
+    <use href="#g-ticks-min"/><use href="#cyto-core"/>
+    <use href="#pair-12"/><use href="#pair-3"/><use href="#pair-6"/><use href="#pair-9"/>
+    <use href="#g-mtoc"/>
+  </symbol>
+
+  <symbol id="ga-sm" viewBox="0 0 120 120">
+    <g transform="translate(60,60) scale(.78) translate(-60,-60)">
+      <use href="#membrane" fill="var(--c1)" fill-opacity="var(--fill-op,1)"
+           stroke="var(--c4)" stroke-width="6" stroke-linejoin="round"/>
+    </g>
+    <ellipse cx="60" cy="60" rx="12.6" ry="11.6" fill="var(--c2)" fill-opacity=".18"
+             stroke="var(--c2)" stroke-width="2.8"/>
+    <g fill="var(--c3)">
+      <circle cx="60" cy="13" r="5.4"/><circle cx="107" cy="60" r="5.4"/>
+      <circle cx="60" cy="107" r="5.4"/><circle cx="13" cy="60" r="5.4"/>
+    </g>
+    <g stroke="var(--c3)" stroke-width="2.2" stroke-linecap="round">
+      <path d="M60 30 L60 21"/><path d="M90 60 L99 60"/>
+      <path d="M60 90 L60 99"/><path d="M30 60 L21 60"/>
+    </g>
+    <use href="#g-mtoc"/>
   </symbol>
 
 </defs>
@@ -425,6 +786,144 @@
         <svg width="22" height="22"><use href="#d2"/></svg>
       </div><span class="cap">Small sizes</span></div>
       <div class="panel var-mono-dark"><svg width="90" height="90"><use href="#d2"/></svg><span class="cap">One colour</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ E — WHOLE CELL ============ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Variant E — Whole cell</h2>
+    <p style="color:var(--muted);max-width:62ch;margin:-14px 0 26px;">
+      The cell stops being half a circle and becomes the entire face: a ruffled
+      membrane, nucleus off to one side, mitochondria, Golgi, ER and vesicles.
+      The hands pivot on the centrosome at dead centre — microtubules radiating
+      out, each tipped with a molecule.
+    </p>
+    <div class="row">
+      <div class="panel"><svg width="170" height="170"><use href="#ea"/></svg><span class="cap">Dark</span></div>
+      <div class="panel light var-r2-light"><svg width="170" height="170"><use href="#ea"/></svg><span class="cap">Light</span></div>
+      <div class="panel"><svg width="170" height="170"><use href="#ea-bare"/></svg><span class="cap">Without the dial</span></div>
+      <div class="panel var-r2-mono-dark"><svg width="130" height="130"><use href="#ea"/></svg><span class="cap">One colour</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#ea-sm"/></svg>
+        <svg width="36" height="36"><use href="#ea-sm"/></svg>
+        <svg width="22" height="22"><use href="#ea-sm"/></svg>
+      </div><span class="cap">Small sizes (simplified)</span></div>
+      <div class="panel">
+        <div class="stage" style="width:170px;height:170px;">
+          <svg width="170" height="170" viewBox="0 0 120 120"><use href="#ea-base"/></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><g class="h-hour"><use href="#mt-hour"/></g></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><g class="h-minute"><use href="#mt-minute"/></g></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><g class="h-second"><use href="#mt-second"/></g></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><use href="#g-mtoc"/></svg>
+        </div>
+        <span class="cap">Animated</span>
+      </div>
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="56" height="56"><use href="#ea-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-r2-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="56" height="56"><use href="#ea-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ F — FREE-FORM CELL ============ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Variant F — Free-form cell</h2>
+    <p style="color:var(--muted);max-width:62ch;margin:-14px 0 26px;">
+      Same furnished interior, but the membrane is openly asymmetric — lobed,
+      with a pseudopod low on the left. The dial stays a true circle around it,
+      so the mark reads as regular time measuring an irregular cell.
+    </p>
+    <div class="row">
+      <div class="panel"><svg width="170" height="170"><use href="#fa"/></svg><span class="cap">Dark</span></div>
+      <div class="panel light var-r2-light"><svg width="170" height="170"><use href="#fa"/></svg><span class="cap">Light</span></div>
+      <div class="panel var-r2-mono-dark"><svg width="130" height="130"><use href="#fa"/></svg><span class="cap">One colour</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#fa-sm"/></svg>
+        <svg width="36" height="36"><use href="#fa-sm"/></svg>
+        <svg width="22" height="22"><use href="#fa-sm"/></svg>
+      </div><span class="cap">Small sizes (simplified)</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel">
+        <div class="stage" style="width:170px;height:170px;">
+          <svg width="170" height="170" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--c4)" stroke-width="1.6" opacity=".22"/>
+            <use href="#g-ticks-maj"/><use href="#g-ticks-min"/>
+            <g class="breathe"><use href="#cyto-free"/></g>
+          </svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><g class="h-hour"><use href="#mt-hour"/></g></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><g class="h-minute"><use href="#mt-minute"/></g></svg>
+          <svg width="170" height="170" viewBox="0 0 120 120"><use href="#g-mtoc"/></svg>
+        </div>
+        <span class="cap">Animated — the cell breathes</span>
+      </div>
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="56" height="56"><use href="#fa-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-r2-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="56" height="56"><use href="#fa-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ G — PHENOTYPE ⇄ SIGNATURE ============ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Variant G — Phenotype ⇄ signature clock</h2>
+    <p style="color:var(--muted);max-width:62ch;margin:-14px 0 26px;">
+      Each hour on the face carries a <em>pair</em>: a molecular signature inside
+      the cytoplasm, tied across the membrane to the phenotype it produces —
+      round, migrating, dividing, spread. A sweep of light selects one hour and
+      that tie goes solid — with a receptor firing where it crosses the membrane —
+      so the mark says the thing the lab says: the molecular state you are in, and
+      what the cell becomes, depend on <em>when</em> you look.
+    </p>
+    <div class="row">
+      <div class="panel"><svg width="190" height="190"><use href="#ga"/></svg><span class="cap">Dark — 3 o'clock current</span></div>
+      <div class="panel light var-r2-light"><svg width="190" height="190"><use href="#ga"/></svg><span class="cap">Light</span></div>
+      <div class="panel"><svg width="190" height="190"><use href="#ga-flat"/></svg><span class="cap">All pairs equal</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel">
+        <div class="stage" style="width:190px;height:190px;">
+          <svg width="190" height="190" viewBox="0 0 120 120">
+            <use href="#g-ticks-min"/><use href="#cyto-core"/>
+          </svg>
+          <svg width="190" height="190" viewBox="0 0 120 120">
+            <g class="g-sweep"><use href="#g-wedge"/></g>
+          </svg>
+          <svg width="190" height="190" viewBox="0 0 120 120">
+            <use class="p12" href="#pair-12"/><use class="p3" href="#pair-3"/>
+            <use class="p6"  href="#pair-6"/><use class="p9" href="#pair-9"/>
+            <g class="g-sweep"><use href="#tie-live"/></g>
+            <use href="#g-mtoc"/>
+          </svg>
+        </div>
+        <span class="cap">Animated — the sweep hands off</span>
+      </div>
+      <div class="panel var-r2-mono-dark"><svg width="150" height="150"><use href="#ga-flat"/></svg><span class="cap">One colour</span></div>
+      <div class="panel"><div class="sizes">
+        <svg width="64" height="64"><use href="#ga-sm"/></svg>
+        <svg width="36" height="36"><use href="#ga-sm"/></svg>
+        <svg width="22" height="22"><use href="#ga-sm"/></svg>
+      </div><span class="cap">Small sizes (pairs → four marks)</span></div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="panel" style="flex:1;align-items:flex-start;">
+        <div class="lockup"><svg width="58" height="58"><use href="#ga-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
+      <div class="panel light var-r2-light" style="flex:1;align-items:flex-start;">
+        <div class="lockup light-txt"><svg width="58" height="58"><use href="#ga-sm"/></svg><span>Turn Lab<small>University of Wisconsin–Madison</small></span></div>
+      </div>
     </div>
   </div>
 </section>
