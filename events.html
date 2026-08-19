@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lab Philosophy — Turn Lab</title>
-<meta name="description" content="How the Turn Lab works together — mentorship, values, and lab culture at UW–Madison." />
+<title>Events — Turn Lab</title>
+<meta name="description" content="Turn Lab events — lab calendar, seminars, and upcoming activities." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -65,12 +65,12 @@
       <a href="index.html">Home</a>
       <a href="approach.html">Approach</a>
       <a href="research.html">Research</a>
-      <a href="philosophy.html" class="active" aria-current="page">Philosophy</a>
+      <a href="philosophy.html">Philosophy</a>
       <a href="people.html">People</a>
       <a href="publications.html">Publications</a>
       <a href="news.html">News</a>
       <a href="lab-adventures.html">Lab Adventures</a>
-      <a href="events.html">Events</a>
+      <a href="events.html" class="active" aria-current="page">Events</a>
       <a href="join.html">Join &amp; Contact</a>
       <a href="members.html" class="nav-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2.5"/></svg>Members</a>
     </nav>
@@ -82,57 +82,53 @@
 <section class="page-head">
   <svg class="ph-motif" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#netmotif"/></svg>
   <div class="wrap">
-    <p class="eyebrow">Lab Philosophy</p>
-    <h1>How we work together</h1>
-    <p>The Turn lab promotes the following values in how we conduct research, work with one another, mentor trainees, and engage with the broader community.</p>
+    <p class="eyebrow">Events</p>
+    <h1>What&rsquo;s coming up</h1>
+    <p>Lab meetings, seminars, deadlines, and the things we are showing up to.</p>
   </div>
 </section>
 
-<!-- ===================== PHILOSOPHY ===================== -->
-<section id="philosophy">
+<!-- ===================== CALENDAR ===================== -->
+<section id="calendar">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="eyebrow">Philosophy</p>
-      <h2>Our values</h2>
+      <p class="eyebrow">Lab calendar</p>
+      <h2>The live calendar</h2>
+      <p class="lead">This embeds a Google Calendar, so anything added there shows up here automatically — no site edit needed.</p>
     </div>
 
-    <div class="netgraph reveal" id="valuesNet">
-      <ul class="net-items">
-        <li class="net-item" data-label="Respect" data-color="#5b8cff">
-          <h3>Respect</h3>
-          <p>We treat every person with dignity, compassion, and respect. All voices are welcome, and we have zero tolerance for bullying or harassment. Our lab is a safe, inclusive place to learn, grow, collaborate, and do excellent science — regardless of background or identity.</p>
-        </li>
-        <li class="net-item" data-label="Open Communication" data-color="#38d6f0">
-          <h3>Open Communication</h3>
-          <p>We communicate honestly, respectfully, and often. Clear expectations, constructive feedback, and two-way conversations help us succeed. Lab members are expected to be open about their work and needs; in return, I will communicate expectations, decisions, and feedback clearly. None of us are mind readers — let&rsquo;s keep the conversation going.</p>
-        </li>
-        <li class="net-item" data-label="Community" data-color="#ff3fbe">
-          <h3>Community</h3>
-          <p>We succeed together. We support one another&rsquo;s learning, well-being, and professional growth rather than fostering competition or comparison. We value the different experiences, perspectives, and strengths each person brings, and we are committed to diversity, equity, inclusion, and belonging.</p>
-        </li>
-        <li class="net-item" data-label="Rigor &amp; Reproducibility" data-color="#9a5bff">
-          <h3>Rigor and Reproducibility</h3>
-          <p>We pursue careful, transparent, and reproducible science. We critically examine our assumptions and biases, document our work thoroughly, and communicate findings honestly (even when results are unexpected or inconclusive). As members of the scientific community, we share a responsibility to contribute reliable knowledge in the pursuit of truth.</p>
-        </li>
-        <li class="net-item" data-label="Accountability" data-color="#2fd3a7">
-          <h3>Accountability</h3>
-          <p>We take responsibility for our commitments, conduct, and scientific record. We acknowledge mistakes, address problems promptly and respectfully, give appropriate credit for contributions, and work to repair harm when it occurs. It is a privilege to be a scientist in academia, as our work is funded by tax payer money, trust of great scientists, support of our families and friends, with the hopes that our work can help better understanding and humanity. Therefore, it is our responsibility to be good stewards of our time and resources in appreciation for this great opportunity we have been given.</p>
-        </li>
-        <li class="net-item" data-label="Perseverance" data-color="#cdd6ff">
-          <h3>Perseverance</h3>
-          <p>Research is challenging, uncertain, and often slow. We meet setbacks with patience, resilience, and support for one another. We encourage each lab member to set meaningful scientific and personal goals, create actionable plans, and grow as both scientists and people.</p>
-        </li>
-        <li class="net-item" data-label="Creativity" data-color="#ff7a9c">
-          <h3>Creativity</h3>
-          <p>We welcome curiosity, bold ideas, and new ways of approaching difficult problems. We ask questions, think critically, learn broadly, and challenge assumptions. Everyone is encouraged to share ideas, take thoughtful risks, and explore beyond familiar approaches.</p>
-        </li>
-      </ul>
+    <!-- To switch the live calendar on:
+         1. In Google Calendar, open Settings for the lab calendar.
+         2. Under "Access permissions", tick "Make available to public".
+         3. Under "Integrate calendar", copy the "Public URL to this calendar"
+            or the src from the embed code.
+         4. Replace CALENDAR_ID below with it, then delete the placeholder panel.
+    <iframe class="cal-frame" title="Turn Lab calendar" loading="lazy"
+      src="https://calendar.google.com/calendar/embed?src=CALENDAR_ID&ctz=America%2FChicago&mode=MONTH&showTitle=0&showPrint=0&showTabs=1&showCalendars=0&bgcolor=%23120b32"></iframe>
+    -->
+    <div class="cal-placeholder reveal">
+      <p><span class="placeholder">[PLACEHOLDER — calendar]</span></p>
+      <p>Send the lab calendar&rsquo;s public embed link (Google Calendar &rarr; Settings &rarr; Integrate calendar) and the live month view drops in right here. The calendar has to be set to public for the embed to load for visitors.</p>
     </div>
-    <p class="net-caption">This background shows our values. Try to break these bonds! 🙂</p>
-    <div class="btn-row reveal" style="margin-top:40px;">
-      <a class="btn btn-primary" href="join.html">Join the lab</a>
-      <a class="btn btn-teal" href="people.html">Meet the team</a>
+  </div>
+</section>
+
+<!-- ===================== UPCOMING ===================== -->
+<section id="upcoming" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">Upcoming</p>
+      <h2>Activities</h2>
     </div>
+    <ul class="news-list reveal">
+      <li class="news-feature">
+        <time><span class="placeholder">[DATE]</span></time>
+        <div class="body">
+          <h3><span class="placeholder">[PLACEHOLDER — first activity]</span></h3>
+          <p>Anything that deserves more than a calendar row — a seminar, a conference, a lab outing — can be written out here.</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -147,6 +143,5 @@
 </footer>
 
 <script src="app.js"></script>
-<script src="network.js"></script>
 </body>
 </html>

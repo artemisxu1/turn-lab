@@ -65,23 +65,23 @@ header.nav {
   border-bottom: 1px solid var(--line);
 }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-.brand { display: flex; align-items: center; gap: 12px; font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem; color: var(--ink); text-decoration: none; }
+.brand { white-space: nowrap; display: flex; align-items: center; gap: 12px; font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem; color: var(--ink); text-decoration: none; }
 .brand svg { flex: 0 0 auto; }
-.nav-links { display: flex; gap: 26px; align-items: center; }
-.nav-links a { font-size: .94rem; font-weight: 500; color: var(--ink); text-decoration: none; position: relative; }
+.nav-links { display: flex; gap: 15px; align-items: center; }
+.nav-links a { font-size: .84rem; font-weight: 500; color: var(--ink); text-decoration: none; position: relative; white-space: nowrap; }
 .nav-links a:hover { color: var(--accent); }
 .nav-links a.active { color: var(--teal); }
 .nav-links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: var(--accent); border-radius: 2px; }
 .nav-toggle { display: none; background: none; border: 0; font-size: 1.5rem; color: var(--ink); cursor: pointer; }
 
 /* ---------- HERO (home) ---------- */
-.hero { position: relative; overflow: hidden; color: #eef0ff; min-height: 92vh; display: flex; align-items: center;
+.hero { position: relative; overflow: hidden; color: #eef0ff; min-height: calc(100vh - 72px); display: flex; align-items: center;
   background:
     radial-gradient(115% 120% at 12% 8%,  rgba(102,74,224,.55) 0%, transparent 55%),
     radial-gradient(120% 120% at 92% 96%, rgba(255,84,196,.30) 0%, transparent 55%),
     radial-gradient(120% 120% at 96% 8%,  rgba(56,214,240,.22) 0%, transparent 50%),
     linear-gradient(158deg, #0a0526 0%, #0d0736 52%, #12093f 100%); }
-.hero-inner { position: relative; z-index: 2; max-width: 760px; pointer-events: none; }
+.hero-inner { position: relative; z-index: 2; max-width: 940px; pointer-events: none; }
 .hero-inner a, .hero-inner .chip { pointer-events: auto; }
 .hero h1 { font-size: clamp(2.5rem, 6vw, 4.3rem); color: #ffffff; margin: 0 0 8px; font-weight: 600;
   text-shadow: 0 0 42px rgba(91,140,255,.45); }
@@ -346,11 +346,6 @@ footer a { color: #eef0ff; }
   .headshot { width: 100%; max-width: 320px; }
   .join-cols, .contact-grid { grid-template-columns: 1fr; }
 }
-/* 8 nav items need more room than 6 did — collapse to the drawer sooner */
-@media (max-width: 1080px) and (min-width: 941px) {
-  .nav-links { gap: 18px; }
-  .nav-links a { font-size: .88rem; }
-}
 @media (max-width: 940px) {
   .nav-links { display: none; position: absolute; top: 72px; left: 0; right: 0; flex-direction: column; align-items: flex-start; background: var(--paper); padding: 18px 24px; gap: 16px; border-bottom: 1px solid var(--teal-soft); }
   .nav-links.open { display: flex; }
@@ -367,4 +362,102 @@ footer a { color: #eef0ff; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .explore-grid.reveal.visible .xcard { animation: none; }
+}
+
+/* ==========================================================
+   INTERACTION NETWORKS (Philosophy / People)
+   The .net-items list is the real content and the only thing
+   narrow-screen and reduced-motion visitors ever see. network.js
+   lifts that same content into .net-stage on wide screens.
+   ========================================================== */
+.netgraph { margin-top: 30px; }
+.net-items { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.net-item { background: var(--paper); border: 1px solid var(--teal-soft); border-radius: var(--radius);
+  padding: 26px 28px 28px; box-shadow: var(--shadow); }
+.net-item h3, .net-item h4 { margin: 0 0 6px; font-family: "Fraunces", serif; font-weight: 600; font-size: 1.24rem; }
+.net-item .role { color: var(--accent); font-weight: 600; font-size: .92rem; margin: 0 0 14px; }
+.net-item p { color: var(--muted); font-size: .96rem; }
+.net-item img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; float: right; margin: 0 0 10px 14px; }
+.net-item dl { margin: 0; }
+.net-item dt { font-weight: 600; color: var(--teal); font-size: .7rem; text-transform: uppercase;
+  letter-spacing: .1em; margin-top: 14px; }
+.net-item dd { margin: 3px 0 0; font-size: .9rem; }
+.netgraph.is-enhanced .net-items { display: none; }
+
+.net-stage { position: relative; width: 100%; height: 588px; touch-action: none; }
+.net-edges { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.net-edge { stroke: #7fa3ff; stroke-linecap: round; }
+
+.net-node { position: absolute; top: 0; left: 0; width: 0; height: 0; z-index: 2; }
+.net-node.is-open { z-index: 6; }
+.net-inner { position: absolute; transform: translate(-50%, -50%); transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.net-node.is-open .net-inner { transform: translate(-50%, -50%) rotateY(180deg); }
+
+.net-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.net-front { width: calc(var(--r) * 2); height: calc(var(--r) * 2); border-radius: 50%; border: 0; cursor: grab;
+  background: radial-gradient(circle at 34% 30%, rgba(255,255,255,.34), transparent 58%), var(--bub);
+  color: var(--bub-ink); font-family: "Inter", sans-serif; font-weight: 600; font-size: .8rem;
+  line-height: 1.24; padding: 10px; display: flex; align-items: center; justify-content: center; text-align: center;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 10px 26px rgba(4,2,18,.62), 0 0 30px -6px var(--bub);
+  transition: box-shadow .25s ease, filter .25s ease; }
+.net-front:hover { filter: brightness(1.08); box-shadow: 0 0 0 1px rgba(255,255,255,.28), 0 12px 30px rgba(4,2,18,.7), 0 0 44px -4px var(--bub); }
+.net-front:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.net-node.is-dragging .net-front { cursor: grabbing; filter: brightness(1.12); }
+.net-node.is-open .net-front { pointer-events: none; }
+
+.net-back { position: absolute; top: 0; left: 0; transform: rotateY(180deg);
+  width: 372px; height: 424px; margin: -212px 0 0 -186px; opacity: 0; pointer-events: none; overflow: hidden;
+  background: var(--paper); border: 1px solid var(--bub); border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(3,1,16,.8), 0 0 40px -12px var(--bub);
+  transition: opacity .3s ease .12s; }
+.net-node.is-open .net-back { opacity: 1; pointer-events: auto; }
+.net-back::after { content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 44px;
+  border-radius: 0 0 19px 19px; pointer-events: none;
+  background: linear-gradient(to top, var(--paper), rgba(18,11,50,0)); }
+.net-body { height: 100%; overflow: auto; padding: 26px 26px 24px; }
+.net-body h3, .net-body h4 { margin: 0 0 4px; font-family: "Fraunces", serif; font-weight: 600; font-size: 1.18rem; }
+.net-body .role { color: var(--accent); font-weight: 600; font-size: .88rem; margin: 0 0 12px; }
+.net-body p { color: var(--muted); font-size: .9rem; margin: 0 0 12px; }
+.net-body dl { margin: 0; }
+.net-body dt { font-weight: 600; color: var(--teal); font-size: .66rem; text-transform: uppercase;
+  letter-spacing: .1em; margin-top: 12px; }
+.net-body dd { margin: 3px 0 0; font-size: .86rem; }
+.net-body img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; float: right; margin: 0 0 8px 12px; }
+.net-close { position: absolute; top: 8px; right: 10px; z-index: 2; background: none; border: 0; cursor: pointer;
+  font-size: 1.5rem; line-height: 1; color: var(--muted); padding: 4px 8px; border-radius: 8px; }
+.net-close:hover { color: var(--ink); background: rgba(255,255,255,.07); }
+
+.net-caption { margin-top: 22px; text-align: center; color: var(--muted); font-size: .84rem; opacity: .8; }
+
+@media (max-width: 900px) { .net-items { grid-template-columns: 1fr; } }
+
+/* ---------- HOME: stripped back to the hero ---------- */
+.hero-affil { margin: 0 0 4px; color: var(--muted); font-size: .92rem; }
+.hero-affil i { font-style: normal; opacity: .42; padding: 0 7px; }
+.canvas-note { position: absolute; left: 0; right: 0; bottom: 18px; z-index: 3; text-align: center;
+  color: rgba(236,237,255,.66); font-size: .7rem; letter-spacing: .02em; padding: 0 24px;
+  text-shadow: 0 1px 10px rgba(4,2,18,.95), 0 0 3px rgba(4,2,18,.9); }
+@media (max-width: 640px) { .canvas-note { font-size: .62rem; bottom: 12px; } .hero-affil { font-size: .8rem; } }
+
+/* ---------- EVENTS: calendar ---------- */
+.cal-frame { border: 0; width: 100%; height: 620px; border-radius: var(--radius);
+  box-shadow: var(--shadow); background: var(--paper); }
+.cal-placeholder { background: var(--paper); border: 1px dashed var(--teal-soft);
+  border-radius: var(--radius); padding: 32px 30px; }
+.cal-placeholder p { color: var(--muted); margin: 0 0 10px; max-width: 74ch; }
+.cal-placeholder p:last-child { margin: 0; }
+
+/* ---------- RESEARCH FOCUS: art beside the blurb ---------- */
+.rmedia.pending { display: flex; align-items: center; justify-content: center; background: var(--paper);
+  border: 1px dashed var(--teal-soft); min-height: 260px; }
+.rmedia.pending > span { color: var(--muted); font-size: .8rem; text-align: center; padding: 20px; }
+.rmedia.pending .pend-label { display: block; margin-top: 12px; }
+.rrow .rtext p { max-width: 68ch; }
+
+/* ---------- NAV: 11 items, so squeeze before handing over to the drawer ---------- */
+@media (max-width: 1150px) and (min-width: 941px) {
+  .nav-links { gap: 11px; }
+  .nav-links a { font-size: .78rem; }
+  .nav-lock { padding: 6px 10px !important; }
 }
