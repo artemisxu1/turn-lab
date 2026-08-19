@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Neon crossroads — scene study</title>
+<style>
+  html,body { margin:0; height:100%; background:#07021a; }
+  body { display:flex; align-items:center; justify-content:center; }
+  svg { display:block; height:100vh; width:auto; max-width:100vw; }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 1185 1920" preserveAspectRatio="xMidYMid meet" aria-label="Abstract neon overhead view of interchanging roads">
+<defs>
+  <!-- ============ gradients ============ -->
+  <linearGradient id="gSweep" x1="1" y1="0" x2="0.1" y2="1">
+    <stop offset="0"    stop-color="#2f43d8"/>
+    <stop offset=".28"  stop-color="#3b3fd6"/>
+    <stop offset=".55"  stop-color="#6c34d4"/>
+    <stop offset=".78"  stop-color="#a52fc4"/>
+    <stop offset="1"    stop-color="#e836b6"/>
+  </linearGradient>
+  <linearGradient id="gSweepIn" x1="1" y1="0" x2="0.1" y2="1">
+    <stop offset="0"    stop-color="#4257ef"/>
+    <stop offset=".5"   stop-color="#8244e8"/>
+    <stop offset="1"    stop-color="#f451c6"/>
+  </linearGradient>
+  <linearGradient id="gTopBand" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0"   stop-color="#c02cc0"/>
+    <stop offset=".45" stop-color="#8f34d8"/>
+    <stop offset="1"   stop-color="#5b3ce0"/>
+  </linearGradient>
+  <linearGradient id="gCrimson" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"   stop-color="#8f1440" stop-opacity=".55"/>
+    <stop offset=".22" stop-color="#d92a55"/>
+    <stop offset=".62" stop-color="#e0446a"/>
+    <stop offset="1"   stop-color="#7c1c5e" stop-opacity=".7"/>
+  </linearGradient>
+  <linearGradient id="gMagentaCol" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"   stop-color="#5c2bb0" stop-opacity=".5"/>
+    <stop offset=".4"  stop-color="#c336c8"/>
+    <stop offset="1"   stop-color="#f24ec0"/>
+  </linearGradient>
+  <linearGradient id="gVioletCol" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"   stop-color="#3a2a9e"/>
+    <stop offset=".5"  stop-color="#6b2fd6"/>
+    <stop offset="1"   stop-color="#8b34d4"/>
+  </linearGradient>
+  <linearGradient id="gCyanFade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"   stop-color="#25f0ff" stop-opacity=".2"/>
+    <stop offset=".3"  stop-color="#4df6ff"/>
+    <stop offset=".85" stop-color="#20d8f0"/>
+    <stop offset="1"   stop-color="#1a9fd8" stop-opacity=".3"/>
+  </linearGradient>
+  <radialGradient id="oOrange"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".95"/><stop offset="1" stop-color="#c01840" stop-opacity=".55"/></radialGradient>
+  <radialGradient id="oRed"><stop offset="0" stop-color="#a01838" stop-opacity=".85"/><stop offset="1" stop-color="#5c0e2c" stop-opacity=".7"/></radialGradient>
+  <radialGradient id="oTeal"><stop offset="0" stop-color="#bff4ec" stop-opacity=".78"/><stop offset="1" stop-color="#3fd8d0" stop-opacity=".38"/></radialGradient>
+  <radialGradient id="oBlue"><stop offset="0" stop-color="#3f6ae8" stop-opacity=".62"/><stop offset="1" stop-color="#2a3ba8" stop-opacity=".35"/></radialGradient>
+  <radialGradient id="bgGlow" cx=".42" cy=".55" r=".75">
+    <stop offset="0" stop-color="#2a1160"/><stop offset="1" stop-color="#0a0424"/>
+  </radialGradient>
+
+  <!-- ============ filters ============ -->
+  <filter id="glowS" x="-160%" y="-160%" width="420%" height="420%">
+    <feGaussianBlur stdDeviation="7" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glowL" x="-120%" y="-120%" width="340%" height="340%">
+    <feGaussianBlur stdDeviation="22" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="softBlur"><feGaussianBlur stdDeviation="14"/></filter>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer>
+  </filter>
+
+  <!-- reusable short light streak -->
+  <symbol id="dash" viewBox="0 0 40 8"><rect x="0" y="0" width="40" height="8" rx="4"/></symbol>
+</defs>
+
+<!-- ============================ BACKDROP ============================ -->
+<rect width="1185" height="1920" fill="url(#bgGlow)"/>
+<rect width="1185" height="1920" fill="#0d0430" opacity=".55"/>
+
+<!-- deep violet ground plates that give the dark areas structure -->
+<g opacity=".9">
+  <path d="M470 560 L1185 300 L1185 1560 L520 1920 Z" fill="#2a0f6e" opacity=".55"/>
+  <path d="M690 470 L1185 300 L1185 980 L740 1120 Z" fill="#3a1690" opacity=".45"/>
+  <path d="M0 980 L300 940 L260 1920 L0 1920 Z" fill="#1e0a52" opacity=".6"/>
+</g>
+
+<!-- ============================ DARK BUILDING BLOCKS ============================ -->
+<g>
+  <rect x="8"   y="852"  width="105" height="235" rx="16" fill="#0b0430" stroke="#6b2fc0" stroke-width="4" opacity=".95"/>
+  <rect x="0"   y="1120" width="92"  height="300" rx="16" fill="#0b0430" stroke="#5a2ab0" stroke-width="4" opacity=".9"/>
+  <rect x="700" y="600"  width="140" height="330" rx="14" fill="#08021f" stroke="#4a1e9e" stroke-width="5"/>
+  <rect x="742" y="628"  width="52"  height="230" rx="24" fill="none" stroke="#ff2fb0" stroke-width="16" filter="url(#glowS)"/>
+  <rect x="792" y="872"  width="42"  height="52"  rx="6"  fill="#2b1e9e"/>
+  <rect x="424" y="1188" width="98"  height="122" rx="14" fill="#0a0326" stroke="#4a1e9e" stroke-width="4"/>
+  <rect x="866" y="1010" width="120" height="278" rx="14" fill="#0a0326" stroke="#4a1e9e" stroke-width="4" opacity=".9"/>
+  <rect x="900" y="1330" width="150" height="250" rx="14" fill="#0a0326" stroke="#4a1e9e" stroke-width="4" opacity=".8"/>
+</g>
+
+<!-- ============================ TOP-LEFT LOOP + BANDS ============================ -->
+<!-- thin magenta hairpin at the very top left -->
+<path d="M118 612 L118 440 C118 372 92 336 40 322" fill="none" stroke="#ff2fc8" stroke-width="15"
+      stroke-linecap="round" filter="url(#glowS)"/>
+<path d="M60 470 C10 460 -20 420 -10 372" fill="none" stroke="#c62ad8" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+
+<!-- broad purple band sweeping from the left edge up to the right -->
+<g>
+  <path d="M-60 330 C 90 330 190 292 300 216 C 430 128 560 76 760 26"
+        fill="none" stroke="url(#gTopBand)" stroke-width="168" stroke-linecap="butt"/>
+  <path d="M-60 330 C 90 330 190 292 300 216 C 430 128 560 76 760 26"
+        fill="none" stroke="#ffffff" stroke-width="150" stroke-opacity=".07"/>
+  <path d="M-60 330 C 90 330 190 292 300 216 C 430 128 560 76 760 26"
+        fill="none" stroke="#ff5fd8" stroke-width="5" stroke-opacity=".85"/>
+  <path d="M-60 258 C 80 258 180 222 288 150 C 400 76 520 30 700 -20"
+        fill="none" stroke="#8a5cff" stroke-width="6" stroke-opacity=".55"/>
+</g>
+
+<!-- orange/red vertical bars top -->
+<rect x="262" y="-10" width="30" height="150" rx="6" fill="#ffb62e" filter="url(#glowS)"/>
+<rect x="300" y="-10" width="86" height="118" rx="8" fill="#e8562a" opacity=".85"/>
+<rect x="352" y="-10" width="58" height="200" rx="8" fill="#c9354e" opacity=".7"/>
+<rect x="404" y="-10" width="22" height="96" rx="6" fill="#ffcf3e" opacity=".9" filter="url(#glowS)"/>
+
+<!-- ============================ THE BIG SWEEP ============================ -->
+<g>
+  <!-- outer body -->
+  <path id="sweep" d="M1240 44 C 980 168 760 300 610 452 C 470 594 388 742 356 906
+                      C 322 1084 300 1360 268 1660 C 252 1810 240 1880 232 1960"
+        fill="none" stroke="url(#gSweep)" stroke-width="196" stroke-linecap="butt"/>
+  <!-- inner lane plate -->
+  <path d="M1240 44 C 980 168 760 300 610 452 C 470 594 388 742 356 906
+           C 322 1084 300 1360 268 1660 C 252 1810 240 1880 232 1960"
+        fill="none" stroke="url(#gSweepIn)" stroke-width="150" stroke-opacity=".55"/>
+  <!-- centre divider -->
+  <path d="M1240 44 C 980 168 760 300 610 452 C 470 594 388 742 356 906
+           C 322 1084 300 1360 268 1660 C 252 1810 240 1880 232 1960"
+        fill="none" stroke="#c9a8ff" stroke-width="4" stroke-opacity=".5"/>
+  <!-- bright edge rails -->
+  <path d="M1150 -46 C 900 82 690 214 540 366 C 400 508 300 664 268 828
+           C 234 1006 208 1300 176 1600 C 160 1750 150 1870 144 1960"
+        fill="none" stroke="#b96bff" stroke-width="7" stroke-opacity=".85"/>
+  <path d="M1320 138 C 1060 262 840 392 690 544 C 552 686 470 826 440 986
+           C 408 1164 390 1420 358 1720 C 342 1870 332 1900 326 1960"
+        fill="none" stroke="#8f4dff" stroke-width="7" stroke-opacity=".7"/>
+</g>
+
+<!-- blue band crossing the upper right -->
+<g>
+  <path d="M1240 210 C 1040 300 880 372 700 470 C 600 524 520 578 452 632"
+        fill="none" stroke="#2f57e0" stroke-width="118" opacity=".92"/>
+  <path d="M1240 210 C 1040 300 880 372 700 470 C 600 524 520 578 452 632"
+        fill="none" stroke="#6f8dff" stroke-width="4" stroke-opacity=".8"/>
+  <path d="M1240 128 C 1050 216 900 288 720 386 C 620 440 540 494 472 548"
+        fill="none" stroke="#4a6cf0" stroke-width="46" opacity=".55"/>
+</g>
+
+<!-- ============================ THE VERTICAL CORRIDORS ============================ -->
+<!-- crimson / red spine -->
+<g>
+  <path d="M636 520 L534 1920" fill="none" stroke="url(#gCrimson)" stroke-width="128"/>
+  <path d="M646 520 L544 1920" fill="none" stroke="#ff7a5c" stroke-width="5" stroke-opacity=".9"/>
+  <path d="M620 520 L518 1920" fill="none" stroke="#ff3f7a" stroke-width="3" stroke-opacity=".7"/>
+</g>
+<!-- pink-magenta corridor to its right -->
+<g>
+  <path d="M792 540 L690 1920" fill="none" stroke="url(#gMagentaCol)" stroke-width="104" opacity=".92"/>
+  <path d="M800 540 L698 1920" fill="none" stroke="#ff8ae0" stroke-width="4" stroke-opacity=".8"/>
+</g>
+<!-- violet corridor, far right -->
+<g>
+  <path d="M1010 470 L916 1920" fill="none" stroke="url(#gVioletCol)" stroke-width="150" opacity=".9"/>
+  <path d="M1022 470 L928 1920" fill="none" stroke="#a86bff" stroke-width="5" stroke-opacity=".6"/>
+  <path d="M1120 430 L1030 1920" fill="none" stroke="#5b32c8" stroke-width="86" opacity=".7"/>
+</g>
+
+<!-- bright cyan rails running the full height -->
+<g filter="url(#glowS)">
+  <path d="M612 540 L512 1920" fill="none" stroke="url(#gCyanFade)" stroke-width="11"/>
+  <path d="M706 528 L606 1920" fill="none" stroke="url(#gCyanFade)" stroke-width="8" opacity=".9"/>
+  <path d="M990 350 L900 1500" fill="none" stroke="url(#gCyanFade)" stroke-width="9" opacity=".85"/>
+  <path d="M1128 470 L1042 1760" fill="none" stroke="url(#gCyanFade)" stroke-width="7" opacity=".7"/>
+  <path d="M128 1040 L196 1360" fill="none" stroke="url(#gCyanFade)" stroke-width="9"/>
+  <path d="M120 1560 L176 1860" fill="none" stroke="#3fe8ff" stroke-width="8" opacity=".8"/>
+</g>
+
+<!-- cyan cross-bar low right -->
+<g>
+  <path d="M742 1010 L1185 972" fill="none" stroke="#6ff0ff" stroke-width="26" opacity=".92" filter="url(#glowS)"/>
+  <path d="M540 1560 L700 1548" fill="none" stroke="#8ff4ff" stroke-width="18" opacity=".85"/>
+</g>
+
+<!-- angled cyan connector that hooks down-left (the elbow) -->
+<path d="M700 1470 L636 1600 L470 1690" fill="none" stroke="#4de0ff" stroke-width="17"
+      stroke-linecap="round" stroke-linejoin="round" opacity=".9" filter="url(#glowS)"/>
+<path d="M470 1310 L470 1560 L560 1620" fill="none" stroke="#3f7dff" stroke-width="15"
+      stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+
+<!-- ============================ BOTTOM: ROUNDABOUT + CROSS ROADS ============================ -->
+<g>
+  <path d="M-20 1780 C 200 1760 460 1706 700 1690 C 900 1676 1080 1690 1210 1712"
+        fill="none" stroke="#c02ab8" stroke-width="96" opacity=".88"/>
+  <path d="M-20 1780 C 200 1760 460 1706 700 1690 C 900 1676 1080 1690 1210 1712"
+        fill="none" stroke="#ff7ae0" stroke-width="4" stroke-opacity=".7"/>
+  <path d="M330 1900 C 520 1858 700 1826 900 1820" fill="none" stroke="#8f34d8" stroke-width="60" opacity=".7"/>
+</g>
+<g fill="none" stroke-width="3">
+  <circle cx="828" cy="1706" r="78" stroke="#7ab6ff" opacity=".9"/>
+  <circle cx="704" cy="1728" r="56" stroke="#ff6ad0" opacity=".8"/>
+  <circle cx="782" cy="1660" r="96" stroke="#c98aff" opacity=".45"/>
+  <g fill="#ffffff" stroke="none">
+    <circle cx="806" cy="1632" r="5"/><circle cx="898" cy="1690" r="5"/>
+    <circle cx="852" cy="1780" r="5"/><circle cx="762" cy="1756" r="5"/><circle cx="752" cy="1668" r="4"/>
+  </g>
+</g>
+
+<!-- ============================ TRANSLUCENT ORBS ============================ -->
+<g style="mix-blend-mode:screen">
+  <circle cx="206" cy="96"   r="62"  fill="url(#oRed)"/>
+  <circle cx="180" cy="352"  r="88"  fill="url(#oOrange)"/>
+  <circle cx="1022" cy="512" r="100" fill="url(#oTeal)"/>
+  <circle cx="532" cy="1402" r="96"  fill="url(#oBlue)"/>
+  <circle cx="486" cy="1268" r="62"  fill="url(#oRed)" opacity=".55"/>
+</g>
+
+<!-- ============================ LIGHT STREAKS (the "cars") ============================ -->
+<g filter="url(#glowS)">
+  <!-- yellow -->
+  <g fill="#ffd23e">
+    <rect x="96"  y="368"  width="62" height="13" rx="7" transform="rotate(-4 127 374)"/>
+    <rect x="776" y="60"   width="58" height="12" rx="6" transform="rotate(-8 805 66)"/>
+    <rect x="1006" y="52"  width="60" height="12" rx="6" transform="rotate(-8 1036 58)"/>
+    <rect x="372" y="718"  width="46" height="14" rx="7" transform="rotate(58 395 725)"/>
+    <rect x="648" y="1268" width="30" height="16" rx="8" transform="rotate(-6 663 1276)"/>
+    <rect x="616" y="1784" width="66" height="15" rx="7" transform="rotate(-4 649 1791)"/>
+    <rect x="440" y="216"  width="56" height="15" rx="7" transform="rotate(-14 468 223)"/>
+  </g>
+  <!-- white / cyan -->
+  <g fill="#eaffff">
+    <rect x="884" y="176"  width="70" height="13" rx="7" transform="rotate(-12 919 182)"/>
+    <rect x="184" y="1258" width="16" height="86" rx="8" transform="rotate(-4 192 1301)"/>
+    <rect x="874" y="536"  width="14" height="72" rx="7" transform="rotate(-4 881 572)"/>
+    <rect x="1078" y="1006" width="14" height="70" rx="7" transform="rotate(-4 1085 1041)"/>
+    <rect x="864" y="1508" width="86" height="20" rx="6" transform="rotate(-6 907 1518)"/>
+  </g>
+  <!-- pink / magenta -->
+  <g fill="#ff5fd0">
+    <rect x="398" y="238"  width="72" height="14" rx="7" transform="rotate(-16 434 245)"/>
+    <rect x="936" y="1512" width="70" height="18" rx="9" transform="rotate(-6 971 1521)"/>
+    <rect x="452" y="1650" width="52" height="12" rx="6" transform="rotate(-6 478 1656)"/>
+    <rect x="676" y="1774" width="48" height="12" rx="6" transform="rotate(-4 700 1780)"/>
+  </g>
+  <!-- blue -->
+  <g fill="#4d8cff">
+    <rect x="440" y="372"  width="16" height="58" rx="8" transform="rotate(-6 448 401)"/>
+    <rect x="828" y="352"  width="16" height="44" rx="8" transform="rotate(-6 836 374)"/>
+    <rect x="336" y="1310" width="14" height="52" rx="7" transform="rotate(-4 343 1336)"/>
+  </g>
+</g>
+
+<!-- scattered small ticks -->
+<g fill="#9fe8ff" opacity=".85">
+  <rect x="146" y="652"  width="7" height="22" rx="3.5" transform="rotate(-4 149 663)"/>
+  <rect x="158" y="712"  width="7" height="16" rx="3.5" transform="rotate(-4 161 720)"/>
+  <rect x="150" y="806"  width="7" height="18" rx="3.5" transform="rotate(-4 153 815)"/>
+  <rect x="470" y="1116" width="7" height="18" rx="3.5"/>
+  <rect x="486" y="1042" width="7" height="14" rx="3.5"/>
+  <rect x="452" y="1210" width="7" height="16" rx="3.5"/>
+  <rect x="640" y="960"  width="6" height="16" rx="3"/>
+  <rect x="654" y="1080" width="6" height="14" rx="3"/>
+  <rect x="662" y="1440" width="6" height="18" rx="3"/>
+  <rect x="1046" y="748" width="6" height="16" rx="3"/>
+  <rect x="1128" y="1122" width="6" height="18" rx="3"/>
+  <rect x="94"  y="884"  width="6" height="14" rx="3"/>
+</g>
+
+<!-- soft bloom pools where lights cluster -->
+<g filter="url(#softBlur)" opacity=".55" style="mix-blend-mode:screen">
+  <ellipse cx="470" cy="392" rx="60" ry="46" fill="#2f6aff"/>
+  <ellipse cx="852" cy="368" rx="52" ry="40" fill="#2f6aff"/>
+  <ellipse cx="118" cy="1790" rx="70" ry="34" fill="#ff2fa0"/>
+  <ellipse cx="700" cy="1800" rx="80" ry="34" fill="#ff2fa0"/>
+  <ellipse cx="396" cy="742"  rx="46" ry="34" fill="#ff9a2a"/>
+  <ellipse cx="204" cy="1660" rx="54" ry="40" fill="#7c3fe8"/>
+</g>
+
+<!-- film grain -->
+<rect width="1185" height="1920" filter="url(#grain)" opacity=".55" style="mix-blend-mode:overlay"/>
+</svg>
+
+</body>
+</html>

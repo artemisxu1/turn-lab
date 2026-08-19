@@ -1,11 +1,16 @@
 /* ============================================================
    PPI-style interaction network.
-   Progressive enhancement: the page ships the real content as a
-   plain list of .net-item cards. If the viewport is wide enough and
-   motion is allowed, we lift that content into a STRING-like network
-   of bubbles held together by springs. Drag a bubble and the bonds
-   stretch, glow, and pull it back — they never break. Click a bubble
-   and it flips over into the card it came from.
+
+   Progressive enhancement: the page ships the real content as a plain
+   list of .net-item cards. On a wide screen with motion allowed, that
+   content is lifted into a STRING-like graph of bubbles.
+
+   The layout is solved once, up front, and then frozen — nothing drifts,
+   wobbles, or settles on its own. Nodes move for exactly two reasons:
+   you are dragging one, or one has been opened and the others step aside
+   to make room. Every move is a single eased tween toward a target that
+   was computed before the motion started, so there is nothing to
+   oscillate against.
    ============================================================ */
 (function () {
   const graphs = document.querySelectorAll('.netgraph');
@@ -13,18 +18,18 @@
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const SVG_NS = 'http://www.w3.org/2000/svg';
+  const TAU = Math.PI * 2;
+  const clamp = (v, lo, hi) => v < lo ? lo : (v > hi ? hi : v);
 
-  // A readable label colour for a given bubble fill. Saturated mid-tones like
-  // #5b8cff read at only ~3:1 against white but ~6:1 against near-black, so the
-  // threshold sits low on purpose: almost every bubble gets dark ink.
+  // Label colour for a bubble fill. Saturated mid-tones like #5b8cff read at
+  // only ~3:1 against white but ~6:1 against near-black, so most bubbles get
+  // dark ink; the comparison picks whichever actually wins.
   function inkFor(hex) {
     const c = hex.replace('#', '');
     const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16);
     const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
     const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-    const onDark = (L + 0.05) / 0.0566;   // contrast vs #0d0726
-    const onWhite = 1.05 / (L + 0.05);
-    return onDark >= onWhite ? '#0d0726' : '#ffffff';
+    return (L + 0.05) / 0.0566 >= 1.05 / (L + 0.05) ? '#0d0726' : '#ffffff';
   }
 
   class Graph {
@@ -52,18 +57,30 @@
       root.classList.add('is-enhanced');
 
       this.open = null;
-      this.drag = null;
       this.raf = 0;
-      this.measure();
-      this.seed();
+      this.dragging = null;
 
-      window.addEventListener('resize', () => { this.measure(); });
+      this.measure();
+      this.solveLayout();
+      this.snapToTargets();
+      this.paint();
+
+      let rt = 0;
+      window.addEventListener('resize', () => {
+        clearTimeout(rt);
+        rt = setTimeout(() => {
+          this.measure(); this.solveLayout();
+          if (this.open) this.retarget(this.open); else this.homeTargets();
+          this.snapToTargets(); this.paint();
+        }, 160);
+      });
       document.addEventListener('keydown', e => { if (e.key === 'Escape') this.close(); });
       this.stage.addEventListener('pointerdown', e => {
         if (e.target === this.stage || e.target === this.svg) this.close();
       });
-      this.loop();
     }
+
+    /* ---------- build ---------- */
 
     buildNode(li, i) {
       const label = li.dataset.label || ('Item ' + (i + 1));
@@ -102,25 +119,27 @@
       this.stage.appendChild(el);
 
       const n = {
-        el, front, back, label,
-        x: 0, y: 0, vx: 0, vy: 0,
-        r: 56, baseR: 56, open: false, pinned: false, moved: 0
+        el, front, back, label, i,
+        x: 0, y: 0,      // where it is now
+        tx: 0, ty: 0,    // where it is heading
+        bx: 0, by: 0,    // its home in the frozen layout
+        r: 56, baseR: 56, open: false, drag: false, moved: 0
       };
 
       front.addEventListener('click', () => { if (n.moved < 6) this.toggle(n); });
-      close.addEventListener('click', () => this.close());
       front.addEventListener('pointerdown', e => this.startDrag(e, n));
+      close.addEventListener('click', () => this.close());
       return n;
     }
 
-    // ring + chords: every node keeps four bonds, which makes the whole
-    // thing springy enough to snap back into shape
+    // ring + chords: four bonds per node, so the shape is rigid enough that a
+    // dragged bubble visibly strains the whole graph
     buildEdges(n) {
       const seen = new Set(), edges = [];
       const add = (a, b) => {
         const k = a < b ? a + ':' + b : b + ':' + a;
         if (a === b || seen.has(k)) return;
-        seen.add(k); edges.push({ a, b, stretch: 0 });
+        seen.add(k); edges.push({ a, b });
       };
       for (let i = 0; i < n; i++) { add(i, (i + 1) % n); if (n > 3) add(i, (i + 2) % n); }
       return edges;
@@ -129,155 +148,231 @@
     measure() {
       const rect = this.stage.getBoundingClientRect();
       this.w = rect.width; this.h = rect.height;
-      const compact = this.w < 780;
+      const compact = this.w < 820;
       this.nodes.forEach(n => {
         n.baseR = compact ? 46 : 56;
-        if (!n.open) n.r = n.baseR;
+        n.r = n.baseR;
         n.el.style.setProperty('--r', n.baseR + 'px');
       });
-      this.link = compact ? 150 : 190;
+      this.rest = compact ? 158 : 196;
+      this.cardW = compact ? 292 : 336;
     }
 
-    seed() {
-      const cx = this.w / 2, cy = this.h / 2;
-      const rad = Math.min(cx, cy) * 0.58;
-      this.nodes.forEach((n, i) => {
-        const a = (i / this.nodes.length) * Math.PI * 2 - Math.PI / 2;
-        n.x = cx + Math.cos(a) * rad;
-        n.y = cy + Math.sin(a) * rad;
+    /* ---------- layout, solved once then frozen ---------- */
+
+    // A position-based relaxation (no velocities, no randomness) so the result
+    // is identical every load and cannot wobble.
+    solveLayout() {
+      const n = this.nodes.length, cx = this.w / 2, cy = this.h / 2;
+      const rad = Math.min(this.w, this.h) * 0.31;
+      this.nodes.forEach((nd, i) => {
+        const a = (i / n) * TAU - Math.PI / 2;
+        const wob = [1.06, 0.88, 0.99][i % 3];   // deterministic, just enough to look unplanned
+        nd.x = cx + Math.cos(a) * rad * wob;
+        nd.y = cy + Math.sin(a) * rad * wob;
       });
+
+      for (let it = 0; it < 400; it++) {
+        for (const e of this.edges) {
+          const a = this.nodes[e.a], b = this.nodes[e.b];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const d = Math.hypot(dx, dy) || 0.001;
+          const shift = (d - this.rest) / d * 0.5 * 0.12;
+          const ox = dx * shift, oy = dy * shift;
+          a.x += ox; a.y += oy; b.x -= ox; b.y -= oy;
+        }
+        this.separate(this.nodes.map(nd => nd), 0.5);
+        for (const nd of this.nodes) {
+          nd.x = clamp(nd.x, nd.baseR + 6, this.w - nd.baseR - 6);
+          nd.y = clamp(nd.y, nd.baseR + 6, this.h - nd.baseR - 6);
+        }
+      }
+      this.nodes.forEach(nd => { nd.bx = nd.x; nd.by = nd.y; });
+      this.homeTargets();
+    }
+
+    separate(list, strength) {
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+          const a = list[i], b = list[j];
+          const min = (a.baseR || a.r) + (b.baseR || b.r) + 30;
+          const dx = b.x - a.x, dy = b.y - a.y;
+          let d = Math.hypot(dx, dy);
+          if (d < 0.001) { b.x += 0.7; d = 0.7; }
+          if (d < min) {
+            const push = (min - d) / d * 0.5 * strength;
+            const ox = dx * push, oy = dy * push;
+            a.x -= ox; a.y -= oy; b.x += ox; b.y += oy;
+          }
+        }
+      }
+    }
+
+    homeTargets() { this.nodes.forEach(n => { n.tx = n.bx; n.ty = n.by; }); }
+
+    snapToTargets() { this.nodes.forEach(n => { n.x = n.tx; n.y = n.ty; }); }
+
+    /* ---------- opening: work out every destination before moving ---------- */
+
+    retarget(openNode) {
+      const cardW = openNode.cardW, cardH = openNode.cardH;
+      const halfW = cardW / 2, halfH = cardH / 2;
+
+      // the card itself: nudged just enough to sit fully inside the stage
+      const ox = clamp(openNode.bx, halfW + 10, Math.max(halfW + 10, this.w - halfW - 10));
+      const oy = clamp(openNode.by, halfH + 10, Math.max(halfH + 10, this.h - halfH - 10));
+      openNode.tx = ox; openNode.ty = oy;
+
+      // everyone else starts from home and steps out of the card's way
+      const others = this.nodes.filter(n => n !== openNode)
+        .map(n => ({ ref: n, x: n.bx, y: n.by, baseR: n.baseR }));
+
+      for (let it = 0; it < 160; it++) {
+        for (const p of others) {
+          const gap = p.baseR + 20;
+          const qx = clamp(p.x, ox - halfW, ox + halfW);
+          const qy = clamp(p.y, oy - halfH, oy + halfH);
+          let dx = p.x - qx, dy = p.y - qy;
+          let d = Math.hypot(dx, dy);
+          if (d < gap) {
+            if (d < 0.001) {           // dead centre: leave along the long axis
+              dx = p.x - ox; dy = p.y - oy;
+              d = Math.hypot(dx, dy) || 1;
+              dx /= d; dy /= d;
+              p.x = ox + dx * (halfW + gap); p.y = oy + dy * (halfH + gap);
+            } else {
+              p.x = qx + dx / d * gap; p.y = qy + dy / d * gap;
+            }
+          } else {
+            // no longer in the way — drift back toward home so the graph keeps its shape
+            p.x += (p.ref.bx - p.x) * 0.06;
+            p.y += (p.ref.by - p.y) * 0.06;
+          }
+        }
+        this.separate(others, 0.6);
+        for (const p of others) {
+          p.x = clamp(p.x, p.baseR + 6, this.w - p.baseR - 6);
+          p.y = clamp(p.y, p.baseR + 6, this.h - p.baseR - 6);
+        }
+      }
+      others.forEach(p => { p.ref.tx = p.x; p.ref.ty = p.y; });
+    }
+
+    /* ---------- interaction ---------- */
+
+    toggle(n) { n.open ? this.close() : this.openNode(n); }
+
+    openNode(n) {
+      if (this.open) this.close();
+      n.open = true;
+      this.open = n;
+      this.root.classList.add('has-open');
+      n.el.classList.add('is-open');
+      n.front.setAttribute('aria-expanded', 'true');
+
+      // size the card to its own content, then remember it for the clearance maths
+      n.back.style.width = this.cardW + 'px';
+      const h = Math.min(n.back.scrollHeight, Math.round(this.h * 0.78));
+      n.back.style.height = h + 'px';
+      n.el.style.setProperty('--cw', this.cardW + 'px');
+      n.el.style.setProperty('--ch', h + 'px');
+      n.cardW = this.cardW; n.cardH = h;
+      n.back.classList.toggle('is-scrolling', n.back.scrollHeight > h + 2);
+
+      this.edges.forEach(e => e.el.classList.toggle('is-live', e.a === n.i || e.b === n.i));
+
+      this.retarget(n);
+      this.run();
+      requestAnimationFrame(() => n.back.querySelector('.net-close') && n.back.querySelector('.net-close').focus());
+    }
+
+    close() {
+      const n = this.open;
+      if (!n) return;
+      n.open = false; this.open = null;
+      this.root.classList.remove('has-open');
+      n.el.classList.remove('is-open');
+      n.front.setAttribute('aria-expanded', 'false');
+      this.edges.forEach(e => e.el.classList.remove('is-live'));
+      this.homeTargets();
+      this.run();
     }
 
     startDrag(e, n) {
       if (n.open) return;
       n.moved = 0;
       const rect = this.stage.getBoundingClientRect();
-      this.drag = { n, dx: n.x - (e.clientX - rect.left), dy: n.y - (e.clientY - rect.top) };
-      n.pinned = true;
+      const offX = n.x - (e.clientX - rect.left);
+      const offY = n.y - (e.clientY - rect.top);
+      n.drag = true;
+      this.dragging = n;
       n.el.classList.add('is-dragging');
-      e.target.setPointerCapture?.(e.pointerId);
+      if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
 
       const move = ev => {
         const r = this.stage.getBoundingClientRect();
-        const tx = ev.clientX - r.left + this.drag.dx;
-        const ty = ev.clientY - r.top + this.drag.dy;
+        const tx = clamp(ev.clientX - r.left + offX, n.baseR, this.w - n.baseR);
+        const ty = clamp(ev.clientY - r.top + offY, n.baseR, this.h - n.baseR);
         n.moved += Math.abs(tx - n.x) + Math.abs(ty - n.y);
-        n.x = tx; n.y = ty; n.vx = n.vy = 0;
+        n.x = n.tx = tx; n.y = n.ty = ty;   // follows the pointer exactly
+        this.paint();
       };
       const up = () => {
-        n.pinned = false;
+        n.drag = false; this.dragging = null;
         n.el.classList.remove('is-dragging');
-        this.drag = null;
+        // the bond never breaks: it pulls the bubble straight back home
+        n.tx = n.bx; n.ty = n.by;
         e.target.removeEventListener('pointermove', move);
         e.target.removeEventListener('pointerup', up);
         e.target.removeEventListener('pointercancel', up);
+        this.run();
       };
       e.target.addEventListener('pointermove', move);
       e.target.addEventListener('pointerup', up);
       e.target.addEventListener('pointercancel', up);
     }
 
-    toggle(n) { n.open ? this.close() : this.openNode(n); }
+    /* ---------- the only animation loop, and it stops itself ---------- */
 
-    openNode(n) {
-      this.close();
-      n.open = true; n.pinned = true;
-      n.el.classList.add('is-open');
-      n.front.setAttribute('aria-expanded', 'true');
-      // the card takes up much more room, so its repulsion radius grows and
-      // the rest of the network parts to make space
-      const card = this.w < 780 ? { w: 300, h: 340 } : { w: 372, h: 424 };
-      n.r = Math.max(card.w, card.h) * 0.52;
-      n.cardW = card.w; n.cardH = card.h;
-      this.open = n;
-      requestAnimationFrame(() => n.back.querySelector('.net-close')?.focus());
-    }
-
-    close() {
-      const n = this.open;
-      if (!n) return;
-      n.open = false; n.pinned = false; n.r = n.baseR;
-      n.el.classList.remove('is-open');
-      n.front.setAttribute('aria-expanded', 'false');
-      this.open = null;
-    }
-
-    step() {
-      const nodes = this.nodes, cx = this.w / 2, cy = this.h / 2;
-
-      // springs — long bonds pull hard, but never let go
-      for (const e of this.edges) {
-        const a = nodes[e.a], b = nodes[e.b];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const d = Math.hypot(dx, dy) || 0.001;
-        const rest = this.link + (a.open || b.open ? 150 : 0);
-        const f = (d - rest) * 0.0022;
-        const fx = (dx / d) * f, fy = (dy / d) * f;
-        if (!a.pinned) { a.vx += fx; a.vy += fy; }
-        if (!b.pinned) { b.vx -= fx; b.vy -= fy; }
-        e.stretch = Math.max(0, (d - rest) / rest);
-      }
-
-      // mutual repulsion so bubbles never sit on top of each other
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i], b = nodes[j];
-          const dx = b.x - a.x, dy = b.y - a.y;
-          let d = Math.hypot(dx, dy) || 0.001;
-          const min = a.r + b.r + 26;
-          if (d < min) {
-            const f = (min - d) * 0.02;
-            const fx = (dx / d) * f, fy = (dy / d) * f;
-            if (!a.pinned) { a.vx -= fx; a.vy -= fy; }
-            if (!b.pinned) { b.vx += fx; b.vy += fy; }
-          }
+    run() {
+      if (this.raf) return;
+      const tick = () => {
+        let moving = false;
+        for (const n of this.nodes) {
+          if (n.drag) continue;
+          const dx = n.tx - n.x, dy = n.ty - n.y;
+          if (Math.abs(dx) < 0.25 && Math.abs(dy) < 0.25) { n.x = n.tx; n.y = n.ty; continue; }
+          n.x += dx * 0.16; n.y += dy * 0.16;
+          moving = true;
         }
-      }
-
-      for (const n of nodes) {
-        if (!n.pinned) {
-          // drift home, damp, integrate
-          n.vx += (cx - n.x) * 0.00045;
-          n.vy += (cy - n.y) * 0.00045;
-          n.vx *= 0.90; n.vy *= 0.90;
-          const sp = Math.hypot(n.vx, n.vy);
-          if (sp > 14) { n.vx = n.vx / sp * 14; n.vy = n.vy / sp * 14; }
-          n.x += n.vx; n.y += n.vy;
-        }
-        // stay inside the stage
-        const halfW = n.open ? n.cardW / 2 : n.r;
-        const halfH = n.open ? n.cardH / 2 : n.r;
-        n.x = Math.min(this.w - halfW - 4, Math.max(halfW + 4, n.x));
-        n.y = Math.min(this.h - halfH - 4, Math.max(halfH + 4, n.y));
-      }
+        this.paint();
+        if (moving || this.dragging) { this.raf = requestAnimationFrame(tick); }
+        else { this.raf = 0; this.paint(); }   // one last exact frame, then idle
+      };
+      this.raf = requestAnimationFrame(tick);
     }
 
     paint() {
       for (const n of this.nodes) {
-        n.el.style.transform = 'translate(' + (n.x | 0) + 'px,' + (n.y | 0) + 'px)';
+        n.el.style.transform = 'translate(' + n.x.toFixed(1) + 'px,' + n.y.toFixed(1) + 'px)';
       }
       for (const e of this.edges) {
         const a = this.nodes[e.a], b = this.nodes[e.b];
-        e.el.setAttribute('x1', a.x); e.el.setAttribute('y1', a.y);
-        e.el.setAttribute('x2', b.x); e.el.setAttribute('y2', b.y);
-        // a stretched bond goes taut: brighter and thicker, so pulling
-        // one bubble away visibly strains the whole network
-        const t = Math.min(1, e.stretch);
-        e.el.style.strokeWidth = (1.6 + t * 2.6).toFixed(2);
-        e.el.style.opacity = (0.34 + t * 0.62).toFixed(2);
+        e.el.setAttribute('x1', a.x.toFixed(1)); e.el.setAttribute('y1', a.y.toFixed(1));
+        e.el.setAttribute('x2', b.x.toFixed(1)); e.el.setAttribute('y2', b.y.toFixed(1));
+        // a stretched bond goes taut rather than snapping
+        const d = Math.hypot(b.x - a.x, b.y - a.y);
+        const t = clamp((d - this.rest) / this.rest, 0, 1);
+        e.el.style.strokeWidth = (1.5 + t * 2.4).toFixed(2);
+        e.el.style.opacity = (0.3 + t * 0.6).toFixed(2);
       }
-    }
-
-    loop() {
-      this.step(); this.paint();
-      this.raf = requestAnimationFrame(() => this.loop());
     }
   }
 
   graphs.forEach(root => {
-    // Narrow screens and reduced-motion users keep the plain card list —
-    // dragging bubbles on a phone fights the scroll.
-    if (reduce || window.innerWidth < 720) return;
+    // Narrow screens and reduced-motion visitors keep the plain card list:
+    // dragging bubbles on a touchscreen fights the page scroll.
+    if (reduce || window.innerWidth < 820) return;
     new Graph(root);
   });
 })();

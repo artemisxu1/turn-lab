@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Turn Lab — design v2 (draft)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --void:#04040d; --void-2:#0a0a1c; --ink:#eef0ff; --muted:#9aa0c8; --line:rgba(255,255,255,.07);
+  --magenta:#ff2fa0; --pink:#ff5fd2; --violet:#7c4dff; --blue:#2f5bff; --cyan:#22e0f0; --orange:#ff7a3c;
+  --maxw:1180px;
+  --p:0;                      /* hero scroll progress 0 → 1, set by JS */
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--ink);font-family:"Inter",system-ui,sans-serif;
+     line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:600;line-height:1.1;letter-spacing:-.015em}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 26px}
+
+/* ---------------- NAV ---------------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60}
+.nav::before{content:"";position:absolute;inset:0;height:120px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,2,22,.72),transparent)}
+.nav-inner{position:relative}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:74px}
+.brand{font-family:"Fraunces",serif;font-size:1.15rem;font-weight:600;color:var(--ink);
+       text-decoration:none;opacity:calc((var(--p) - .55) * 4)}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:.88rem;color:#cdd3f5;text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+@media (max-width:780px){.nav-links{display:none}}
+
+/* ---------------- HERO STAGE ---------------- */
+.stage{height:260vh;position:relative}
+.pin{position:sticky;top:0;height:100vh;overflow:hidden;background:#07021a}
+.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* scrim that deepens as the roads clear, so the wordmark always has contrast */
+.scrim{position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:radial-gradient(72% 62% at 50% 50%, rgba(6,2,22,.85), rgba(6,2,22,.3) 62%, transparent 100%);
+  opacity:calc(var(--p) * .7)}
+
+/* --- treadmill: lane dashes crawl slowly along each road --- */
+.flow{animation:flow 30s linear infinite}
+.flow-2{animation:flow 40s linear infinite;animation-direction:reverse}
+.flow-3{animation:flow 52s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-560}}
+
+/* --- on scroll the roads simply fade back until they are barely there --- */
+.rgrp{opacity:calc(1 - var(--p) * .9);will-change:opacity}
+.r-decor{opacity:calc(1 - var(--p) * 1.35)}
+
+/* --- the wordmark the roads make space for --- */
+.word{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:0 26px;z-index:5;
+  opacity:calc((var(--p) - .3) * 2.8);
+  transform:translateY(calc((1 - var(--p)) * 26px))}
+.word .kicker{font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin:0 0 20px}
+.word h1{font-size:clamp(3rem,10vw,7.5rem);margin:0;color:#fff;font-weight:400;
+  letter-spacing:calc(-.02em + (1 - var(--p)) * .14em)}
+.word h1 em{font-style:normal;background:linear-gradient(96deg,var(--cyan),var(--violet) 46%,var(--magenta));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.word .line{font-family:"Fraunces",serif;font-style:italic;font-size:clamp(1.05rem,2.4vw,1.5rem);
+  color:var(--pink);margin:20px 0 0}
+.word .mission{max-width:54ch;margin:18px auto 0;color:var(--muted);font-size:1.03rem;font-weight:300}
+.word .btns{display:flex;gap:12px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+
+.btn{display:inline-block;padding:12px 26px;border-radius:999px;font-size:.92rem;font-weight:500;
+  text-decoration:none;transition:transform .18s,box-shadow .18s}
+.btn-neon{color:#08000c;background:linear-gradient(96deg,var(--cyan),var(--violet) 55%,var(--magenta))}
+.btn-neon:hover{transform:translateY(-2px);box-shadow:0 16px 40px -16px var(--violet)}
+.btn-wire{color:var(--ink);border:1px solid rgba(255,255,255,.22)}
+.btn-wire:hover{border-color:var(--cyan);color:var(--cyan)}
+.scrollcue{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-size:.68rem;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--muted);z-index:6;
+  opacity:calc(1 - var(--p)*3)}
+
+/* ---------------- CONTENT BELOW ---------------- */
+section{padding:110px 0;position:relative}
+.eyebrow{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin:0 0 16px}
+.section-head{max-width:620px;margin-bottom:54px}
+.section-head h2{font-size:clamp(2rem,4.4vw,3rem);margin:0 0 16px;font-weight:400}
+.section-head p{color:var(--muted);font-weight:300;font-size:1.06rem;margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.card{background:var(--void);padding:44px 34px 48px;position:relative;transition:background .3s}
+.card:hover{background:var(--void-2)}
+.card .num{font-family:"Fraunces",serif;font-size:.84rem;color:var(--muted)}
+.card h3{font-size:1.45rem;margin:16px 0 12px;font-weight:400}
+.card p{color:var(--muted);font-size:.95rem;font-weight:300;margin:0}
+.card .streak{position:absolute;left:0;right:0;top:0;height:2px;opacity:.85}
+@media (max-width:860px){.cards{grid-template-columns:1fr}}
+footer{border-top:1px solid var(--line);padding:44px 0 64px;color:var(--muted);font-size:.84rem}
+.draftnote{position:fixed;left:14px;bottom:14px;z-index:80;font-size:.66rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);background:rgba(4,4,13,.8);border:1px solid var(--line);
+  padding:7px 13px;border-radius:999px}
+
+@media (prefers-reduced-motion:reduce){
+  .flow,.flow-2,.flow-3{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<span class="draftnote">Design v2 — draft</span>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">Turn Lab</a>
+    <nav class="nav-links">
+      <a href="#themes">Research</a><a href="#">Philosophy</a><a href="#">People</a>
+      <a href="#">Publications</a><a href="#">News</a><a href="#">Join</a><a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="stage" id="stage">
+  <div class="pin">
+
+  <svg class="scene" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="gPink" gradientUnits="userSpaceOnUse" x1="0" y1="452" x2="360" y2="1240">
+      <stop offset="0" stop-color="#c62ac0"/><stop offset=".5" stop-color="#f22fce"/><stop offset="1" stop-color="#ff3fbe"/>
+    </linearGradient>
+    <linearGradient id="gBlue" gradientUnits="userSpaceOnUse" x1="-160" y1="700" x2="2080" y2="60">
+      <stop offset="0" stop-color="#2a30d8"/><stop offset=".5" stop-color="#2f47ef"/><stop offset="1" stop-color="#4363ff"/>
+    </linearGradient>
+    <linearGradient id="gPur" gradientUnits="userSpaceOnUse" x1="-160" y1="1040" x2="1636" y2="560">
+      <stop offset="0" stop-color="#6b2fc8"/><stop offset=".55" stop-color="#8a34e0"/><stop offset="1" stop-color="#a23fe8"/>
+    </linearGradient>
+    <linearGradient id="gBlkRim" gradientUnits="userSpaceOnUse" x1="96" y1="-100" x2="2080" y2="852">
+      <stop offset="0" stop-color="#8f6bff"/><stop offset=".5" stop-color="#6f4ae0"/><stop offset="1" stop-color="#5b8aff"/>
+    </linearGradient>
+    <radialGradient id="jGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#ffffff"/>
+      <stop offset=".7" stop-color="#e6a0ff" stop-opacity=".55"/><stop offset="1" stop-color="#e6a0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="oOrange"><stop offset="0" stop-color="#ff8a2a" stop-opacity=".9"/><stop offset="1" stop-color="#c01840" stop-opacity=".4"/></radialGradient>
+    <radialGradient id="oTeal"><stop offset="0" stop-color="#bff4ec" stop-opacity=".55"/><stop offset="1" stop-color="#3fd8d0" stop-opacity=".24"/></radialGradient>
+    <radialGradient id="bgGlow" cx=".45" cy=".5" r=".85"><stop offset="0" stop-color="#1c0b4a"/><stop offset="1" stop-color="#080220"/></radialGradient>
+    <filter id="glowS" x="-160%" y="-160%" width="420%" height="420%">
+      <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowL" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="20" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softBlur"><feGaussianBlur stdDeviation="16"/></filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".12"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bgGlow)"/>
+  <rect width="1920" height="1080" fill="#0a0328" opacity=".5"/>
+
+  <!-- BLUE — straight diagonal, lower-left up to top-right (backmost) -->
+  <g class="rgrp r-blue">
+    <path d="M-160 700 C 300 610 900 430 1400 300 C 1650 236 1880 150 2080 60" fill="none" stroke="url(#gBlue)" stroke-width="120"/>
+    <path d="M-160 700 C 300 610 900 430 1400 300 C 1650 236 1880 150 2080 60" fill="none" stroke="#8fa6ff" stroke-width="4" stroke-opacity=".7"/>
+    <path class="flow-3" d="M-160 700 C 300 610 900 430 1400 300 C 1650 236 1880 150 2080 60" fill="none" stroke="#dbe6ff" stroke-width="6" stroke-opacity=".6" stroke-dasharray="40 116" stroke-linecap="round"/>
+  </g>
+
+  <!-- PURPLE — from lower-left up to a junction on the right, with branches + glow -->
+  <g class="rgrp r-purple">
+    <path d="M1636 560 C 1660 380 1672 220 1676 -40" fill="none" stroke="url(#gPur)" stroke-width="118"/>
+    <path d="M1636 560 C 1720 660 1820 720 2080 726" fill="none" stroke="url(#gPur)" stroke-width="118"/>
+    <path d="M-160 1040 C 320 1000 820 760 1240 636 C 1400 588 1520 566 1636 560" fill="none" stroke="url(#gPur)" stroke-width="128"/>
+    <path d="M-160 1040 C 320 1000 820 760 1240 636 C 1400 588 1520 566 1636 560" fill="none" stroke="#c99aff" stroke-width="4" stroke-opacity=".6"/>
+    <path class="flow-2" d="M-160 1040 C 320 1000 820 760 1240 636 C 1400 588 1520 566 1636 560" fill="none" stroke="#ece0ff" stroke-width="6" stroke-opacity=".55" stroke-dasharray="34 104" stroke-linecap="round"/>
+    <circle cx="1636" cy="560" r="120" fill="url(#jGlow)" filter="url(#glowL)"/>
+    <circle cx="1636" cy="560" r="30" fill="#ffffff"/>
+  </g>
+
+  <!-- PINK — hooking in from the left edge, curving down to exit bottom -->
+  <g class="rgrp r-pink">
+    <path d="M-160 452 C 120 432 268 486 336 636 C 420 824 416 1010 360 1240" fill="none" stroke="url(#gPink)" stroke-width="96"/>
+    <path d="M-160 452 C 120 432 268 486 336 636 C 420 824 416 1010 360 1240" fill="none" stroke="#ffffff" stroke-width="80" stroke-opacity=".05"/>
+    <path d="M-160 452 C 120 432 268 486 336 636 C 420 824 416 1010 360 1240" fill="none" stroke="#ff8ae4" stroke-width="4" stroke-opacity=".8"/>
+    <path class="flow" d="M-160 452 C 120 432 268 486 336 636 C 420 824 416 1010 360 1240" fill="none" stroke="#ffe4f8" stroke-width="6" stroke-opacity=".6" stroke-dasharray="30 92" stroke-linecap="round"/>
+  </g>
+
+  <!-- BLACK — from top-left corner, elbow, then horizontal to the right (frontmost) -->
+  <g class="rgrp r-black">
+    <path d="M96 -100 C 380 230 600 520 742 726 C 806 818 892 852 1016 852 L2080 852" fill="none" stroke="url(#gBlkRim)" stroke-width="160" stroke-opacity=".9"/>
+    <path d="M96 -100 C 380 230 600 520 742 726 C 806 818 892 852 1016 852 L2080 852" fill="none" stroke="#0b0622" stroke-width="144"/>
+    <path d="M96 -100 C 380 230 600 520 742 726 C 806 818 892 852 1016 852 L2080 852" fill="none" stroke="#9db4ff" stroke-width="3" stroke-opacity=".5"/>
+    <path class="flow" d="M96 -100 C 380 230 600 520 742 726 C 806 818 892 852 1016 852 L2080 852" fill="none" stroke="#cfd8ff" stroke-width="6" stroke-opacity=".55" stroke-dasharray="42 120" stroke-linecap="round"/>
+  </g>
+
+  <!-- sparse ambience -->
+  <g class="rgrp r-decor">
+    <g style="mix-blend-mode:screen">
+      <circle cx="1180" cy="300" r="96" fill="url(#oTeal)"/>
+      <circle cx="250" cy="940" r="80" fill="url(#oOrange)"/>
+    </g>
+    <g filter="url(#glowS)">
+      <rect x="980" y="470" width="70" height="14" rx="7" transform="rotate(-16 1015 477)" fill="#ffd23e"/>
+      <rect x="640" y="300" width="72" height="13" rx="7" transform="rotate(-16 676 306)" fill="#eaffff"/>
+      <rect x="1320" y="700" width="76" height="14" rx="7" transform="rotate(4 1358 707)" fill="#eaffff"/>
+      <rect x="470" y="980" width="60" height="12" rx="6" transform="rotate(-6 500 986)" fill="#ff5fd0"/>
+      <rect x="1720" y="360" width="14" height="60" rx="7" transform="rotate(8 1727 390)" fill="#ffd23e"/>
+    </g>
+    <g filter="url(#softBlur)" opacity=".4" style="mix-blend-mode:screen">
+      <ellipse cx="900" cy="560" rx="70" ry="46" fill="#ff2fa0"/>
+      <ellipse cx="1500" cy="760" rx="60" ry="40" fill="#7c3fe8"/>
+    </g>
+  </g>
+
+  <rect width="1920" height="1080" filter="url(#grain)" opacity=".45" style="mix-blend-mode:overlay"/>
+  </svg>
+
+  <div class="scrim"></div>
+
+  <div class="word" id="top">
+    <p class="kicker">University of Wisconsin–Madison</p>
+    <h1><em>Turn Lab</em></h1>
+    <p class="line">Standing at the crossroads.</p>
+    <p class="mission">We study how cells decide their fate — mapping the signaling events in space and time that govern the G0 transition, quiescence, and cell identity.</p>
+    <div class="btns">
+      <a class="btn btn-neon" href="#themes">Explore the research</a>
+      <a class="btn btn-wire" href="#">Join the lab</a>
+    </div>
+  </div>
+
+  <p class="scrollcue">Scroll</p>
+  </div>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<section id="themes">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The science</p>
+      <h2>Every cell is at a junction</h2>
+      <p>Three intertwined routes through the same question: where, and when, does a signal commit a cell to a new state?</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <div class="streak" style="background:linear-gradient(90deg,var(--cyan),transparent)"></div>
+        <span class="num">01</span><h3>G0 &amp; quiescence</h3>
+        <p>How cells exit the cycle, hold a reversible resting state, and choose whether to come back.</p>
+      </article>
+      <article class="card">
+        <div class="streak" style="background:linear-gradient(90deg,var(--violet),transparent)"></div>
+        <span class="num">02</span><h3>Primary cilia</h3>
+        <p>The cilium as a signaling hub — a compartment where decisions are staged and read out.</p>
+      </article>
+      <article class="card">
+        <div class="streak" style="background:linear-gradient(90deg,var(--magenta),transparent)"></div>
+        <span class="num">03</span><h3>STAMP</h3>
+        <p>Spatiotemporal phosphoproteomics: catching signaling events in the act, where they happen.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><p>Turn Lab · University of Wisconsin–Madison — design draft v2. The live site is unchanged.</p></div>
+</footer>
+
+<script>
+(function () {
+  const stage = document.getElementById('stage');
+  const root = document.documentElement;
+  let ticking = false;
+  function update() {
+    const travel = stage.offsetHeight - window.innerHeight;
+    const p = Math.min(1, Math.max(0, -stage.getBoundingClientRect().top / travel));
+    root.style.setProperty('--p', p.toFixed(4));
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>
