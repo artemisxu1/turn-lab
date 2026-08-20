@@ -407,6 +407,13 @@ footer a { color: #eef0ff; }
   box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 10px 26px rgba(4,2,18,.62), 0 0 30px -6px var(--bub);
   transition: box-shadow .25s ease, filter .3s ease, opacity .3s ease; }
 .net-front:hover { filter: brightness(1.08); box-shadow: 0 0 0 1px rgba(255,255,255,.28), 0 12px 30px rgba(4,2,18,.7), 0 0 44px -4px var(--bub); }
+.net-name { display: block; }
+/* the role sits just under the bubble, so a long name never has to share
+   space with it; it is inside the front face, so it flips away with it */
+.net-role-cap { position: absolute; top: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+  width: 168px; font-size: .62rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  line-height: 1.3; color: rgba(219,224,255,.9); text-shadow: 0 1px 9px rgba(4,2,18,.95);
+  pointer-events: none; }
 .net-front:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 .net-node.is-dragging .net-front { cursor: grabbing; filter: brightness(1.12); }
 .net-node.is-open .net-front { pointer-events: none; }

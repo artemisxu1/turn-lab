@@ -61,6 +61,7 @@
       this.dragging = null;
       this.moved = false;   // true once the visitor has repositioned a bubble
 
+      this.hasRoles = this.items.some(li => li.dataset.role);
       this.measure();
       this.solveLayout();
       this.snapToTargets();
@@ -114,7 +115,9 @@
       const front = document.createElement('button');
       front.type = 'button';
       front.className = 'net-face net-front';
-      front.innerHTML = '<span>' + label + '</span>';
+      const role = li.dataset.role || '';
+      front.innerHTML = '<span class="net-name">' + label + '</span>'
+        + (role ? '<span class="net-role-cap">' + role + '</span>' : '');
       front.setAttribute('aria-expanded', 'false');
 
       const back = document.createElement('div');
@@ -172,7 +175,9 @@
         n.el.style.setProperty('--r', n.baseR + 'px');
       });
       this.rest = compact ? 158 : 196;
-      this.cardW = compact ? 292 : 336;
+      const wanted = parseInt(this.root.dataset.cardWidth, 10);
+      this.cardW = compact ? 292 : (wanted || 336);
+      if (this.cardW > this.w - 40) this.cardW = Math.max(280, this.w - 40);
     }
 
     /* ---------- layout, solved once then frozen ---------- */
@@ -184,7 +189,8 @@
       const n = this.nodes.length, cx = this.w / 2, cy = this.h / 2;
       const r = this.nodes[0].baseR;
       const needed = (r * 2 + 40) / (2 * Math.sin(Math.PI / n));   // chord >= bubble + gap
-      const fits = Math.min(this.w, this.h) / 2 - r - 12;
+      const foot = this.hasRoles ? 34 : 12;                        // room for the role caption
+      const fits = Math.min(this.w / 2 - r - 12, this.h / 2 - r - foot);
       const rad = clamp(Math.max(needed, Math.min(this.w, this.h) * 0.32), 0, fits);
 
       this.nodes.forEach((nd, i) => {
@@ -237,7 +243,7 @@
 
       for (let it = 0; it < 160; it++) {
         for (const p of others) {
-          const gap = p.baseR + 20;
+          const gap = p.baseR + 34;
           const qx = clamp(p.x, ox - halfW, ox + halfW);
           const qy = clamp(p.y, oy - halfH, oy + halfH);
           let dx = p.x - qx, dy = p.y - qy;
@@ -258,9 +264,10 @@
           }
         }
         this.separate(others, 0.6);
+        const foot = this.hasRoles ? 34 : 6;
         for (const p of others) {
           p.x = clamp(p.x, p.baseR + 6, this.w - p.baseR - 6);
-          p.y = clamp(p.y, p.baseR + 6, this.h - p.baseR - 6);
+          p.y = clamp(p.y, p.baseR + 6, this.h - p.baseR - foot);
         }
       }
       others.forEach(p => { p.ref.tx = p.x; p.ref.ty = p.y; });
@@ -320,7 +327,8 @@
       const move = ev => {
         const r = this.stage.getBoundingClientRect();
         const tx = clamp(ev.clientX - r.left + offX, n.baseR, this.w - n.baseR);
-        const ty = clamp(ev.clientY - r.top + offY, n.baseR, this.h - n.baseR);
+        const foot = this.hasRoles ? 30 : 0;
+        const ty = clamp(ev.clientY - r.top + offY, n.baseR, this.h - n.baseR - foot);
         n.moved += Math.abs(tx - n.x) + Math.abs(ty - n.y);
         n.x = n.tx = tx; n.y = n.ty = ty;   // follows the pointer exactly
         this.paint();
