@@ -59,6 +59,7 @@
       this.open = null;
       this.raf = 0;
       this.dragging = null;
+      this.moved = false;   // true once the visitor has repositioned a bubble
 
       this.measure();
       this.solveLayout();
@@ -69,8 +70,24 @@
       window.addEventListener('resize', () => {
         clearTimeout(rt);
         rt = setTimeout(() => {
-          this.measure(); this.solveLayout();
-          if (this.open) this.retarget(this.open); else this.homeTargets();
+          const ow = this.w, oh = this.h;
+          this.measure();
+          if (this.moved && ow && oh) {
+            // keep the arrangement the user built, just rescale it
+            const sx = this.w / ow, sy = this.h / oh;
+            this.nodes.forEach(n => {
+              n.bx = clamp(n.bx * sx, n.baseR + 6, this.w - n.baseR - 6);
+              n.by = clamp(n.by * sy, n.baseR + 6, this.h - n.baseR - 6);
+            });
+            this.edges.forEach(e => {
+              const a = this.nodes[e.a], b = this.nodes[e.b];
+              e.rest = Math.hypot(b.bx - a.bx, b.by - a.by) || 1;
+            });
+            this.homeTargets();
+          } else {
+            this.solveLayout();
+          }
+          if (this.open) this.retarget(this.open);
           this.snapToTargets(); this.paint();
         }, 160);
       });
@@ -160,34 +177,25 @@
 
     /* ---------- layout, solved once then frozen ---------- */
 
-    // A position-based relaxation (no velocities, no randomness) so the result
-    // is identical every load and cannot wobble.
+    // The resting arrangement is a plain evenly-spaced circle. No relaxation,
+    // no wobble: the radius is just wide enough that neighbouring bubbles clear
+    // each other, and narrow enough to stay inside the stage.
     solveLayout() {
       const n = this.nodes.length, cx = this.w / 2, cy = this.h / 2;
-      const rad = Math.min(this.w, this.h) * 0.31;
-      this.nodes.forEach((nd, i) => {
-        const a = (i / n) * TAU - Math.PI / 2;
-        const wob = [1.06, 0.88, 0.99][i % 3];   // deterministic, just enough to look unplanned
-        nd.x = cx + Math.cos(a) * rad * wob;
-        nd.y = cy + Math.sin(a) * rad * wob;
-      });
+      const r = this.nodes[0].baseR;
+      const needed = (r * 2 + 40) / (2 * Math.sin(Math.PI / n));   // chord >= bubble + gap
+      const fits = Math.min(this.w, this.h) / 2 - r - 12;
+      const rad = clamp(Math.max(needed, Math.min(this.w, this.h) * 0.32), 0, fits);
 
-      for (let it = 0; it < 400; it++) {
-        for (const e of this.edges) {
-          const a = this.nodes[e.a], b = this.nodes[e.b];
-          const dx = b.x - a.x, dy = b.y - a.y;
-          const d = Math.hypot(dx, dy) || 0.001;
-          const shift = (d - this.rest) / d * 0.5 * 0.12;
-          const ox = dx * shift, oy = dy * shift;
-          a.x += ox; a.y += oy; b.x -= ox; b.y -= oy;
-        }
-        this.separate(this.nodes.map(nd => nd), 0.5);
-        for (const nd of this.nodes) {
-          nd.x = clamp(nd.x, nd.baseR + 6, this.w - nd.baseR - 6);
-          nd.y = clamp(nd.y, nd.baseR + 6, this.h - nd.baseR - 6);
-        }
-      }
-      this.nodes.forEach(nd => { nd.bx = nd.x; nd.by = nd.y; });
+      this.nodes.forEach((nd, i) => {
+        const a = (i / n) * TAU - Math.PI / 2;   // first node at twelve o'clock
+        nd.x = nd.bx = cx + Math.cos(a) * rad;
+        nd.y = nd.by = cy + Math.sin(a) * rad;
+      });
+      this.edges.forEach(e => {
+        const a = this.nodes[e.a], b = this.nodes[e.b];
+        e.rest = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+      });
       this.homeTargets();
     }
 
@@ -307,7 +315,7 @@
       n.drag = true;
       this.dragging = n;
       n.el.classList.add('is-dragging');
-      if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
+      try { if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId); } catch (_) {}
 
       const move = ev => {
         const r = this.stage.getBoundingClientRect();
@@ -320,12 +328,15 @@
       const up = () => {
         n.drag = false; this.dragging = null;
         n.el.classList.remove('is-dragging');
-        // the bond never breaks: it pulls the bubble straight back home
-        n.tx = n.bx; n.ty = n.by;
+        // where you drop it is where it lives now — the bonds just stretch to
+        // follow, since they never break
+        n.bx = n.x; n.by = n.y;
+        n.tx = n.x; n.ty = n.y;
+        if (n.moved > 6) this.moved = true;
         e.target.removeEventListener('pointermove', move);
         e.target.removeEventListener('pointerup', up);
         e.target.removeEventListener('pointercancel', up);
-        this.run();
+        this.paint();
       };
       e.target.addEventListener('pointermove', move);
       e.target.addEventListener('pointerup', up);
@@ -362,7 +373,7 @@
         e.el.setAttribute('x2', b.x.toFixed(1)); e.el.setAttribute('y2', b.y.toFixed(1));
         // a stretched bond goes taut rather than snapping
         const d = Math.hypot(b.x - a.x, b.y - a.y);
-        const t = clamp((d - this.rest) / this.rest, 0, 1);
+        const t = clamp((d - e.rest) / e.rest, 0, 1);
         e.el.style.strokeWidth = (1.5 + t * 2.4).toFixed(2);
         e.el.style.opacity = (0.3 + t * 0.6).toFixed(2);
       }
