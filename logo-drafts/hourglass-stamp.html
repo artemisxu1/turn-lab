@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Turn Lab — hourglass stamp logo options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ---------------- page chrome ---------------- */
+  :root { --ink:#ecedff; --bg:#06031a; --surface:#120b32; --muted:#a7abda; --line:rgba(255,255,255,.09);
+          --edge:#2c2560; --hi:#38d6f0; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Inter",system-ui,sans-serif; line-height:1.6; }
+  h1,h2,h3 { font-family:"Fraunces",Georgia,serif; line-height:1.15; font-weight:600; }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 24px; }
+  header.top { padding:56px 0 30px; border-bottom:1px solid var(--line); }
+  header.top h1 { font-size:2.2rem; margin:0 0 14px; }
+  header.top p { color:var(--muted); max-width:74ch; margin:0 0 10px; }
+  .design { padding:52px 0; border-bottom:1px solid var(--line); }
+  .design h2 { font-size:1.5rem; margin:0 0 10px; }
+  .design > .wrap > p.note { color:var(--muted); max-width:74ch; margin:0 0 28px; }
+  .row { display:flex; flex-wrap:wrap; gap:22px; align-items:flex-start; }
+  .panel { background:var(--surface); border:1px solid var(--edge); border-radius:18px; padding:24px;
+           display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .panel .cap { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-align:center; }
+  .panel .cap b { color:var(--hi); font-weight:600; }
+  .sizes { display:flex; align-items:flex-end; gap:20px; }
+  kbd { font-family:inherit; font-size:.72rem; background:var(--edge); border-radius:5px; padding:1px 6px; }
+
+  /* ---------------- the interactive stamp ---------------- */
+  .stamp-btn { background:none; border:0; padding:0; cursor:pointer; display:block; line-height:0; border-radius:10px; }
+  .stamp-btn:focus-visible { outline:2px solid var(--hi); outline-offset:6px; }
+  .stamp-btn svg { display:block; }
+
+  /* The mark lives in <defs> and arrives through <use>, and document CSS
+     selectors do not reach inside a use shadow tree. Custom properties do
+     inherit in, so the whole two-state machine is driven by variables:
+     --turn rotates the glass, --opA/--opB cross-fade the contents, and the
+     --dur/--del pair lets a container freeze one state for comparison. */
+  .turned { --turn:180deg; --opA:0; --opB:1; }
+  .fix-a  { --dur:0s; --durA:0s; --durB:0s; --delA:0s; --delB:0s; }
+  .fix-b  { --turn:180deg; --opA:0; --opB:1;
+            --dur:0s; --durA:0s; --durB:0s; --delA:0s; --delB:0s; }
+
+  @media (prefers-reduced-motion:reduce) {
+    .stamp-btn { --dur:0s; --durA:0s; --durB:0s; --delA:0s; --delB:0s; }
+  }
+
+  /* ---- the artwork logo: its own state vars, so it never collides with the
+          drawn version's. The spin and the fill are deliberately sequential:
+          the fade only starts once the spin has landed, because that is the
+          instant the two frames are in register. Fading them while they are
+          mid-turn would show both at once, 180 degrees apart. ---- */
+  .stamp-btn { --pWipe:-200px; --pDelT:.32s; --pDelB:0s; --pDurB:.3s; }
+  .turned    { --pTurn:180deg; --pWipe:0px; --pDelT:0s; --pDelB:1.05s; --pDurB:.7s; }
+  .fix-a     { --pWipe:-200px; --pDur:0s; --pDurB:0s; --pDelT:0s; --pDelB:0s; }
+  .fix-b     { --pTurn:180deg; --pWipe:0px;
+               --pDur:0s; --pDurB:0s; --pDelT:0s; --pDelB:0s; }
+  @media (prefers-reduced-motion:reduce) {
+    .stamp-btn { --pDur:0s; --pDurB:0s; --pDelT:0s; --pDelB:0s; }
+  }
+
+  /* pure white border, deep field behind the white line art */
+  .cw-white  { --paper:#ffffff; --panel:#101a3f;
+               --word:#ffffff; --sub:#38d6f0; --rule:rgba(255,255,255,.32); }
+  .cw-white-ink  { --panel:#0b1020; }
+  .cw-white-plum { --panel:#241243; }
+
+  /* ---------------- logo colourways ---------------- */
+  .cw-dark {
+    --paper:#f3ece0;   /* the stamp's paper edge          */
+    --panel:#101a3f;   /* the printed field               */
+    --glass:#f7f3ea;   /* hourglass frame + glass outline */
+    --glasstint:#16214a;
+    /* three lilacs: the cells are the same shape but not the same colour */
+    --sand:#bcaef5; --sand2:#a698ec; --sand3:#cfc6fb;
+    --cell-fill:currentColor; --cell-stroke:none; --sand-sw:0; --sandnuc:#efeaff;
+    --ppi:#7ba2ff; --ppi-op:.30;
+    --word:#f7f3ea; --sub:#38d6f0; --ink:#f7f3ea; --rule:rgba(247,243,234,.34);
+    --f1:#38d6f0; --f2:#ff6fb0; --f3:#f2a63c; --f4:#b07dff; --f5:#4bd6a0; --f6:#6f9bff;
+  }
+  /* one restrained accent trio instead of six hues */
+  .cw-duo { --f1:#38d6f0; --f2:#ff6fb0; --f3:#f2a63c; --f4:#38d6f0; --f5:#ff6fb0; --f6:#f2a63c; }
+  /* engraved: one ink, one carmine for the nuclei. No colour variation in the
+     cells either - an intaglio press only had the one plate. */
+  .cw-ink {
+    --paper:#efe6d4; --panel:#e8dec9; --glass:#17265c; --glasstint:transparent;
+    --sand:#17265c; --sand2:#17265c; --sand3:#17265c;
+    --cell-fill:none; --cell-stroke:currentColor; --sand-sw:2.2; --sandnuc:#17265c;
+    --ppi:#17265c; --ppi-op:.24;
+    --word:#17265c; --sub:#a3243f; --ink:#17265c; --rule:rgba(23,38,92,.4);
+    --f1:#17265c; --f2:#17265c; --f3:#17265c; --f4:#17265c; --f5:#17265c; --f6:#17265c;
+    --fcn:#a3243f;
+  }
+</style>
+</head>
+<body>
+
+<!-- =================================================================
+     SHARED PARTS
+     All geometry lives in one 200 x 260 "design box". The hourglass is
+     symmetric about its waist at (100,130), so a 180 degree turn leaves the
+     vessel unchanged and only the contents move.
+
+     The bulbs are wide (x 32..168 at their widest) for a reason: the six
+     trajectories below the waist need clear channels between the cells, and
+     the narrower bulb of the first draft could not give them one.
+     ================================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+
+  <!-- ---- stamp perforations: holes punched out of the paper, so the edge
+          works on any background ---- -->
+  <pattern id="perf" x="-5.5" y="-5.5" width="11" height="11" patternUnits="userSpaceOnUse">
+    <circle cx="5.5" cy="5.5" r="4.4" fill="#000"/>
+  </pattern>
+  <pattern id="perf-lg" x="-16" y="-16" width="32" height="32" patternUnits="userSpaceOnUse">
+    <circle cx="16" cy="16" r="13" fill="#000"/>
+  </pattern>
+
+  <mask id="m-por" maskUnits="userSpaceOnUse" x="-8" y="-8" width="346" height="434">
+    <rect width="330" height="418" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="341" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="412.5" width="341" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="429" fill="url(#perf)"/>
+    <rect x="324.5" y="-5.5" width="11"  height="429" fill="url(#perf)"/>
+  </mask>
+  <mask id="m-lan" maskUnits="userSpaceOnUse" x="-8" y="-8" width="434" height="346">
+    <rect width="418" height="330" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="429" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="324.5" width="429" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="341" fill="url(#perf)"/>
+    <rect x="412.5" y="-5.5" width="11"  height="341" fill="url(#perf)"/>
+  </mask>
+  <mask id="m-sqr" maskUnits="userSpaceOnUse" x="-8" y="-8" width="368" height="368">
+    <rect width="352" height="352" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="363" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="346.5" width="363" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="363" fill="url(#perf)"/>
+    <rect x="346.5" y="-5.5" width="11"  height="363" fill="url(#perf)"/>
+  </mask>
+  <!-- portrait 297 x 418, for the artwork logo: narrower than the drawn
+       version's frame because the supplied hourglass is a tall 0.53 : 1 -->
+  <mask id="m-p297" maskUnits="userSpaceOnUse" x="-8" y="-8" width="313" height="434">
+    <rect width="297" height="418" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="308" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="412.5" width="308" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="429" fill="url(#perf)"/>
+    <rect x="291.5" y="-5.5" width="11"  height="429" fill="url(#perf)"/>
+  </mask>
+
+  <!-- The artwork logo has no background panel, so its border is a RING: the
+       same perforated edge, with the interior punched out so the middle is
+       transparent. -->
+  <mask id="m-ring-por" maskUnits="userSpaceOnUse" x="-8" y="-8" width="313" height="434">
+    <rect width="297" height="418" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="308" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="412.5" width="308" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="429" fill="url(#perf)"/>
+    <rect x="291.5" y="-5.5" width="11"  height="429" fill="url(#perf)"/>
+    <rect x="22" y="22" width="253" height="374" rx="3" fill="#000"/>
+  </mask>
+  <mask id="m-ring-sqr" maskUnits="userSpaceOnUse" x="-8" y="-8" width="368" height="368">
+    <rect width="352" height="352" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="363" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="346.5" width="363" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="363" fill="url(#perf)"/>
+    <rect x="346.5" y="-5.5" width="11"  height="363" fill="url(#perf)"/>
+    <rect x="20" y="20" width="312" height="312" rx="3" fill="#000"/>
+  </mask>
+  <mask id="m-ring-lan" maskUnits="userSpaceOnUse" x="-8" y="-8" width="434" height="346">
+    <rect width="418" height="330" fill="#fff"/>
+    <rect x="-5.5" y="-5.5"  width="429" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="324.5" width="429" height="11"  fill="url(#perf)"/>
+    <rect x="-5.5" y="-5.5"  width="11"  height="341" fill="url(#perf)"/>
+    <rect x="412.5" y="-5.5" width="11"  height="341" fill="url(#perf)"/>
+    <rect x="22" y="22" width="374" height="286" rx="3" fill="#000"/>
+  </mask>
+
+  <!-- the moving front of the downward wipe: solid for most of its length,
+       fading over the last quarter so the leading edge is soft -->
+  <linearGradient id="wipeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="126" x2="0" y2="326">
+    <stop offset="0" stop-color="#fff"/>
+    <stop offset=".75" stop-color="#fff"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+
+  <!-- coarse teeth, so the edge survives at favicon sizes -->
+  <mask id="m-sqr-lg" maskUnits="userSpaceOnUse" x="-20" y="-20" width="392" height="392">
+    <rect width="352" height="352" fill="#fff"/>
+    <rect x="-16" y="-16" width="384" height="32"  fill="url(#perf-lg)"/>
+    <rect x="-16" y="336"  width="384" height="32"  fill="url(#perf-lg)"/>
+    <rect x="-16" y="-16" width="32"  height="384" fill="url(#perf-lg)"/>
+    <rect x="336" y="-16"  width="32"  height="384" fill="url(#perf-lg)"/>
+  </mask>
+
+  <filter id="grain-f" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+
+  <!-- ---- the vessel ---- -->
+  <g id="hg-glass">
+    <path d="M60 33 C44 33 32 44 32 64 C32 90 72 104 97 127 L97 133
+             C72 156 32 170 32 196 C32 216 44 227 60 227 L140 227
+             C156 227 168 216 168 196 C168 170 128 156 103 133 L103 127
+             C128 104 168 90 168 64 C168 44 156 33 140 33 Z"
+          fill="var(--glasstint)" stroke="var(--glass)" stroke-width="5.2" stroke-linejoin="round"/>
+    <rect x="26" y="20"  width="148" height="13" rx="6.5" fill="var(--glass)"/>
+    <rect x="26" y="227" width="148" height="13" rx="6.5" fill="var(--glass)"/>
+  </g>
+
+  <!-- One undifferentiated cell. Identical in shape everywhere; its colour
+       comes from the `color` on each instance, so the pile can be three
+       slightly different lilacs the way the reference drawing is. -->
+  <g id="g-cell">
+    <circle r="7" fill="var(--cell-fill)" stroke="var(--cell-stroke)" stroke-width="var(--sand-sw)"/>
+    <circle cx="-1.8" cy="-1.6" r="2.5" fill="var(--sandnuc)" opacity=".8"/>
+  </g>
+
+  <!-- ============ STATE 1 ============
+       22 cells settled in the lower bulb. Rows of 8/7/5/2 give a free surface
+       at about 41 degrees off horizontal, which is roughly a real angle of
+       repose - a heap, not a stack. -->
+  <g id="sand-rest">
+    <use href="#g-cell" x="47.5"  y="214" style="color:var(--sand)"/>
+    <use href="#g-cell" x="62.5"  y="214" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="77.5"  y="214" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="92.5"  y="214" style="color:var(--sand)"/>
+    <use href="#g-cell" x="107.5" y="214" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="122.5" y="214" style="color:var(--sand)"/>
+    <use href="#g-cell" x="137.5" y="214" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="152.5" y="214" style="color:var(--sand)"/>
+    <use href="#g-cell" x="55"  y="201" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="70"  y="201" style="color:var(--sand)"/>
+    <use href="#g-cell" x="85"  y="201" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="100" y="201" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="115" y="201" style="color:var(--sand)"/>
+    <use href="#g-cell" x="130" y="201" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="145" y="201" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="70"  y="188" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="85"  y="188" style="color:var(--sand)"/>
+    <use href="#g-cell" x="100" y="188" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="115" y="188" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="130" y="188" style="color:var(--sand)"/>
+    <use href="#g-cell" x="92.5"  y="175" style="color:var(--sand)"/>
+    <use href="#g-cell" x="107.5" y="175" style="color:var(--sand2)"/>
+  </g>
+
+  <!-- ============ STATE 2, part one ============
+       The same 22 cells after the turn. 14 have settled into the BOTTOM of the
+       upper bulb - not stuck to its ceiling - and the free surface is a crater:
+       high against the walls, drained away in the middle, the way an hourglass
+       actually empties. One is entering the throat, one has just cleared it. -->
+  <g id="sand-falling">
+    <use href="#g-cell" x="55"  y="81" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="70"  y="81" style="color:var(--sand)"/>
+    <use href="#g-cell" x="130" y="81" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="145" y="81" style="color:var(--sand)"/>
+    <use href="#g-cell" x="62.5"  y="94" style="color:var(--sand)"/>
+    <use href="#g-cell" x="77.5"  y="94" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="92.5"  y="94" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="107.5" y="94" style="color:var(--sand)"/>
+    <use href="#g-cell" x="122.5" y="94" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="137.5" y="94" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="85"  y="107" style="color:var(--sand3)"/>
+    <use href="#g-cell" x="100" y="107" style="color:var(--sand)"/>
+    <use href="#g-cell" x="115" y="107" style="color:var(--sand2)"/>
+    <use href="#g-cell" x="100" y="120" style="color:var(--sand)"/>
+    <!-- squeezed inside the throat, then just clear of it and falling -->
+    <g transform="translate(100,130.5) scale(.66)" style="color:var(--sand2)"><use href="#g-cell"/></g>
+    <g transform="translate(100,143) scale(.92)" style="color:var(--sand)"><use href="#g-cell"/></g>
+  </g>
+
+  <!-- ---- the six fates. Each is drawn about its own origin; --fc sets its
+          hue and --fcn its nucleus. ---- -->
+  <g id="fate-round">
+    <circle r="9" fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.6"/>
+    <circle cx="-2.2" cy="1.4" r="4" fill="var(--fcn,var(--fc))"/>
+  </g>
+  <g id="fate-spindle">
+    <path d="M-13 0 C-8.5 -6.2 8.5 -6.2 13 0 C8.5 6.2 -8.5 6.2 -13 0 Z"
+          fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle r="3.2" fill="var(--fcn,var(--fc))"/>
+  </g>
+  <g id="fate-stellate">
+    <g stroke="var(--fc)" stroke-width="2.8" stroke-linecap="round" fill="none">
+      <path d="M3.9 2.25 L9.96 5.75"/><path d="M0 4.5 L0 11.5"/><path d="M-3.9 2.25 L-9.96 5.75"/>
+      <path d="M-3.9 -2.25 L-9.96 -5.75"/><path d="M0 -4.5 L0 -11.5"/><path d="M3.9 -2.25 L9.96 -5.75"/>
+    </g>
+    <circle r="6.4" fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.4"/>
+    <circle r="2.6" fill="var(--fcn,var(--fc))"/>
+  </g>
+  <g id="fate-lobed">
+    <path d="M0 -9.4 C5.4 -10 8.2 -5.6 10.6 -2.4 C13 .8 9.8 5 6.6 6.8 C3.8 8.4 2.4 11 -1.2 10.2
+             C-5 9.4 -5.2 5.8 -8 4 C-11 2 -11.4 -2.4 -9 -5 C-6.6 -7.6 -4.6 -8.8 0 -9.4 Z"
+          fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx=".6" cy=".4" r="3.6" fill="var(--fcn,var(--fc))"/>
+  </g>
+  <!-- a nod to the lab's own subject: one fate grows a primary cilium -->
+  <g id="fate-ciliated">
+    <path d="M5.4 -6 C9.2 -9.4 10.6 -13.4 11 -17.6" fill="none"
+          stroke="var(--fc)" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="11" cy="-17.6" r="2.2" fill="var(--fc)"/>
+    <circle r="8.4" fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.5"/>
+    <circle cx="-1.6" cy="1.2" r="3.6" fill="var(--fcn,var(--fc))"/>
+  </g>
+  <!-- granulated rod: the secretory, islet-like fate -->
+  <g id="fate-rod">
+    <rect x="-6" y="-11" width="12" height="22" rx="6"
+          fill="var(--fc)" fill-opacity=".22" stroke="var(--fc)" stroke-width="2.4"/>
+    <g stroke="var(--fc)" stroke-width="1.6" stroke-linecap="round" opacity=".85" fill="none">
+      <path d="M-6 -5 L-10 -6.5"/><path d="M6 -1 L10 -2.5"/><path d="M-6 3 L-10 4.5"/><path d="M6 7 L10 8.5"/>
+    </g>
+    <g fill="var(--fcn,var(--fc))">
+      <circle cy="-5" r="1.9"/><circle cy=".5" r="1.9"/><circle cy="6" r="1.9"/>
+    </g>
+  </g>
+
+  <!-- ============ STATE 2, part two ============
+       Six trajectories out of the bottleneck. Each fate sits at its own
+       (angle, radius) about the throat exit at (100,146), and each trail is a
+       single cubic that leaves the throat near-vertical and bends out to its
+       own angle. Because the angles are strictly ordered left to right and no
+       curve leaves its own angular corridor, two trails can never cross.
+
+       Each curve leaves already aimed at its own angle and gets its bend from
+       an outward bow, so every point on trail i lies between angle a and
+       1.18a - and those bands are disjoint between neighbours, which is what
+       makes crossing impossible rather than merely unlikely.
+
+       Every clearance in here was measured rather than eyeballed: trail to
+       other cell, trail to trail, trail to glass, cell to cell, cell to glass.
+       The tightest gap in the whole arrangement is 2.1 units. The distance a
+       fate sits from the throat also does some work - the near ones committed
+       early, the far ones travelled before they decided. -->
+  <g id="fates-fan">
+    <g fill="none" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="2.5 6" opacity=".9">
+      <path d="M84.7 158.9 C73.6 161.8 64.9 170.6 60.4 179.2"     stroke="var(--f3)"/>
+      <path d="M90.9 163.8 C86.9 167.1 85.0 172.3 84.5 176.5"     stroke="var(--f4)"/>
+      <path d="M95.8 165.6 C91.8 178.7 88.8 193.7 87.5 205.0"     stroke="var(--f5)"/>
+      <path d="M104.2 165.6 C107.9 177.5 110.6 191.2 111.8 201.4" stroke="var(--f6)"/>
+      <path d="M110.0 163.3 C115.7 168.0 119.0 175.2 120.3 181.2" stroke="var(--f2)"/>
+      <path d="M115.3 158.9 C126.4 161.9 135.1 170.6 139.7 179.3" stroke="var(--f1)"/>
+    </g>
+    <g style="--fc:var(--f3)"><g transform="translate(51,187.1) scale(.8)"><use href="#fate-stellate"/></g></g>
+    <g style="--fc:var(--f4)"><g transform="translate(79.1,187) scale(.8)"><use href="#fate-lobed"/></g></g>
+    <!-- the cilium is mirrored so it points away from its own trail's corridor -->
+    <g style="--fc:var(--f5)"><g transform="translate(85.4,214.5) scale(-.8,.8)"><use href="#fate-ciliated"/></g></g>
+    <g style="--fc:var(--f6)"><g transform="translate(114.1,212.5) scale(.8) rotate(14)"><use href="#fate-rod"/></g></g>
+    <!-- the spindle's long axis is radial: it is migrating along its own path,
+         and it stays thin across the corridor its neighbour's trail needs -->
+    <g style="--fc:var(--f2)"><g transform="translate(127,192.8) scale(.8) rotate(-60)"><use href="#fate-spindle"/></g></g>
+    <g style="--fc:var(--f1)"><g transform="translate(147.5,185.9) scale(.8)"><use href="#fate-round"/></g></g>
+  </g>
+
+  <!-- =========== the turning assembly ===========
+       The rotation is written translate-rotate-translate so it needs no
+       transform-origin, and state 2 carries its own counter-rotation so it
+       lands upright once the glass has finished turning. -->
+  <g id="hg-assembly">
+    <g style="transform:translate(100px,130px) rotate(var(--turn,0deg)) translate(-100px,-130px);
+              transition:transform var(--dur,1.15s) cubic-bezier(.62,.02,.24,1)">
+      <use href="#hg-glass"/>
+      <g style="opacity:var(--opA,1);transition:opacity var(--durA,.38s) ease var(--delA,.18s)">
+        <use href="#sand-rest"/>
+      </g>
+      <g transform="rotate(180 100 130)"
+         style="opacity:var(--opB,0);transition:opacity var(--durB,.42s) ease var(--delB,.32s)">
+        <use href="#sand-falling"/><use href="#fates-fan"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ---- simplified mark for favicon / nav sizes: five cells and three
+          fates, strokes fattened so nothing disappears ---- -->
+  <g id="hg-glass-mini">
+    <path d="M60 33 C44 33 32 44 32 64 C32 90 72 104 97 127 L97 133
+             C72 156 32 170 32 196 C32 216 44 227 60 227 L140 227
+             C156 227 168 216 168 196 C168 170 128 156 103 133 L103 127
+             C128 104 168 90 168 64 C168 44 156 33 140 33 Z"
+          fill="var(--glasstint)" stroke="var(--glass)" stroke-width="9" stroke-linejoin="round"/>
+    <rect x="22" y="14"  width="156" height="19" rx="9.5" fill="var(--glass)"/>
+    <rect x="22" y="227" width="156" height="19" rx="9.5" fill="var(--glass)"/>
+  </g>
+  <g id="hg-mini">
+    <g style="transform:translate(100px,130px) rotate(var(--turn,0deg)) translate(-100px,-130px);
+              transition:transform var(--dur,1.15s) cubic-bezier(.62,.02,.24,1)">
+      <use href="#hg-glass-mini"/>
+      <g style="opacity:var(--opA,1);transition:opacity var(--durA,.38s) ease var(--delA,.18s)">
+        <circle cx="68"  cy="207" r="15" fill="var(--sand)"/>
+        <circle cx="100" cy="207" r="15" fill="var(--sand3)"/>
+        <circle cx="132" cy="207" r="15" fill="var(--sand2)"/>
+        <circle cx="84"  cy="181" r="15" fill="var(--sand2)"/>
+        <circle cx="116" cy="181" r="15" fill="var(--sand)"/>
+      </g>
+      <g transform="rotate(180 100 130)"
+         style="opacity:var(--opB,0);transition:opacity var(--durB,.42s) ease var(--delB,.32s)">
+        <circle cx="72"  cy="94"  r="13" fill="var(--sand2)"/>
+        <circle cx="100" cy="94"  r="13" fill="var(--sand)"/>
+        <circle cx="128" cy="94"  r="13" fill="var(--sand3)"/>
+        <circle cx="100" cy="113" r="12" fill="var(--sand2)"/>
+        <circle cx="100" cy="130" r="7"  fill="var(--sand)"/>
+        <g fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 8">
+          <path d="M100 146 C86 154 68 166 64 180"    stroke="var(--f1)"/>
+          <path d="M100 146 C100 158 100 168 100 176"  stroke="var(--f3)"/>
+          <path d="M100 146 C114 154 134 166 138 180" stroke="var(--f5)"/>
+        </g>
+        <circle cx="64" cy="196" r="14" fill="var(--f1)" fill-opacity=".3" stroke="var(--f1)" stroke-width="4"/>
+        <g stroke="var(--f3)" stroke-width="4" stroke-linecap="round" fill="none">
+          <path d="M100 213 L100 224"/><path d="M91 207 L82 216"/><path d="M109 207 L118 216"/>
+        </g>
+        <circle cx="100" cy="203" r="10" fill="var(--f3)" fill-opacity=".3" stroke="var(--f3)" stroke-width="4"/>
+        <path d="M124 196 C130 187 146 187 152 196 C146 205 130 205 124 196 Z"
+              fill="var(--f5)" fill-opacity=".3" stroke="var(--f5)" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ---- the interaction field, kept but no longer placed in the stamps.
+          Shown once at the foot of the page so the decision stays reversible. ---- -->
+  <g id="ppi-field">
+    <g stroke="var(--ppi)" stroke-width="1.1" fill="none">
+      <path d="M20 36 62 18 M20 36 48 66 M62 18 48 66 M62 18 94 40 M20 36 12 92
+               M12 92 48 66 M48 66 94 40 M12 92 30 148 M48 66 70 116 M30 148 70 116
+               M70 116 98 150 M94 40 98 150 M30 148 16 204 M70 116 54 178 M16 204 54 178
+               M54 178 98 150 M54 178 78 232 M16 204 36 262 M36 262 78 232 M78 232 104 258
+               M98 150 104 258 M36 262 20 326 M78 232 62 300 M20 326 62 300 M62 300 104 258"/>
+      <path d="M270 50 222 24 M222 24 192 48 M270 50 262 116 M222 24 236 82 M262 116 236 82
+               M236 82 192 48 M262 116 266 172 M236 82 212 136 M266 172 212 136 M212 136 232 200
+               M192 48 212 136 M266 172 272 228 M272 228 232 200 M232 200 248 272 M232 200 202 244
+               M248 272 202 244 M202 244 226 310 M270 332 226 310 M226 310 180 274
+               M202 244 180 274 M212 136 202 244"/>
+      <path d="M94 40 192 48 M104 258 180 274"/>
+    </g>
+    <g fill="var(--ppi)">
+      <circle cx="20" cy="36" r="2.4"/><circle cx="62" cy="18" r="2.6"/><circle cx="12" cy="92" r="2.4"/>
+      <circle cx="48" cy="66" r="4.2"/><circle cx="94" cy="40" r="2.8"/><circle cx="30" cy="148" r="2.6"/>
+      <circle cx="70" cy="116" r="3.4"/><circle cx="16" cy="204" r="2.4"/><circle cx="54" cy="178" r="4"/>
+      <circle cx="98" cy="150" r="2.8"/><circle cx="36" cy="262" r="2.6"/><circle cx="78" cy="232" r="3.2"/>
+      <circle cx="20" cy="326" r="2.2"/><circle cx="62" cy="300" r="2.6"/><circle cx="104" cy="258" r="2.8"/>
+      <circle cx="270" cy="50" r="2.4"/><circle cx="222" cy="24" r="2.6"/><circle cx="262" cy="116" r="2.6"/>
+      <circle cx="236" cy="82" r="3.4"/><circle cx="192" cy="48" r="2.8"/><circle cx="266" cy="172" r="2.4"/>
+      <circle cx="212" cy="136" r="4.2"/><circle cx="272" cy="228" r="2.4"/><circle cx="232" cy="200" r="3.2"/>
+      <circle cx="248" cy="272" r="2.6"/><circle cx="202" cy="244" r="4"/><circle cx="270" cy="332" r="2.2"/>
+      <circle cx="226" cy="310" r="2.6"/><circle cx="180" cy="274" r="2.8"/>
+    </g>
+  </g>
+  <clipPath id="cp-por"><rect x="22" y="22" width="286" height="374" rx="6"/></clipPath>
+
+</defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Turn Lab — hourglass stamp</h1>
+    <p>Every stamp on this page is live &mdash; <b>click one to invert the hourglass</b>, and
+      click again to reset.</p>
+    <p>The section directly below is <b>the logo</b>: your own artwork in a pure white stamp
+      border, with the inversion animated. Everything after it is the earlier version I drew from
+      scratch, kept for reference &mdash; it is still where the small-size mark comes from.</p>
+  </div>
+</header>
+
+
+<!-- ================================================================
+     THE ARTWORK LOGO — the supplied PNGs in a white stamp border
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>The logo &mdash; your artwork, white stamp border</h2>
+    <p class="note">Your two PNGs in a pure white perforated border, with the turn animated.
+      <b>Click any of these to invert the hourglass.</b> The spin runs first; the moment it lands,
+      the lower bulb wipes in downward from the neck, so the differentiated cells appear in the
+      order they would have fallen. Nothing cross-fades mid-turn, so there is no ghosting and no
+      double-image &mdash; the frame and the upper bulb never move.</p>
+    <p class="note">The border is a ring now rather than a filled panel: no background, just the
+      perforated edge, the hourglass and the wordmark. Worth knowing what that costs &mdash; the
+      hourglass is white line art, so the logo needs a dark surface under it. On a white page it
+      would disappear. If you need one that survives any background, the line art has to gain a
+      dark outline or the panel has to come back.</p>
+    <p class="note">Two things I changed about the files. I cropped both to their ink: as supplied,
+      the hourglass sat 3.5% left of centre in one canvas and 3.5% right in the other (they are a
+      180&deg; pair, so that follows), which would have made it slide sideways inside the border as
+      it turned. And your description is exact rather than approximate &mdash; spinning
+      <em>before</em> by 180&deg; matches <em>after</em> with a maximum channel difference of 0
+      across 369,526 inked pixels, which is what lets the transition be genuinely seamless. The
+      cropped copies are <kbd>images/logo-stamp-before.png</kbd> and
+      <kbd>images/logo-stamp-after.png</kbd>; your originals are untouched.</p>
+
+    <div class="row">
+      <div class="panel">
+        <button class="stamp-btn cw-white" aria-pressed="false"
+                aria-label="Turn Lab logo — activate to invert the hourglass">
+          <svg width="300" height="422" viewBox="-6 -6 309 430">
+            <g mask="url(#m-ring-por)"><rect width="297" height="418" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(37.84,31.15) scale(1.1066)">
+              <mask id="wipeA" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeA)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <text x="148.5" y="356" dx="2.9" text-anchor="middle"
+                  style="font:800 36px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+          </svg>
+        </button>
+        <span class="cap">Live &mdash; <b>click to invert</b></span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-white fix-a">
+          <svg width="196" height="276" viewBox="-6 -6 309 430">
+            <g mask="url(#m-ring-por)"><rect width="297" height="418" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(37.84,31.15) scale(1.1066)">
+              <mask id="wipeB" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeB)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <text x="148.5" y="356" dx="2.9" text-anchor="middle"
+                  style="font:800 36px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+          </svg>
+        </div>
+        <span class="cap">Before &mdash; pre-inverted</span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-white fix-b">
+          <svg width="196" height="276" viewBox="-6 -6 309 430">
+            <g mask="url(#m-ring-por)"><rect width="297" height="418" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(37.84,31.15) scale(1.1066)">
+              <mask id="wipeC" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeC)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <text x="148.5" y="356" dx="2.9" text-anchor="middle"
+                  style="font:800 36px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+          </svg>
+        </div>
+        <span class="cap">After &mdash; inverted</span>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:22px;">
+      <div class="panel">
+        <button class="stamp-btn cw-white" aria-pressed="false"
+                aria-label="Turn Lab mark — activate to invert the hourglass">
+          <svg width="230" height="230" viewBox="-6 -6 364 364">
+            <g mask="url(#m-ring-sqr)"><rect width="352" height="352" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(59.61,24.69) scale(1.1639)">
+              <mask id="wipeD" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeD)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </button>
+        <span class="cap">Mark only, square<br/><b>click to invert</b></span>
+      </div>
+
+      <div class="panel">
+        <button class="stamp-btn cw-white" aria-pressed="false"
+                aria-label="Turn Lab landscape lockup — activate to invert the hourglass">
+          <svg width="400" height="316" viewBox="-6 -6 430 342">
+            <g mask="url(#m-ring-lan)"><rect width="418" height="330" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(14.58,31.93) scale(1.0082)">
+              <mask id="wipeE" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeE)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <text x="206" y="150" style="font:800 52px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">TURN</text>
+            <text x="206" y="204" style="font:800 52px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">LAB</text>
+            <path d="M206 226 L372 226" stroke="var(--rule)" stroke-width="1.4"/>
+            <text x="206" y="248" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".85">UNIVERSITY OF</text>
+            <text x="206" y="264" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".85">WISCONSIN&#8211;MADISON</text>
+          </svg>
+        </button>
+        <span class="cap">Landscape lockup &mdash; <b>click to invert</b></span>
+      </div>
+
+      <div class="panel" style="align-items:flex-start;gap:18px;">
+        <button class="stamp-btn cw-white" aria-pressed="false"
+                aria-label="Turn Lab nav lockup — activate to invert the hourglass"
+                style="display:flex;align-items:center;gap:12px;">
+          <svg width="27" height="38" viewBox="-6 -6 309 430">
+            <g mask="url(#m-ring-por)"><rect width="297" height="418" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(37.84,31.15) scale(1.1066)">
+              <mask id="wipeF" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeF)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <span style="font:600 20px Fraunces,serif;color:var(--ink);line-height:1.15;text-align:left;">Turn Lab
+            <small style="display:block;font:500 8px Inter,sans-serif;letter-spacing:.18em;color:var(--muted);">UNIVERSITY OF WISCONSIN&ndash;MADISON</small>
+          </span>
+        </button>
+        <div class="sizes cw-white fix-b">
+          <svg width="52" height="52" viewBox="-6 -6 364 364">
+            <g mask="url(#m-ring-sqr)"><rect width="352" height="352" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(59.61,24.69) scale(1.1639)">
+              <mask id="wipeG" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeG)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <svg width="32" height="32" viewBox="-6 -6 364 364">
+            <g mask="url(#m-ring-sqr)"><rect width="352" height="352" rx="3" fill="var(--paper)"/></g>
+            <g transform="translate(59.61,24.69) scale(1.1639)">
+              <mask id="wipeH" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="330">
+                <rect x="-20" y="126.0" width="240" height="200.0" fill="url(#wipeGrad)"
+                      style="transform:translateY(var(--pWipe,-200.0px));
+                             transition:transform var(--pDurB,.7s) ease var(--pDelB,0s)"/>
+              </mask>
+              <g style="transform:translate(100px,130.0px) rotate(var(--pTurn,0deg)) translate(-100px,-130.0px);
+                        transition:transform var(--pDur,1s) cubic-bezier(.6,.02,.24,1) var(--pDelT,.3s)">
+                <image href="../images/logo-stamp-before.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                <g transform="rotate(180 100 130.0)">
+                  <g mask="url(#wipeH)">
+                    <image href="../images/logo-stamp-after.png" x="35.15" y="8" width="129.7" height="244.0"/>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <span class="cap">Nav lockup, and 52 / 32&nbsp;px<br/>&mdash; see the note below</span>
+      </div>
+    </div>
+
+    <p class="note" style="margin:30px 0 0;">
+      One caveat I should be straight about: this version is a raster, so it cannot do the jobs a
+      vector mark does. At 32&nbsp;px the hourglass is about 16&nbsp;px wide and the cells turn to
+      coloured mush, and it can't be printed in one colour, embossed, or cut as vinyl. For the
+      full-size logo on the site, on slides and in print, the artwork is the right call. For the
+      favicon and the nav mark I'd keep a simplified vector alongside it &mdash; Option D below is
+      already built for exactly that, and can be re-cut to match this artwork once you've settled on
+      it. If you'd rather have one asset everywhere, I can trace this artwork to vector.
+    </p>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     OPTION A — PORTRAIT
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Drawn version &mdash; Option A, Portrait</h2>
+    <p class="note">The faithful refinement. Everything from your draft, tightened: real punched
+      perforations instead of a scalloped outline, a vessel drawn symmetric about its waist so the
+      turn is believable, and an empty field so the hourglass carries the whole frame. Turned
+      portrait, because a vertical subject wants a vertical frame &mdash; the landscape draft left
+      large dead margins left and right.</p>
+
+    <div class="row">
+      <div class="panel">
+        <button class="stamp-btn cw-dark" aria-pressed="false" aria-label="Turn Lab stamp, option A — activate to turn the hourglass">
+          <svg width="300" height="380" viewBox="-6 -6 342 430" role="img">
+            <g mask="url(#m-por)">
+              <rect width="330" height="418" rx="4" fill="var(--paper)"/>
+              <rect width="330" height="418" filter="url(#grain-f)" style="mix-blend-mode:overlay;opacity:.09"/>
+            </g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="360" dx="-3.2" text-anchor="middle"
+                  style="font:800 40px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+            <text x="165" y="384" dx="-2.2" text-anchor="middle"
+                  style="font:600 12px Inter,sans-serif;letter-spacing:.34em;fill:var(--sub)">SINCE 2026</text>
+          </svg>
+        </button>
+        <span class="cap">Live &mdash; <b>click to turn</b></span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-dark fix-a">
+          <svg width="205" height="260" viewBox="-6 -6 342 430" aria-hidden="true">
+            <g mask="url(#m-por)"><rect width="330" height="418" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="360" dx="-3.2" text-anchor="middle" style="font:800 40px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+            <text x="165" y="384" dx="-2.2" text-anchor="middle" style="font:600 12px Inter,sans-serif;letter-spacing:.34em;fill:var(--sub)">SINCE 2026</text>
+          </svg>
+        </div>
+        <span class="cap">State 1 &mdash; at rest</span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-dark fix-b">
+          <svg width="205" height="260" viewBox="-6 -6 342 430" aria-hidden="true">
+            <g mask="url(#m-por)"><rect width="330" height="418" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="360" dx="-3.2" text-anchor="middle" style="font:800 40px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+            <text x="165" y="384" dx="-2.2" text-anchor="middle" style="font:600 12px Inter,sans-serif;letter-spacing:.34em;fill:var(--sub)">SINCE 2026</text>
+          </svg>
+        </div>
+        <span class="cap">State 2 &mdash; turned</span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-dark cw-duo fix-b">
+          <svg width="205" height="260" viewBox="-6 -6 342 430" aria-hidden="true">
+            <g mask="url(#m-por)"><rect width="330" height="418" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="360" dx="-3.2" text-anchor="middle" style="font:800 40px Inter,sans-serif;letter-spacing:.16em;fill:var(--word)">TURN LAB</text>
+            <text x="165" y="384" dx="-2.2" text-anchor="middle" style="font:600 12px Inter,sans-serif;letter-spacing:.34em;fill:var(--sub)">SINCE 2026</text>
+          </svg>
+        </div>
+        <span class="cap">State 2, three hues<br/>instead of six</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     OPTION B — LANDSCAPE LOCKUP
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Drawn version &mdash; Option B, Landscape lockup</h2>
+    <p class="note">Keeps the draft's wide format, but earns it: the hourglass moves left and the
+      wordmark stacks beside it, so nothing is padding. This is the shape that sits well as a site
+      header, a letterhead, a slide corner, or a social banner crop. The value tablet in the corner
+      is the piece of stamp grammar the draft was missing.</p>
+
+    <div class="row">
+      <div class="panel">
+        <button class="stamp-btn cw-dark" aria-pressed="false" aria-label="Turn Lab stamp, option B — activate to turn the hourglass">
+          <svg width="420" height="332" viewBox="-6 -6 430 342" role="img">
+            <g mask="url(#m-lan)">
+              <rect width="418" height="330" rx="4" fill="var(--paper)"/>
+              <rect width="418" height="330" filter="url(#grain-f)" style="mix-blend-mode:overlay;opacity:.09"/>
+            </g>
+            <rect x="22" y="22" width="374" height="286" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="358" height="270" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(18,22) scale(1.1)"><use href="#hg-assembly"/></g>
+            <text x="228" y="150" style="font:800 54px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">TURN</text>
+            <text x="228" y="206" style="font:800 54px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">LAB</text>
+            <path d="M228 228 L372 228" stroke="var(--rule)" stroke-width="1.4"/>
+            <text x="228" y="250" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".8">UNIVERSITY OF</text>
+            <text x="228" y="266" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".8">WISCONSIN&#8211;MADISON</text>
+            <text x="228" y="290" style="font:600 12px Inter,sans-serif;letter-spacing:.3em;fill:var(--sub)">SINCE 2026</text>
+            <g transform="translate(348,50)">
+              <rect x="-26" y="-16" width="52" height="32" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.4"/>
+              <text y="6" text-anchor="middle" style="font:700 16px Inter,sans-serif;letter-spacing:.06em;fill:var(--word)" opacity=".85">G0</text>
+            </g>
+          </svg>
+        </button>
+        <span class="cap">Live &mdash; <b>click to turn</b></span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-dark fix-b">
+          <svg width="310" height="245" viewBox="-6 -6 430 342" aria-hidden="true">
+            <g mask="url(#m-lan)"><rect width="418" height="330" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="374" height="286" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="358" height="270" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(18,22) scale(1.1)"><use href="#hg-assembly"/></g>
+            <text x="228" y="150" style="font:800 54px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">TURN</text>
+            <text x="228" y="206" style="font:800 54px Inter,sans-serif;letter-spacing:.1em;fill:var(--word)">LAB</text>
+            <path d="M228 228 L372 228" stroke="var(--rule)" stroke-width="1.4"/>
+            <text x="228" y="250" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".8">UNIVERSITY OF</text>
+            <text x="228" y="266" style="font:600 11px Inter,sans-serif;letter-spacing:.2em;fill:var(--word)" opacity=".8">WISCONSIN&#8211;MADISON</text>
+            <text x="228" y="290" style="font:600 12px Inter,sans-serif;letter-spacing:.3em;fill:var(--sub)">SINCE 2026</text>
+            <g transform="translate(348,50)">
+              <rect x="-26" y="-16" width="52" height="32" rx="4" fill="none" stroke="var(--rule)" stroke-width="1.4"/>
+              <text y="6" text-anchor="middle" style="font:700 16px Inter,sans-serif;letter-spacing:.06em;fill:var(--word)" opacity=".85">G0</text>
+            </g>
+          </svg>
+        </div>
+        <span class="cap">State 2 &mdash; turned</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     OPTION C — ENGRAVED
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Drawn version &mdash; Option C, Engraved</h2>
+    <p class="note">The most literally &ldquo;old stamp&rdquo; of the four: printed on warm paper in
+      one ink, the way a real intaglio commemorative was, with a cancellation postmark struck across
+      the corner. The six fates are told apart by <em>shape</em> rather than colour, with a single
+      carmine reserved for the nuclei &mdash; which means this version survives a one-colour print,
+      an embossing die, and a laser-cut sticker. The cells lose their colour variation here on
+      purpose: an intaglio press only had the one plate.</p>
+
+    <div class="row">
+      <div class="panel">
+        <button class="stamp-btn cw-ink" aria-pressed="false" aria-label="Turn Lab stamp, option C — activate to turn the hourglass">
+          <svg width="300" height="380" viewBox="-6 -6 342 430" role="img">
+            <g mask="url(#m-por)">
+              <rect width="330" height="418" rx="4" fill="var(--paper)"/>
+              <rect width="330" height="418" filter="url(#grain-f)" style="mix-blend-mode:multiply;opacity:.14"/>
+            </g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--ink)" stroke-width="1.6" opacity=".55"/>
+            <rect x="36" y="36" width="258" height="346" rx="2" fill="none" stroke="var(--ink)" stroke-width=".8" opacity=".4"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="357" dx="-1.2" text-anchor="middle"
+                  style="font:600 38px Fraunces,Georgia,serif;letter-spacing:.06em;fill:var(--word)">TURN LAB</text>
+            <path d="M96 370 L234 370" stroke="var(--ink)" stroke-width="1" opacity=".45"/>
+            <text x="165" y="386" dx="-2.6" text-anchor="middle"
+                  style="font:600 11px Inter,sans-serif;letter-spacing:.26em;fill:var(--sub)">MADISON &#183; WISCONSIN &#183; MMXXVI</text>
+            <g opacity=".26">
+              <circle cx="252" cy="86" r="48" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+              <circle cx="252" cy="86" r="39" fill="none" stroke="var(--ink)" stroke-width="1"/>
+              <path id="pm-arc" d="M252 86 m-29 0 a29 29 0 0 0 58 0" fill="none"/>
+              <text style="font:600 10px Inter,sans-serif;letter-spacing:.2em;fill:var(--ink)">
+                <textPath href="#pm-arc" startOffset="50%" text-anchor="middle">TURN LAB</textPath>
+              </text>
+              <text x="252" y="92" text-anchor="middle"
+                    style="font:700 15px Inter,sans-serif;letter-spacing:.06em;fill:var(--ink)">2026</text>
+              <text x="252" y="110" text-anchor="middle"
+                    style="font:600 8px Inter,sans-serif;letter-spacing:.18em;fill:var(--ink)">MADISON WI</text>
+              <g stroke="var(--ink)" stroke-width="2" fill="none">
+                <path d="M208 124 C228 118 278 118 298 124"/>
+                <path d="M210 132 C230 126 276 126 296 132"/>
+              </g>
+            </g>
+          </svg>
+        </button>
+        <span class="cap">Live &mdash; <b>click to turn</b></span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-ink fix-b">
+          <svg width="205" height="260" viewBox="-6 -6 342 430" aria-hidden="true">
+            <g mask="url(#m-por)"><rect width="330" height="418" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--ink)" stroke-width="1.6" opacity=".55"/>
+            <rect x="36" y="36" width="258" height="346" rx="2" fill="none" stroke="var(--ink)" stroke-width=".8" opacity=".4"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="357" dx="-1.2" text-anchor="middle" style="font:600 38px Fraunces,Georgia,serif;letter-spacing:.06em;fill:var(--word)">TURN LAB</text>
+            <path d="M96 370 L234 370" stroke="var(--ink)" stroke-width="1" opacity=".45"/>
+            <text x="165" y="386" dx="-2.6" text-anchor="middle" style="font:600 11px Inter,sans-serif;letter-spacing:.26em;fill:var(--sub)">MADISON &#183; WISCONSIN &#183; MMXXVI</text>
+          </svg>
+        </div>
+        <span class="cap">State 2, no cancellation</span>
+      </div>
+
+      <div class="panel">
+        <div class="cw-dark fix-b">
+          <svg width="205" height="260" viewBox="-6 -6 342 430" aria-hidden="true">
+            <g mask="url(#m-por)"><rect width="330" height="418" rx="4" fill="var(--paper)"/></g>
+            <rect x="22" y="22" width="286" height="374" rx="6" fill="var(--panel)"/>
+            <rect x="30" y="30" width="270" height="358" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(43,21.6) scale(1.22)"><use href="#hg-assembly"/></g>
+            <text x="165" y="357" dx="-1.2" text-anchor="middle" style="font:600 38px Fraunces,Georgia,serif;letter-spacing:.06em;fill:var(--word)">TURN LAB</text>
+            <path d="M96 370 L234 370" stroke="var(--rule)" stroke-width="1"/>
+            <text x="165" y="386" dx="-2.6" text-anchor="middle" style="font:600 11px Inter,sans-serif;letter-spacing:.26em;fill:var(--sub)">MADISON &#183; WISCONSIN &#183; MMXXVI</text>
+          </svg>
+        </div>
+        <span class="cap">The serif wordmark<br/>on the dark field</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     OPTION D — SQUARE MARK
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>Drawn version &mdash; Option D, Square mark</h2>
+    <p class="note">Not an alternative so much as the companion every logo needs: the wordmark drops
+      away and the hourglass carries the stamp alone. This is the avatar, the favicon, the nav
+      brandmark, the sticker. Beside it the same mark simplified for small sizes &mdash; five cells,
+      three fates, coarser teeth &mdash; because the twenty-two-cell version turns to mud under
+      about 40&nbsp;px.</p>
+
+    <div class="row">
+      <div class="panel">
+        <button class="stamp-btn cw-dark" aria-pressed="false" aria-label="Turn Lab mark — activate to turn the hourglass">
+          <svg width="260" height="260" viewBox="-6 -6 364 364" role="img">
+            <g mask="url(#m-sqr)">
+              <rect width="352" height="352" rx="4" fill="var(--paper)"/>
+              <rect width="352" height="352" filter="url(#grain-f)" style="mix-blend-mode:overlay;opacity:.09"/>
+            </g>
+            <rect x="20" y="20" width="312" height="312" rx="6" fill="var(--panel)"/>
+            <rect x="28" y="28" width="296" height="296" rx="4" fill="none" stroke="var(--rule)" stroke-width="1"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-assembly"/></g>
+          </svg>
+        </button>
+        <span class="cap">Live &mdash; <b>click to turn</b></span>
+      </div>
+
+      <div class="panel">
+        <div class="sizes cw-dark fix-a">
+          <svg width="88" height="88" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+          <svg width="52" height="52" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+          <svg width="32" height="32" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+        </div>
+        <span class="cap">Small sizes, state 1<br/>88 / 52 / 32 px</span>
+      </div>
+
+      <div class="panel">
+        <div class="sizes cw-dark fix-b">
+          <svg width="88" height="88" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+          <svg width="52" height="52" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+          <svg width="32" height="32" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+        </div>
+        <span class="cap">Small sizes, state 2</span>
+      </div>
+
+      <div class="panel" style="align-items:flex-start;gap:20px;">
+        <button class="stamp-btn cw-dark" aria-pressed="false" aria-label="Turn Lab nav lockup — activate to turn the hourglass"
+                style="display:flex;align-items:center;gap:13px;">
+          <svg width="40" height="40" viewBox="-8 -8 368 368" aria-hidden="true">
+            <g mask="url(#m-sqr-lg)"><rect width="352" height="352" rx="4" fill="var(--paper)"/></g>
+            <rect x="24" y="24" width="304" height="304" rx="7" fill="var(--panel)"/>
+            <g transform="translate(56,20) scale(1.2)"><use href="#hg-mini"/></g>
+          </svg>
+          <span style="font:600 20px Fraunces,serif;color:var(--ink);line-height:1.15;text-align:left;">Turn Lab
+            <small style="display:block;font:500 8px Inter,sans-serif;letter-spacing:.18em;color:var(--muted);">UNIVERSITY OF WISCONSIN&ndash;MADISON</small>
+          </span>
+        </button>
+        <span class="cap">Nav lockup at true size<br/><b>click to turn</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================
+     THE PIECES ON THEIR OWN
+     ================================================================ -->
+<section class="design">
+  <div class="wrap">
+    <h2>The pieces, close up</h2>
+    <p class="note">So you can judge the parts separately from the frames. The six fates were chosen
+      to say something about this lab rather than to be generically cellular: a quiescent round cell,
+      a migratory spindle, a stellate cell, a lobed cell, a <em>ciliated</em> cell, and a granulated
+      secretory rod for the islet work.</p>
+
+    <div class="row">
+      <div class="panel">
+        <div class="cw-dark">
+          <svg width="230" height="300" viewBox="20 10 160 240" aria-hidden="true">
+            <rect x="20" y="10" width="160" height="240" fill="var(--panel)" rx="8"/>
+            <use href="#hg-glass"/><use href="#sand-rest"/>
+          </svg>
+        </div>
+        <span class="cap">State 1 &mdash; 22 cells, settled</span>
+      </div>
+      <div class="panel">
+        <div class="cw-dark">
+          <svg width="230" height="300" viewBox="20 10 160 240" aria-hidden="true">
+            <rect x="20" y="10" width="160" height="240" fill="var(--panel)" rx="8"/>
+            <use href="#hg-glass"/><use href="#sand-falling"/><use href="#fates-fan"/>
+          </svg>
+        </div>
+        <span class="cap">State 2 &mdash; pooled above,<br/>six committed below</span>
+      </div>
+      <div class="panel">
+        <div class="cw-dark">
+          <svg width="230" height="130" viewBox="0 0 300 170" aria-hidden="true">
+            <rect width="300" height="170" fill="var(--panel)" rx="8"/>
+            <g style="--fc:var(--f1)"><g transform="translate(46,52)"><use href="#fate-round"/></g></g>
+            <g style="--fc:var(--f2)"><g transform="translate(112,52) rotate(-28)"><use href="#fate-spindle"/></g></g>
+            <g style="--fc:var(--f3)"><g transform="translate(184,52)"><use href="#fate-stellate"/></g></g>
+            <g style="--fc:var(--f4)"><g transform="translate(252,52)"><use href="#fate-lobed"/></g></g>
+            <g style="--fc:var(--f5)"><g transform="translate(100,126)"><use href="#fate-ciliated"/></g></g>
+            <g style="--fc:var(--f6)"><g transform="translate(196,122) rotate(14)"><use href="#fate-rod"/></g></g>
+          </svg>
+        </div>
+        <span class="cap">The six fates</span>
+      </div>
+      <div class="panel">
+        <div class="cw-dark">
+          <svg width="176" height="230" viewBox="0 0 286 374" aria-hidden="true">
+            <rect width="286" height="374" fill="var(--panel)" rx="8"/>
+            <g clip-path="url(#cp-por)" opacity="1"><use href="#ppi-field"/></g>
+          </svg>
+        </div>
+        <span class="cap">The interaction field &mdash;<br/>pulled out of the stamps,<br/>kept in case you want it</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="design" style="border-bottom:0;">
+  <div class="wrap">
+    <h2>Notes before this becomes the real logo</h2>
+    <p class="note">
+      The wordmark is live text here so you can retype it &mdash; in the final asset it should be
+      converted to outlines so it can't reflow on a machine without Inter or Fraunces.
+      <kbd>SINCE 2026</kbd> and <kbd>G0</kbd> are placeholders for whatever you want in those slots;
+      tell me the real wording. The six-hue version breaks the site's four-colour rule on purpose,
+      since the fates need to be distinguishable, but Option A's three-hue panel and Option C's
+      one-ink version both stay inside it if you'd rather hold the line.
+    </p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.stamp-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var on = b.classList.toggle('turned');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  });
+</script>
+</body>
+</html>
