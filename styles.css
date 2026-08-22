@@ -440,6 +440,12 @@ footer a { color: #eef0ff; }
   letter-spacing: .1em; margin-top: 11px; }
 .net-body dd { margin: 2px 0 0; font-size: .85rem; }
 .net-body img { width: 66px; height: 66px; border-radius: 50%; object-fit: cover; float: right; margin: 0 0 8px 12px; }
+/* photo-only card: the portrait is the card */
+.net-back.is-photo .net-body { padding: 0; }
+.net-back.is-photo .net-body img { float: none; width: 100%; height: auto; aspect-ratio: 4 / 5;
+  border-radius: 0; margin: 0; display: block; }
+.net-back.is-photo .net-body h3 { padding: 14px 18px 0; }
+.net-back.is-photo .net-body .role { padding: 0 18px 16px; margin: 0; }
 /* only fade the foot when there is genuinely more text below */
 .net-back.is-scrolling::after { content: ""; position: absolute; left: 1px; right: 1px; bottom: 1px; height: 40px;
   border-radius: 0 0 17px 17px; pointer-events: none;

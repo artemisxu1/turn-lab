@@ -122,6 +122,9 @@
 
       const back = document.createElement('div');
       back.className = 'net-face net-back';
+      // a card carrying only a portrait wants to BE the portrait, not a wide
+      // box with a thumbnail floated into the corner of it
+      if (li.classList.contains('photo-only')) back.classList.add('is-photo');
       const close = document.createElement('button');
       close.type = 'button';
       close.className = 'net-close';
@@ -143,6 +146,7 @@
         x: 0, y: 0,      // where it is now
         tx: 0, ty: 0,    // where it is heading
         bx: 0, by: 0,    // its home in the frozen layout
+        wantW: parseInt(li.dataset.cardWidth, 10) || 0,   // this card's own width, if it asked for one
         r: 56, baseR: 56, open: false, drag: false, moved: 0
       };
 
@@ -286,12 +290,13 @@
       n.front.setAttribute('aria-expanded', 'true');
 
       // size the card to its own content, then remember it for the clearance maths
-      n.back.style.width = this.cardW + 'px';
+      const cw = n.wantW ? Math.min(n.wantW, this.cardW) : this.cardW;
+      n.back.style.width = cw + 'px';
       const h = Math.min(n.back.scrollHeight, Math.round(this.h * 0.78));
       n.back.style.height = h + 'px';
-      n.el.style.setProperty('--cw', this.cardW + 'px');
+      n.el.style.setProperty('--cw', cw + 'px');
       n.el.style.setProperty('--ch', h + 'px');
-      n.cardW = this.cardW; n.cardH = h;
+      n.cardW = cw; n.cardH = h;
       n.back.classList.toggle('is-scrolling', n.back.scrollHeight > h + 2);
 
       this.edges.forEach(e => e.el.classList.toggle('is-live', e.a === n.i || e.b === n.i));
@@ -336,15 +341,25 @@
       const up = () => {
         n.drag = false; this.dragging = null;
         n.el.classList.remove('is-dragging');
-        // where you drop it is where it lives now — the bonds just stretch to
-        // follow, since they never break
-        n.bx = n.x; n.by = n.y;
-        n.tx = n.x; n.ty = n.y;
-        if (n.moved > 6) this.moved = true;
+        if (n.moved > 6) {
+          // a real drag: where you drop it is where it lives now — the bonds
+          // just stretch to follow, since they never break
+          n.bx = n.x; n.by = n.y;
+          n.tx = n.x; n.ty = n.y;
+          this.moved = true;
+        } else {
+          // A plain click also lands here, because opening a bubble begins with
+          // a pointerdown. Committing the position in that case would quietly
+          // adopt wherever the bubble happened to be standing as its new home —
+          // and a bubble that had stepped aside for an open card would then
+          // never find its way back to the circle. So leave home alone and just
+          // re-derive where this one should be sitting right now.
+          if (this.open) this.retarget(this.open); else this.homeTargets();
+        }
         e.target.removeEventListener('pointermove', move);
         e.target.removeEventListener('pointerup', up);
         e.target.removeEventListener('pointercancel', up);
-        this.paint();
+        this.run();
       };
       e.target.addEventListener('pointermove', move);
       e.target.addEventListener('pointerup', up);
