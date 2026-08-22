@@ -83,7 +83,7 @@ header.nav {
     radial-gradient(120% 120% at 96% 8%,  rgba(56,214,240,.22) 0%, transparent 50%),
     linear-gradient(158deg, #0a0526 0%, #0d0736 52%, #12093f 100%); }
 .hero-inner { position: relative; z-index: 2; max-width: 940px; pointer-events: none; }
-.hero-inner a, .hero-inner .chip { pointer-events: auto; }
+.hero-inner a, .hero-inner .chip, .hero-inner .hero-stamp { pointer-events: auto; }
 .hero h1 { font-size: clamp(2.5rem, 6vw, 4.3rem); color: #ffffff; margin: 0 0 8px; font-weight: 600;
   text-shadow: 0 0 42px rgba(91,140,255,.45); }
 .hero .tag { display: inline-block; font-family: "Inter", sans-serif; font-size: .82rem; letter-spacing: .16em; text-transform: uppercase; color: #b9c4ff; margin-bottom: 22px; }
@@ -496,3 +496,23 @@ footer a { color: #eef0ff; }
   .nav-links a { font-size: .78rem; }
   .nav-lock { padding: 6px 10px !important; }
 }
+
+/* ---------- hero stamp: the artwork logo, click to invert ----------
+   The spin and the fill are sequential on purpose. The lower bulb wipes in
+   downward from the neck only once the spin has landed, because that is the
+   instant the two artworks are in register; fading them mid-turn would show
+   both at once, 180 degrees apart. Reversing runs the wipe out first. */
+.hero-stamp { display: block; width: 122px; margin: 0 0 26px; padding: 0; border: 0;
+  background: none; cursor: pointer; line-height: 0; border-radius: 10px;
+  --turn: 0deg; --wipe: -200px; --spinDur: 1s; --spinDel: .32s; --wipeDur: .3s; --wipeDel: 0s; }
+.hero-stamp svg { display: block; width: 100%; height: auto; }
+.hero-stamp:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+.hero-stamp.turned { --turn: 180deg; --wipe: 0px; --spinDel: 0s; --wipeDur: .7s; --wipeDel: 1.05s; }
+.hero-stamp .spin { transition: transform var(--spinDur) cubic-bezier(.6,.02,.24,1) var(--spinDel);
+  transform: translate(100px,130px) rotate(var(--turn)) translate(-100px,-130px); }
+.hero-stamp .wipe { transition: transform var(--wipeDur) ease var(--wipeDel);
+  transform: translateY(var(--wipe)); }
+@media (prefers-reduced-motion: reduce) {
+  .hero-stamp { --spinDur: 0s; --wipeDur: 0s; --spinDel: 0s; --wipeDel: 0s; }
+}
+@media (max-width: 720px) { .hero-stamp { width: 96px; margin-bottom: 20px; } }

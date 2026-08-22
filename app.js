@@ -156,3 +156,13 @@
   if (reduce) { frame(); cancelAnimationFrame(raf); }  // draw one static frame
   else frame();
 })();
+
+// ---------- Hero stamp: turn the hourglass (home only) ----------
+(function () {
+  const stamp = document.getElementById('heroStamp');
+  if (!stamp) return;
+  stamp.addEventListener('click', () => {
+    const on = stamp.classList.toggle('turned');
+    stamp.setAttribute('aria-pressed', on);
+  });
+})();
