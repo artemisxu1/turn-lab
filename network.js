@@ -170,8 +170,9 @@
     }
 
     measure() {
+      this.stage.style.height = '';        // always measure the stage's natural height
       const rect = this.stage.getBoundingClientRect();
-      this.w = rect.width; this.h = rect.height;
+      this.w = rect.width; this.h = rect.height; this.baseH = rect.height;
       const compact = this.w < 820;
       this.nodes.forEach(n => {
         n.baseR = compact ? 46 : 56;
@@ -289,10 +290,49 @@
       n.el.classList.add('is-open');
       n.front.setAttribute('aria-expanded', 'true');
 
-      // size the card to its own content, then remember it for the clearance maths
-      const cw = n.wantW ? Math.min(n.wantW, this.cardW) : this.cardW;
+      // Fit the card to its own text.
+      //
+      // This is measured live rather than computed from a width picked in
+      // advance, because how tall a paragraph runs depends on the font that
+      // actually loaded, the platform's text rendering and the reader's zoom.
+      // A number that fits on one machine clips on another. So: measure, and
+      // if it does not fit, widen and measure again.
+      //
+      // Two details that were getting it wrong before. The card is border-box
+      // while scrollHeight reports the padding box, so the border has to be
+      // added back or the content lands a couple of pixels short - enough to
+      // clip the last line. And widening does not help every card: on a
+      // photo-only card a wider box means a taller image, so the loop stops as
+      // soon as widening stops paying.
+      let avail = Math.round(this.h - 24);
+      const maxW = Math.max(this.cardW, Math.min(this.w - 80, 720));
+      const measure = w => {
+        n.back.style.width = w + 'px';
+        n.back.style.height = 'auto';
+        return n.back.scrollHeight + (n.back.offsetHeight - n.back.clientHeight);
+      };
+
+      let cw = n.wantW ? Math.min(n.wantW, this.cardW) : this.cardW;
+      let need = measure(cw);
+      for (let guard = 0; need + 8 > avail && cw < maxW && guard < 14; guard++) {
+        const wider = Math.min(maxW, cw + 40);
+        const shorter = measure(wider);
+        if (shorter >= need) break;      // wider is not buying height back
+        cw = wider; need = shorter;
+      }
+
+      // Widening has run out and the text still does not fit. Rather than clip
+      // it, let the stage carry the height: a taller graph for as long as the
+      // card is open beats a paragraph with its last lines cut off.
+      if (need + 8 > avail) {
+        const grow = need + 8 + 24;
+        this.stage.style.height = grow + 'px';
+        this.h = grow;
+        avail = grow - 24;
+      }
+
+      const h = Math.min(need + 8, avail);
       n.back.style.width = cw + 'px';
-      const h = Math.min(n.back.scrollHeight, Math.round(this.h * 0.78));
       n.back.style.height = h + 'px';
       n.el.style.setProperty('--cw', cw + 'px');
       n.el.style.setProperty('--ch', h + 'px');
@@ -314,6 +354,10 @@
       n.el.classList.remove('is-open');
       n.front.setAttribute('aria-expanded', 'false');
       this.edges.forEach(e => e.el.classList.remove('is-live'));
+      if (this.stage.style.height) {       // give back any height the card borrowed
+        this.stage.style.height = '';
+        this.h = this.baseH;
+      }
       this.homeTargets();
       this.run();
     }

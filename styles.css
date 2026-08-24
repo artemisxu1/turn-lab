@@ -442,7 +442,7 @@ footer a { color: #eef0ff; }
 .net-body img { width: 66px; height: 66px; border-radius: 50%; object-fit: cover; float: right; margin: 0 0 8px 12px; }
 /* photo-only card: the portrait is the card */
 .net-back.is-photo .net-body { padding: 0; }
-.net-back.is-photo .net-body img { float: none; width: 100%; height: auto; aspect-ratio: 4 / 5;
+.net-back.is-photo .net-body img { float: none; width: 100%; height: auto;
   border-radius: 0; margin: 0; display: block; }
 .net-back.is-photo .net-body h3 { padding: 14px 18px 0; }
 .net-back.is-photo .net-body .role { padding: 0 18px 16px; margin: 0; }
