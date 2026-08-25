@@ -196,19 +196,48 @@ header.nav {
 
 /* trainee profiles — photo + structured facts */
 .trainee-list { display: flex; flex-direction: column; gap: 26px; margin-top: 26px; }
-.trainee-card { display: grid; grid-template-columns: 240px 1fr; gap: 32px; background: var(--paper);
+.trainee-card { --tphoto-w: 320px;
+  display: grid; grid-template-columns: var(--tphoto-w) 1fr; gap: 32px; background: var(--paper);
   border: 1px solid var(--teal-soft); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-.trainee-card .tphoto { width: 240px; height: 100%; min-height: 280px; object-fit: cover; object-position: center top; background: var(--teal-soft); }
+.trainee-card .tphoto { width: var(--tphoto-w); height: 100%; min-height: 280px; object-fit: cover; object-position: center top; background: var(--teal-soft); }
 .trainee-card .tbody { padding: 30px 32px 30px 0; }
 .trainee-card h4 { margin: 0 0 2px; font-family: "Fraunces", serif; font-weight: 600; font-size: 1.35rem; }
 .trainee-card .role { color: var(--accent); font-weight: 600; font-size: .95rem; margin: 0 0 16px; }
-.trainee-card .tbio { margin: 0 0 18px; color: var(--muted); font-size: 1rem; max-width: 62ch; }
+.trainee-card .tbio { margin: 0 0 18px; color: var(--muted); font-size: 1rem; }
 .tfacts { margin: 0; display: grid; grid-template-columns: max-content 1fr; column-gap: 22px; row-gap: 10px; align-items: baseline; }
 .tfacts dt { font-size: .72rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; color: var(--teal); }
 .tfacts dd { margin: 0; color: var(--muted); font-size: .95rem; }
+/* A card carrying a blurb runs it across the full width, then sets the photo
+   beside the fact list rather than down the whole card. Because the photo and
+   the fact list share a grid row, the photo takes that row's height, so it
+   comes out short and wide instead of a tall narrow strip. The bottom padding
+   sits on the card rather than on the fact list, so the two stay exactly the
+   same height. */
+.trainee-card.bio-top { --tphoto-w: 430px; --card-pad: 32px; padding-bottom: 30px;
+  grid-template-columns: calc(var(--card-pad) + var(--tphoto-w)) 1fr;
+  grid-template-areas: "head head" "photo facts"; }
+.trainee-card.bio-top .thead  { grid-area: head; padding: 30px var(--card-pad) 0; }
+.trainee-card.bio-top .thead .tbio:last-child { margin-bottom: 0; }
+/* the photo no longer meets any card edge, so it takes a corner radius of its own */
+.trainee-card.bio-top .tphoto-frame { grid-area: photo; position: relative; min-height: 0;
+  margin-left: var(--card-pad); border-radius: 14px; overflow: hidden; }
+.trainee-card.bio-top .tphoto { position: absolute; inset: 0;
+  width: 100%; height: 100%; min-height: 0; object-fit: cover; }
+.trainee-card.bio-top .tbody  { grid-area: facts; padding: 0 var(--card-pad) 0 0; }
+@media (max-width: 820px) {
+  .trainee-card.bio-top { padding-bottom: 0; grid-template-areas: "head" "photo" "facts"; }
+  /* the grid gap is 0 here, so the header carries the space itself */
+  .trainee-card.bio-top .thead { padding: 26px 26px 24px; }
+  /* .trainee-card.bio-top out-specifies the single-column rule above, so the
+     stacked layout has to restate it or the card keeps two columns. */
+  .trainee-card.bio-top { --card-pad: 26px; grid-template-columns: 1fr; }
+  .trainee-card.bio-top .tphoto-frame { aspect-ratio: 4 / 3;
+    margin: 0 var(--card-pad); }
+  .trainee-card.bio-top .tbody { padding: 22px 26px 30px; }
+}
 @media (max-width: 820px) {
   .trainee-card { grid-template-columns: 1fr; gap: 0; }
-  .trainee-card .tphoto { width: 100%; height: auto; aspect-ratio: 4 / 3; min-height: 0; }
+  .trainee-card .tphoto { width: 100%; height: auto; aspect-ratio: 4 / 3; min-height: 0; object-fit: cover; }
   .trainee-card .tbody { padding: 26px 26px 30px; }
   .tfacts { grid-template-columns: 1fr; row-gap: 4px; }
   .tfacts dt { margin-top: 10px; }
@@ -485,6 +514,15 @@ footer a { color: #eef0ff; }
    images touching with no seam. Captions ride on a scrim over the artwork. */
 .rmedia.gallery { display: grid; gap: 0; padding: 0; background: #08041e; }
 .rmedia.gallery.two { grid-template-rows: 1fr 1fr; }
+/* A portrait photo in a media panel. The cell's shape is pinned rather than
+   left to the image, because .rshot img is height:100% and that falls back to
+   the image's intrinsic height against an auto-height grid -- a tall photo
+   would stretch the row far past its siblings. The photo fills the cell and
+   crops, anchored bottom-right, so whatever has to go is taken off the top and
+   the left. */
+.rmedia.gallery.portrait .rshot { aspect-ratio: 4 / 5; }
+.rmedia.gallery.portrait .rshot img { object-position: right 72%; }
+@media (max-width: 900px) { .rmedia.gallery.portrait .rshot { aspect-ratio: 1 / 1; } }
 .rshot { position: relative; margin: 0; min-height: 0; overflow: hidden; }
 .rshot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rshot figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 16px 10px;
