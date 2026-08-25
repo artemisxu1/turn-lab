@@ -35,13 +35,23 @@
   let w = 0, h = 0, dpr = 1, parts = [], raf = 0;
   const mouse = { x: -9999, y: -9999, active: false };
   const LINK = 124, REPEL = 140;
+  // One dial for how briskly the molecules drift. Speed was set in four
+  // separate places — the starting velocity, the brownian nudge, and the floor
+  // and ceiling the drift is held between — so raising it meant keeping four
+  // numbers in step. They all scale off this now: 1 is the original pace.
+  const SPEED = 2;
+  const START_MIN = 0.2 * SPEED, START_RANGE = 0.35 * SPEED;
+  const JITTER = 0.032 * SPEED;          // per-frame brownian nudge
+  const DRIFT_MIN = 0.15 * SPEED;        // never quite settles
+  const DRIFT_MAX = 1.0 * SPEED;         // never gets frantic
+  const PUSH = 0.62 * SPEED;             // how hard the cursor shoves
 
   function init() {
     const count = Math.round(Math.min(95, Math.max(34, (w * h) / 13500)));
     parts = [];
     for (let i = 0; i < count; i++) {
       const r = 3 + Math.random() * 4;
-      const ang = Math.random() * Math.PI * 2, sp = 0.2 + Math.random() * 0.35;
+      const ang = Math.random() * Math.PI * 2, sp = START_MIN + Math.random() * START_RANGE;
       parts.push({
         x: Math.random() * w, y: Math.random() * h,
         vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp,
@@ -105,18 +115,18 @@
         const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
         if (d < REPEL && d > 0.01) {
           const f = (REPEL - d) / REPEL;
-          p.vx += (dx / d) * f * 0.62;
-          p.vy += (dy / d) * f * 0.62;
+          p.vx += (dx / d) * f * PUSH;
+          p.vy += (dy / d) * f * PUSH;
         }
       }
       // spontaneous brownian wander
-      p.vx += (Math.random() - .5) * 0.032;
-      p.vy += (Math.random() - .5) * 0.032;
+      p.vx += (Math.random() - .5) * JITTER;
+      p.vy += (Math.random() - .5) * JITTER;
       p.vx *= 0.992; p.vy *= 0.992;
       // keep a gentle drifting floor and a sane ceiling on speed
       let sp = Math.hypot(p.vx, p.vy);
-      if (sp < 0.15) { const a2 = Math.random() * Math.PI * 2; p.vx += Math.cos(a2) * .15; p.vy += Math.sin(a2) * .15; sp = Math.hypot(p.vx, p.vy); }
-      if (sp > 1.0) { p.vx = p.vx / sp * 1.0; p.vy = p.vy / sp * 1.0; }
+      if (sp < DRIFT_MIN) { const a2 = Math.random() * Math.PI * 2; p.vx += Math.cos(a2) * DRIFT_MIN; p.vy += Math.sin(a2) * DRIFT_MIN; sp = Math.hypot(p.vx, p.vy); }
+      if (sp > DRIFT_MAX) { p.vx = p.vx / sp * DRIFT_MAX; p.vy = p.vy / sp * DRIFT_MAX; }
       p.x += p.vx; p.y += p.vy;
       // bounce off the walls of the cytoplasm
       if (p.x < p.r) { p.x = p.r; p.vx = Math.abs(p.vx) * 0.9; }
