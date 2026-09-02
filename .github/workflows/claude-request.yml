@@ -1,0 +1,51 @@
+name: Site change requests
+
+# Two ways in:
+#   1. The request form on request.html files an issue whose body opens with
+#      the trigger phrase. That is the path Dr. Turn uses.
+#   2. Anyone with write access comments "@claude ..." on that issue or on the
+#      resulting pull request, to ask for a revision.
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+# One run at a time per issue or PR. Without this, a quick follow-up comment
+# starts a second Claude on the same branch while the first is still pushing.
+concurrency:
+  group: claude-request-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  respond:
+    # The action checks the trigger phrase itself, but testing it here as well
+    # keeps a runner from starting on unrelated issues and comments.
+    if: |
+      (github.event_name == 'issues' && contains(github.event.issue.body, '@claude')) ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write        # push the branch holding the change
+      pull-requests: write   # open the PR
+      issues: write          # comment progress back on the issue
+      id-token: write        # required for the action's GitHub App auth
+      actions: read          # read CI results on PRs
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # No `prompt` input, so the action runs in interactive mode: it reads
+          # the request out of the issue or comment that triggered it. The
+          # standing rules live in CLAUDE.md, which it reads on every run.
+          claude_args: |
+            --model claude-sonnet-5
+            --max-turns 30

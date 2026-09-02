@@ -1,0 +1,17 @@
+name = "turnlab-requests"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+REPO = "artemisxu1/turn-lab"
+# The exact origin of the page allowed to post here. Change this to the custom
+# domain once turnlab.org is live: "https://turnlab.org"
+ALLOWED_ORIGIN = "https://artemisxu1.github.io"
+
+# Rate-limit counters. Create the namespace first:
+#   npx wrangler kv namespace create RATE_KV
+# then paste the id it prints below and uncomment.
+# The Worker runs without this binding, but with no rate limiting.
+# [[kv_namespaces]]
+# binding = "RATE_KV"
+# id = "[PLACEHOLDER: kv namespace id]"

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Request a change | Turn Lab</title>
+<meta name="description" content="Ask for a change to the Turn Lab website." />
+<!-- Unlisted page: reachable by direct link only, and gated by a passcode.
+     Kept out of the nav on every other page on purpose. -->
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ===================== SVG SPRITE ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="tm-perf" x="-3" y="-3" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2.2" fill="#000"/>
+    </pattern>
+    <!-- Eight deep teeth a side rather than the large mark's ten: at 40px
+         a finer perforation would land under a pixel and read as fuzz. -->
+    <mask id="tm-ring" maskUnits="userSpaceOnUse" x="-4" y="-4" width="56" height="56">
+      <rect width="48" height="48" fill="#fff"/>
+      <rect x="-3" y="-3" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="45" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
+      <rect x="45" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
+      <rect x="5.5" y="5.5" width="37" height="37" rx="1" fill="#000"/>
+    </mask>
+    <symbol id="turnmark" viewBox="0 0 48 48">
+      <rect x="5" y="5" width="38" height="38" rx="1" fill="#1a1244"/>
+      <g mask="url(#tm-ring)"><rect width="48" height="48" fill="#ffffff"/></g>
+      <image href="images/logo-mark.png" x="14.7" y="6.5" width="18.61" height="35"/>
+    </symbol>
+    <symbol id="netmotif" viewBox="0 0 1200 400">
+      <g stroke="#6f9bff" stroke-width="1.1" opacity="0.55">
+        <line x1="600" y1="200" x2="300" y2="60"/><line x1="600" y1="200" x2="900" y2="60"/>
+        <line x1="600" y1="200" x2="170" y2="320"/><line x1="600" y1="200" x2="1020" y2="330"/>
+        <line x1="300" y1="60" x2="120" y2="210"/><line x1="900" y1="60" x2="1080" y2="210"/>
+        <line x1="300" y1="60" x2="600" y2="200"/><line x1="120" y1="210" x2="170" y2="320"/>
+        <line x1="1080" y1="210" x2="1020" y2="330"/><line x1="300" y1="60" x2="900" y2="60"/>
+      </g>
+      <g fill="#cdd6ff">
+        <circle cx="600" cy="200" r="6" fill="#ff54c4"/>
+        <circle cx="300" cy="60" r="4"/><circle cx="900" cy="60" r="4"/>
+        <circle cx="170" cy="320" r="4"/><circle cx="1020" cy="330" r="4"/>
+        <circle cx="120" cy="210" r="3"/><circle cx="1080" cy="210" r="3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="Turn Lab home">
+      <svg class="brandmark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+      Turn Lab
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="approach.html">Approach</a>
+      <a href="research.html">Research</a>
+      <a href="philosophy.html">Philosophy</a>
+      <a href="people.html">People</a>
+      <a href="publications.html">Publications</a>
+      <a href="news.html">News</a>
+      <a href="lab-adventures.html">Lab Adventures</a>
+      <a href="events.html">Events</a>
+      <a href="join.html">Join &amp; Contact</a>
+      <a href="members.html" class="nav-lock"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="10" rx="2.5"/></svg>Members</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+  </div>
+</header>
+
+<!-- ===================== PAGE HEAD ===================== -->
+<section class="page-head">
+  <svg class="ph-motif" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#netmotif"/></svg>
+  <div class="wrap">
+    <p class="eyebrow">Website</p>
+    <h1>Request a change</h1>
+    <p>Describe what you&rsquo;d like changed on the site in plain words. No need to know how the website is built.</p>
+  </div>
+</section>
+
+<!-- ===================== REQUEST FORM ===================== -->
+<section id="request">
+  <div class="wrap">
+    <div class="join-card reveal">
+
+      <form id="reqForm" class="reqform" autocomplete="off" novalidate>
+        <div class="req-row">
+          <label for="reqName">Your name</label>
+          <input type="text" id="reqName" name="name" required
+                 placeholder="Rachel Turn" autocomplete="name" />
+        </div>
+
+        <div class="req-row">
+          <label for="reqPage">Which page?</label>
+          <select id="reqPage" name="page" required>
+            <option value="" selected>Choose a page&hellip;</option>
+            <option>Home</option>
+            <option>Approach</option>
+            <option>Research</option>
+            <option>Philosophy</option>
+            <option>People</option>
+            <option>Publications</option>
+            <option>News</option>
+            <option>Lab Adventures</option>
+            <option>Events</option>
+            <option>Join &amp; Contact</option>
+            <option>Members</option>
+            <option>Not sure / more than one page</option>
+          </select>
+        </div>
+
+        <div class="req-row">
+          <label for="reqBody">What should change?</label>
+          <!-- Examples sit outside the field, not in its placeholder. Placeholder
+               text disappears the moment you start typing, which is exactly when
+               someone unsure what to write still wants to see them. -->
+          <div class="req-examples">
+            <p>Examples of requests that work well:</p>
+            <ul>
+              <li>On the People page, change my title to Assistant Professor.</li>
+              <li>Add a news item dated 12 September 2026: our first paper was accepted.</li>
+              <li>Amin&rsquo;s favourite animal is a snow leopard &mdash; it currently says PLACEHOLDER.</li>
+              <li>The third paragraph on Research is out of date. Replace it with: &hellip;</li>
+            </ul>
+          </div>
+          <textarea id="reqBody" name="request" rows="7" required
+                    placeholder="Type your change here…"></textarea>
+          <p class="req-hint">The more specific the better. If you want exact wording used, type it out and say &ldquo;use these words exactly&rdquo;.</p>
+        </div>
+
+        <div class="req-row">
+          <label for="reqPass">Passcode</label>
+          <input type="password" id="reqPass" name="passcode" required
+                 placeholder="Lab passcode" autocomplete="current-password" />
+          <p class="req-hint">The same passcode you use for the Members page.</p>
+        </div>
+
+        <div class="req-actions">
+          <button class="btn btn-primary" id="reqSubmit" type="submit">Send request</button>
+        </div>
+      </form>
+
+      <!-- one live region for every outcome, so a screen reader hears the
+           result whether it succeeded or failed -->
+      <p class="req-status" id="reqStatus" role="status" aria-live="polite" hidden></p>
+
+      <div class="req-done" id="reqDone" hidden>
+        <h2>Thank you, that&rsquo;s been sent.</h2>
+        <p>Your request has been logged. It will be drafted, checked over by a human, and then it will appear on the site. Nothing goes live until someone has looked at it.</p>
+        <p>If it&rsquo;s urgent, or if you need to send a photo or a PDF, email it instead &mdash; attachments can&rsquo;t be sent through this form.</p>
+        <p><button class="btn btn-ghost" id="reqAgain" type="button">Send another request</button></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <svg class="foot-mark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+    <p>Turn Lab &middot; University of Wisconsin&ndash;Madison<br/>
+    Signaling in time and space &nbsp;&middot;&nbsp; cell fate change</p>
+  </div>
+</footer>
+
+<script>
+/* The endpoint that receives the request and files it on GitHub. It holds the
+   GitHub token, which is why this page cannot talk to GitHub directly: anything
+   in this file is public. Set this to the Worker URL after deploying it. */
+const REQUEST_ENDPOINT = "[PLACEHOLDER: https://turnlab-requests.<your-subdomain>.workers.dev]";
+
+const form   = document.getElementById('reqForm');
+const status = document.getElementById('reqStatus');
+const done   = document.getElementById('reqDone');
+const submit = document.getElementById('reqSubmit');
+
+function show(msg, isError) {
+  status.textContent = msg;
+  status.hidden = false;
+  status.classList.toggle('is-error', !!isError);
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Validate by hand rather than leaving it to the browser, so the message is
+  // one plain sentence instead of a native tooltip on whichever field.
+  const payload = {
+    name:     document.getElementById('reqName').value.trim(),
+    page:     document.getElementById('reqPage').value,
+    request:  document.getElementById('reqBody').value.trim(),
+    passcode: document.getElementById('reqPass').value
+  };
+  if (!payload.name)     return show('Please add your name so we know who asked.', true);
+  if (!payload.page)     return show('Please choose which page this is about.', true);
+  if (payload.request.length < 10) return show('Please describe the change in a little more detail.', true);
+  if (!payload.passcode) return show('Please enter the passcode.', true);
+
+  submit.disabled = true;
+  show('Sending…', false);
+
+  try {
+    const res = await fetch(REQUEST_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      form.hidden = true;
+      status.hidden = true;
+      done.hidden = false;
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // The Worker distinguishes a wrong passcode from being rate limited, so
+    // say which rather than showing one catch-all failure.
+    if (res.status === 401) show('That passcode isn’t right. Try again.', true);
+    else if (res.status === 429) show('That’s a lot of requests at once. Please wait a few minutes and try again.', true);
+    else show('Something went wrong sending that. Please try again, or email it instead.', true);
+  } catch (err) {
+    show('Could not reach the server. Check your connection, then try again.', true);
+  } finally {
+    submit.disabled = false;
+  }
+});
+
+document.getElementById('reqAgain').addEventListener('click', () => {
+  form.reset();
+  form.hidden = false;
+  done.hidden = true;
+  status.hidden = true;
+  document.getElementById('reqName').focus();
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>
