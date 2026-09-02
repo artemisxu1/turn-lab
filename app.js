@@ -171,8 +171,30 @@
 (function () {
   const stamp = document.getElementById('heroStamp');
   if (!stamp) return;
-  stamp.addEventListener('click', () => {
+  const EVERY = 10000;                 // the hourglass turns itself this often
+  let timer = 0;
+
+  function flip() {
     const on = stamp.classList.toggle('turned');
     stamp.setAttribute('aria-pressed', on);
+  }
+
+  // Turning on its own is motion nobody asked for, so visitors who have asked
+  // for less of it only get the click.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const start = () => { if (!reduce && !timer) timer = setInterval(flip, EVERY); };
+  const stop = () => { clearInterval(timer); timer = 0; };
+
+  stamp.addEventListener('click', () => {
+    flip();
+    stop(); start();   // restart the countdown, so the timer does not undo the
+                       // visitor's own turn a moment after they made it
   });
+
+  // no sense animating a tab nobody is looking at
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  start();
 })();
