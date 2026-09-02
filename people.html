@@ -18,17 +18,17 @@
     <linearGradient id="lg-cell" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#5b8cff"/><stop offset="1" stop-color="#150c3c"/>
     </linearGradient>
-    <pattern id="tm-perf" x="-2" y="-2" width="4" height="4" patternUnits="userSpaceOnUse">
-      <circle cx="2" cy="2" r="1.5" fill="#000"/>
+    <pattern id="tm-perf" x="-3" y="-3" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2.2" fill="#000"/>
     </pattern>
-    <!-- Twelve coarse teeth a side rather than the large mark's forty: at 40px
-         the fine perforation would land under a pixel and read as fuzz. -->
-    <mask id="tm-ring" maskUnits="userSpaceOnUse" x="-3" y="-3" width="54" height="54">
+    <!-- Eight deep teeth a side rather than the large mark's ten: at 40px
+         a finer perforation would land under a pixel and read as fuzz. -->
+    <mask id="tm-ring" maskUnits="userSpaceOnUse" x="-4" y="-4" width="56" height="56">
       <rect width="48" height="48" fill="#fff"/>
-      <rect x="-2" y="-2" width="52" height="4"  fill="url(#tm-perf)"/>
-      <rect x="-2" y="46" width="52" height="4"  fill="url(#tm-perf)"/>
-      <rect x="-2" y="-2" width="4"  height="52" fill="url(#tm-perf)"/>
-      <rect x="46" y="-2" width="4"  height="52" fill="url(#tm-perf)"/>
+      <rect x="-3" y="-3" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="45" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
+      <rect x="45" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
       <rect x="5.5" y="5.5" width="37" height="37" rx="1" fill="#000"/>
     </mask>
     <symbol id="turnmark" viewBox="0 0 48 48">
@@ -36,6 +36,7 @@
            border. logo-mark.png is the same picture resampled once to 240px
            rather than left for the browser to crunch down from 1710 on every
            paint, which is visibly cleaner at this size. -->
+      <rect x="5" y="5" width="38" height="38" rx="1" fill="#1a1244"/>
       <g mask="url(#tm-ring)"><rect width="48" height="48" fill="#ffffff"/></g>
       <image href="images/logo-mark.png" x="14.7" y="6.5" width="18.61" height="35"/>
     </symbol>
@@ -198,22 +199,16 @@
           </div>
         </article>
 
-        <!-- the mascot's row is the photo, her name and her title, nothing else -->
+        <!-- Chloe's row is the photo, her name and her title, nothing else -->
         <article class="trainee-card">
-          <img class="tphoto" src="images/chloe.png" alt="Chloe, the lab mascot, wearing a lab coat" />
+          <img class="tphoto" src="images/chloe.png" alt="Chloe, a Bernese mountain dog, wearing a lab coat" />
           <div class="tbody">
             <h4>Chloe</h4>
-            <p class="role">Lab Mascot</p>
+            <p class="role">Senior Scientist</p>
           </div>
         </article>
 
       </div>
-    </div>
-
-    <div class="trainees reveal">
-      <h3>Past lab members</h3>
-      <p class="lead">Alumni of the lab and where they went next.</p>
-      <p><span class="placeholder">[PLACEHOLDER]</span> No past members listed yet. Send names, photos, roles, education, research interests, outside-the-lab notes, favorite animals, fun facts, and current positions as people move on.</p>
     </div>
   </div>
 </section>
