@@ -156,7 +156,10 @@
 
       <div class="req-done" id="reqDone" hidden>
         <h2>Thank you, that&rsquo;s been sent.</h2>
-        <p>Your request has been logged. It will be drafted, checked over by a human, and then it will appear on the site. Nothing goes live until someone has looked at it.</p>
+        <p>The change is being drafted now. It usually takes a minute or two.</p>
+        <p><strong>Nothing goes live until you say so.</strong> When it&rsquo;s ready, open the
+        <a href="review.html">review page</a>, where you can look at the change on the real
+        page and then publish it or throw it away.</p>
         <p>If it&rsquo;s urgent, or if you need to send a photo or a PDF, email it instead &mdash; attachments can&rsquo;t be sent through this form.</p>
         <p><button class="btn btn-ghost" id="reqAgain" type="button">Send another request</button></p>
       </div>
@@ -178,7 +181,7 @@
 /* The endpoint that receives the request and files it on GitHub. It holds the
    GitHub token, which is why this page cannot talk to GitHub directly: anything
    in this file is public. Set this to the Worker URL after deploying it. */
-const REQUEST_ENDPOINT = "https://turnlab-requests.artemisxu1.workers.dev";
+const REQUEST_ENDPOINT = "https://turnlab-requests.artemisxu1.workers.dev/submit";
 
 const form   = document.getElementById('reqForm');
 const status = document.getElementById('reqStatus');

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Review changes | Turn Lab</title>
+<meta name="description" content="Preview and publish requested changes to the Turn Lab website." />
+<!-- Unlisted page: direct link only, gated by the same passcode as the
+     request form. Kept out of the nav on every other page on purpose. -->
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ===================== SVG SPRITE ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="tm-perf" x="-3" y="-3" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2.2" fill="#000"/>
+    </pattern>
+    <!-- Eight deep teeth a side rather than the large mark's ten: at 40px
+         a finer perforation would land under a pixel and read as fuzz. -->
+    <mask id="tm-ring" maskUnits="userSpaceOnUse" x="-4" y="-4" width="56" height="56">
+      <rect width="48" height="48" fill="#fff"/>
+      <rect x="-3" y="-3" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="45" width="54" height="6"  fill="url(#tm-perf)"/>
+      <rect x="-3" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
+      <rect x="45" y="-3" width="6"  height="54" fill="url(#tm-perf)"/>
+      <rect x="5.5" y="5.5" width="37" height="37" rx="1" fill="#000"/>
+    </mask>
+    <symbol id="turnmark" viewBox="0 0 48 48">
+      <rect x="5" y="5" width="38" height="38" rx="1" fill="#1a1244"/>
+      <g mask="url(#tm-ring)"><rect width="48" height="48" fill="#ffffff"/></g>
+      <image href="images/logo-mark.png" x="14.7" y="6.5" width="18.61" height="35"/>
+    </symbol>
+    <symbol id="netmotif" viewBox="0 0 1200 400">
+      <g stroke="#6f9bff" stroke-width="1.1" opacity="0.55">
+        <line x1="600" y1="200" x2="300" y2="60"/><line x1="600" y1="200" x2="900" y2="60"/>
+        <line x1="600" y1="200" x2="170" y2="320"/><line x1="600" y1="200" x2="1020" y2="330"/>
+        <line x1="300" y1="60" x2="120" y2="210"/><line x1="900" y1="60" x2="1080" y2="210"/>
+        <line x1="300" y1="60" x2="600" y2="200"/><line x1="120" y1="210" x2="170" y2="320"/>
+        <line x1="1080" y1="210" x2="1020" y2="330"/><line x1="300" y1="60" x2="900" y2="60"/>
+      </g>
+      <g fill="#cdd6ff">
+        <circle cx="600" cy="200" r="6" fill="#ff54c4"/>
+        <circle cx="300" cy="60" r="4"/><circle cx="900" cy="60" r="4"/>
+        <circle cx="170" cy="320" r="4"/><circle cx="1020" cy="330" r="4"/>
+        <circle cx="120" cy="210" r="3"/><circle cx="1080" cy="210" r="3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html" aria-label="Turn Lab home">
+      <svg class="brandmark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+      Turn Lab
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="people.html">People</a>
+      <a href="publications.html">Publications</a>
+      <a href="news.html">News</a>
+      <a href="request.html">Request a change</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+  </div>
+</header>
+
+<!-- ===================== PAGE HEAD ===================== -->
+<section class="page-head">
+  <svg class="ph-motif" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#netmotif"/></svg>
+  <div class="wrap">
+    <p class="eyebrow">Website</p>
+    <h1>Review changes</h1>
+    <p>Changes waiting to be published. Look at each one on the real page first, then publish it or throw it away.</p>
+  </div>
+</section>
+
+<!-- ===================== REVIEW ===================== -->
+<section id="review">
+  <div class="wrap">
+
+    <div class="join-card reveal" id="gateWrap">
+      <form id="gateForm" class="reqform" autocomplete="off" novalidate>
+        <div class="req-row">
+          <label for="revPass">Passcode</label>
+          <input type="password" id="revPass" name="passcode" required
+                 placeholder="Lab passcode" autocomplete="current-password" />
+          <p class="req-hint">The same passcode as the request form.</p>
+        </div>
+        <div class="req-actions">
+          <button class="btn btn-primary" id="gateBtn" type="submit">Show changes</button>
+        </div>
+      </form>
+      <p class="req-status" id="gateStatus" role="status" aria-live="polite" hidden></p>
+    </div>
+
+    <div id="list" hidden></div>
+    <p class="req-status" id="listStatus" role="status" aria-live="polite" hidden></p>
+
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <svg class="foot-mark" viewBox="0 0 48 48" aria-hidden="true"><use href="#turnmark"/></svg>
+    <p>Turn Lab &middot; University of Wisconsin&ndash;Madison<br/>
+    Signaling in time and space &nbsp;&middot;&nbsp; cell fate change</p>
+  </div>
+</footer>
+
+<script>
+const ENDPOINT = "https://turnlab-requests.artemisxu1.workers.dev";
+
+const gateWrap   = document.getElementById('gateWrap');
+const gateForm   = document.getElementById('gateForm');
+const gateStatus = document.getElementById('gateStatus');
+const gateBtn    = document.getElementById('gateBtn');
+const list       = document.getElementById('list');
+const listStatus = document.getElementById('listStatus');
+
+/* Held in memory only, for the life of this tab. Never written to storage:
+   this passcode can publish to the live site. */
+let passcode = null;
+
+function say(el, msg, isError) {
+  el.textContent = msg;
+  el.hidden = !msg;
+  el.classList.toggle('is-error', !!isError);
+}
+
+async function call(route, extra) {
+  const res = await fetch(ENDPOINT + route, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ passcode, ...extra })
+  });
+  return { status: res.status, data: await res.json().catch(() => ({})) };
+}
+
+/* Everything the requester sees comes from the repo, but it is still inserted
+   as text nodes rather than markup. A request typed into the form ends up in
+   this string, so treating it as HTML would let a request rewrite this page. */
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text) n.textContent = text;
+  return n;
+}
+
+function card(item) {
+  const c = el('article', 'rev-card');
+
+  c.appendChild(el('p', 'eyebrow', item.requestedBy
+    ? 'Requested by ' + item.requestedBy
+    : 'Requested change'));
+
+  if (item.requestText) {
+    const q = el('blockquote', 'rev-request');
+    q.appendChild(el('p', null, item.requestText));
+    c.appendChild(q);
+  }
+
+  if (item.summary) {
+    c.appendChild(el('h3', 'rev-h', 'What was changed'));
+    c.appendChild(el('p', 'rev-summary', item.summary));
+  }
+
+  const actions = el('div', 'rev-actions');
+
+  if (item.previewReady) {
+    const view = el('a', 'btn btn-teal', 'View the page');
+    view.href = item.previewUrl;
+    view.target = '_blank';
+    view.rel = 'noopener';
+    actions.appendChild(view);
+  } else {
+    actions.appendChild(el('span', 'rev-building', 'Preview still building, refresh in a moment'));
+  }
+
+  const ok = el('button', 'btn btn-primary', 'Publish this');
+  ok.type = 'button';
+  ok.addEventListener('click', () => resolve(item, 'approve', ok, c));
+  actions.appendChild(ok);
+
+  const no = el('button', 'btn btn-ghost', 'Throw it away');
+  no.type = 'button';
+  no.addEventListener('click', () => resolve(item, 'discard', no, c));
+  actions.appendChild(no);
+
+  c.appendChild(actions);
+  c.appendChild(el('p', 'rev-note', item.previewReady
+    ? 'Publishing puts this on the public site within about a minute.'
+    : 'You can publish before the preview is ready, but it is worth waiting to look.'));
+  return c;
+}
+
+async function resolve(item, action, btn, cardEl) {
+  const verb = action === 'approve' ? 'publish this change' : 'throw this change away';
+  if (!confirm('Are you sure you want to ' + verb + '?')) return;
+
+  cardEl.querySelectorAll('button').forEach(b => (b.disabled = true));
+  btn.textContent = action === 'approve' ? 'Publishing…' : 'Removing…';
+
+  const { status, data } = await call('/' + action, { branch: item.branch });
+
+  if (status === 200) {
+    cardEl.replaceChildren(el('p', 'rev-done', action === 'approve'
+      ? 'Published. It will appear on the site within about a minute.'
+      : 'Thrown away. Nothing was changed on the site.'));
+    return;
+  }
+
+  cardEl.querySelectorAll('button').forEach(b => (b.disabled = false));
+  btn.textContent = action === 'approve' ? 'Publish this' : 'Throw it away';
+  say(listStatus, data.detail
+    ? 'That did not work: ' + data.detail
+    : 'That did not work. Please try again.', true);
+}
+
+function render(pending) {
+  list.replaceChildren();
+  if (!pending.length) {
+    list.appendChild(el('div', 'join-card', 'Nothing is waiting to be published right now.'));
+  } else {
+    pending
+      .sort((a, b) => (a.changedAt || '').localeCompare(b.changedAt || ''))
+      .forEach(item => list.appendChild(card(item)));
+  }
+  list.hidden = false;
+}
+
+/* The first /pending call doubles as the passcode check, so there is no
+   separate login round trip to get wrong. */
+gateForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  passcode = document.getElementById('revPass').value;
+  if (!passcode) return say(gateStatus, 'Please enter the passcode.', true);
+
+  gateBtn.disabled = true;
+  say(gateStatus, 'Checking…', false);
+
+  let status, data;
+  try {
+    ({ status, data } = await call('/pending', {}));
+  } catch (err) {
+    gateBtn.disabled = false;
+    passcode = null;
+    return say(gateStatus, 'Could not reach the server. Check your connection.', true);
+  }
+  gateBtn.disabled = false;
+
+  if (status !== 200) {
+    passcode = null;
+    if (status === 401) return say(gateStatus, 'That passcode isn’t right. Try again.', true);
+    if (status === 429) return say(gateStatus, 'Too many tries. Please wait a few minutes.', true);
+    return say(gateStatus, 'Something went wrong. Please try again.', true);
+  }
+
+  gateWrap.hidden = true;
+  say(gateStatus, '', false);
+  render(data.pending);
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

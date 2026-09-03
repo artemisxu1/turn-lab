@@ -588,6 +588,28 @@ footer a { color: #eef0ff; }
 .req-actions .btn[disabled] { opacity: .55; cursor: default; transform: none; box-shadow: none; }
 .req-status { margin: 18px 0 0; font-size: .92rem; color: var(--muted); }
 .req-status.is-error { color: #ffb4d8; }
+/* ---------- review.html: one card per change awaiting publication ---------- */
+.rev-card { background: var(--paper); border: 1px solid var(--teal-soft);
+  border-radius: var(--radius); padding: 26px 28px; margin-bottom: 22px;
+  box-shadow: var(--shadow); }
+.rev-request { margin: 10px 0 18px; padding: 12px 18px; border: 0;
+  border-left: 3px solid var(--teal); background: rgba(0,0,0,.22);
+  border-radius: 0 12px 12px 0; }
+.rev-request p { margin: 0; white-space: pre-wrap; }
+.rev-h { font-family: "Inter", sans-serif; font-size: .78rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--teal);
+  margin: 0 0 8px; }
+.rev-summary { margin: 0 0 22px; white-space: pre-wrap; }
+.rev-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.rev-actions .btn { border: 0; cursor: pointer; font-family: inherit; }
+.rev-actions .btn-ghost { background: transparent; border: 1.5px solid rgba(180,190,255,.55); }
+.rev-actions .btn[disabled] { opacity: .55; cursor: default; transform: none; box-shadow: none; }
+.rev-building { font-size: .88rem; color: var(--muted); }
+.rev-note { margin: 16px 0 0; font-size: .84rem; color: var(--muted); }
+.rev-done { margin: 0; font-weight: 600; color: var(--accent); }
+@media (max-width: 620px) { .rev-actions { flex-direction: column; align-items: stretch; }
+  .rev-actions .btn { text-align: center; } }
+
 .req-done h2 { margin-top: 0; }
 /* .btn-ghost was written for <a>, so it sets a border and no background. On a
    real <button> the UA's default light background shows through behind its

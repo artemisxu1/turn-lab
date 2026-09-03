@@ -10,6 +10,9 @@ preview_urls = false
 
 [vars]
 REPO = "artemisxu1/turn-lab"
+# The Cloudflare Pages project that builds branch previews. It is the parent
+# domain of every preview: <slugified-branch>.<PAGES_PROJECT>.pages.dev
+PAGES_PROJECT = "turn-lab"
 # The exact origin of the page allowed to post here. Change this to the custom
 # domain once turnlab.org is live: "https://turnlab.org"
 ALLOWED_ORIGIN = "https://artemisxu1.github.io"
