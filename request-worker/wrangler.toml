@@ -2,16 +2,21 @@ name = "turnlab-requests"
 main = "index.js"
 compatibility_date = "2025-01-01"
 
+# Both stated explicitly so a future deploy cannot flip them silently, which is
+# what wrangler warns about when they are absent. Preview URLs would serve this
+# same endpoint at extra addresses, which is surface area for no benefit.
+workers_dev = true
+preview_urls = false
+
 [vars]
 REPO = "artemisxu1/turn-lab"
 # The exact origin of the page allowed to post here. Change this to the custom
 # domain once turnlab.org is live: "https://turnlab.org"
 ALLOWED_ORIGIN = "https://artemisxu1.github.io"
 
-# Rate-limit counters. Create the namespace first:
-#   npx wrangler kv namespace create RATE_KV
-# then paste the id it prints below and uncomment.
-# The Worker runs without this binding, but with no rate limiting.
-# [[kv_namespaces]]
-# binding = "RATE_KV"
-# id = "[PLACEHOLDER: kv namespace id]"
+# Rate-limit counters. The Worker runs without this binding, but with no rate
+# limiting at all, so the passcode becomes the only thing standing between a
+# leaked URL and the API bill.
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "f37ceaaace0745a98d23f92ba5104c93"

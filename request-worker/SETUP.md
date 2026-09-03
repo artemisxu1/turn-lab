@@ -72,13 +72,21 @@ npx wrangler login
 # the kv_namespaces block.
 npx wrangler kv namespace create RATE_KV
 
+# Deploy before setting secrets. The other order works, but wrangler has to
+# stop and ask whether to create a Worker that does not exist yet.
+npx wrangler deploy
+
 npx wrangler secret put GITHUB_TOKEN   # the token from step 3
 npx wrangler secret put PASSCODE       # what Dr. Turn will type
+npx wrangler deploy                    # redeploy so the secrets are attached
 
-npx wrangler deploy
+# Confirm both landed. Prints names only, never values.
+npx wrangler secret list
 ```
 
-`wrangler deploy` prints the Worker URL. Set `PASSCODE` to the same value as
+The first `wrangler deploy` prints the Worker URL. On a new Cloudflare account
+it also asks you to claim a workers.dev subdomain, which becomes the middle
+part of that URL, and DNS for it takes a few minutes to resolve. Set `PASSCODE` to the same value as
 the Members page password, so the hint on the form ("the same passcode you use
 for the Members page") is true — otherwise reword that hint.
 
