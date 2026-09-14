@@ -616,3 +616,16 @@ footer a { color: #eef0ff; }
    near-white text, so clear it and keep the border that carries the shape. */
 .req-done .btn { cursor: pointer; font-family: inherit; }
 .req-done .btn-ghost { background: transparent; }
+
+/* ---------- SCHEMATIC FIGURES (Approach) ----------
+   These diagrams are drawn on white, so they get a white mat rather than
+   sitting straight on the navy: the figures' own white would otherwise read
+   as a ragged bright patch against the dark page. */
+.schem-stack { display: grid; gap: 52px; }
+.schem { margin: 0; }
+.schem-frame { background: #fff; border-radius: var(--radius); padding: 18px;
+  border: 1px solid var(--teal-soft); box-shadow: var(--shadow); overflow: hidden; }
+.schem-frame img { width: 100%; height: auto; border-radius: 6px; }
+.schem figcaption { margin-top: 14px; font-size: .9rem; color: var(--muted); max-width: 80ch; }
+.schem figcaption strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .schem-stack { gap: 38px; } .schem-frame { padding: 10px; } }

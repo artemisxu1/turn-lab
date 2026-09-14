@@ -95,26 +95,32 @@
 <!-- ===================== APPROACH ===================== -->
 <section id="approach">
   <div class="wrap">
-    <div class="res-grid reveal" style="grid-template-columns:repeat(2,1fr);">
-      <article class="res-card">
-        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-          <path d="M8 38 L8 10"/><path d="M8 38 L40 38"/><path d="M14 30 L23 21 L30 13"/>
-          <circle cx="31" cy="12" r="3.4" fill="#ff54c4" stroke="none"/>
-        </svg>
-        <h3>STAMP and Analytical Workflow</h3>
-        <p><span class="placeholder">[PLACEHOLDER]</span> Description of the STAMP pipeline and the analytical workflow behind it.</p>
-        <span class="stamp-key">Synchronized Temporal-spatial Analysis via Microscopy and Phosphoproteomics</span>
-      </article>
-      <article class="res-card">
-        <svg class="res-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-          <circle cx="11" cy="17" r="6"/><circle cx="11" cy="33" r="6"/>
-          <path d="M24 5 L24 43" stroke-dasharray="4 5" stroke-width="2.2"/>
-          <circle cx="37" cy="17" r="6" fill="#ff54c4" stroke="none"/>
-          <circle cx="37" cy="33" r="6" fill="#ff54c4" stroke="none" opacity=".55"/>
-        </svg>
-        <h3>Model systems</h3>
-        <p><span class="placeholder">[PLACEHOLDER]</span> Description of the model systems: synchronous systems, and health vs. disease comparisons.</p>
-      </article>
+    <div class="schem-stack">
+      <figure class="schem reveal">
+        <div class="schem-frame">
+          <img src="images/approach-stamp-workflow.png" width="1728" height="960" loading="lazy"
+               alt="Workflow diagram: a mixed cell population is brought to context-dependent synchrony, then split three ways into signaling assays, mass spectrometry, and microscopy; each is sampled over time to give functional windows, temporal abundance clusters, and morphology quantification, converging on functional hypotheses." />
+        </div>
+        <figcaption><strong>Context-dependent synchrony to functional hypotheses.</strong>
+        A homogeneous cell population is read out in parallel by signaling assays,
+        mass spectrometry, and microscopy across time points after induction.</figcaption>
+      </figure>
+
+      <figure class="schem reveal">
+        <div class="schem-frame">
+          <img src="images/approach-stamp-applications.jpeg" width="2000" height="1261" loading="lazy"
+               alt="Diagram of STAMP platforms and applications. Top row: mass spectrometry with Orbitrap Astral Zoom, time-resolved live- and fixed-cell imaging, and functional assays. Bottom row: time-resolved MS, SILAC-STAMP, phosphosignaling, SPOC-AP-MS, and pulsed treatment." />
+        </div>
+        <figcaption><strong>Examples of ways that we employ STAMP to address diverse questions.</strong></figcaption>
+      </figure>
+
+      <figure class="schem reveal">
+        <div class="schem-frame">
+          <img src="images/approach-ciliogenesis-timeline.jpeg" width="2000" height="800" loading="lazy"
+               alt="Timeline of ciliogenesis from serum starvation through 35 hours: metaphase and cytokinesis, ARL13B and TTBK2 recruitment at 4 hours, RAB34 vesicle recruitment at 6, transition zone formation and IFT-B recruitment at 8, cilium projection at 10, TULP3 then IFT-A at 12, axoneme growth spurt at 14, GPCR recruitment at 16, and a functional cilium with TULP3 and IFT-A returned to the base at 35." />
+        </div>
+        <figcaption><strong>The first application of STAMP: mapping the time-resolved stages of ciliogenesis.</strong></figcaption>
+      </figure>
     </div>
   </div>
 </section>
