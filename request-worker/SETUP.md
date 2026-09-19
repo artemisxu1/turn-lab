@@ -137,9 +137,9 @@ script block. Update both if the URL differs from what is checked in.
 Submit a small real request, wait for the branch, then open `review.html`,
 check the preview, and publish. Watch the repo's Actions tab if nothing appears.
 
-### 8. When turnlab.org goes live
+### 8. When theturnlab.org goes live
 
-Set `ALLOWED_ORIGIN` in `wrangler.toml` to `https://turnlab.org` and redeploy.
+Set `ALLOWED_ORIGIN` in `wrangler.toml` to `https://theturnlab.org` and redeploy.
 Until then it is the `github.io` origin, and both pages will be refused from
 any other origin.
 
