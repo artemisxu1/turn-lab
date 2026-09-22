@@ -13,9 +13,9 @@ REPO = "artemisxu1/turn-lab"
 # The Cloudflare Pages project that builds branch previews. It is the parent
 # domain of every preview: <slugified-branch>.<PAGES_PROJECT>.pages.dev
 PAGES_PROJECT = "turn-lab"
-# The exact origin of the page allowed to post here. Change this to the custom
-# domain once theturnlab.org is live: "https://theturnlab.org"
-ALLOWED_ORIGIN = "https://artemisxu1.github.io"
+# The exact origin of the page allowed to post here. One origin only, so this
+# has to match wherever request.html and review.html are actually served from.
+ALLOWED_ORIGIN = "https://theturnlab.org"
 
 # Rate-limit counters. The Worker runs without this binding, but with no rate
 # limiting at all, so the passcode becomes the only thing standing between a

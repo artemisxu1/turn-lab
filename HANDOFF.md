@@ -141,17 +141,18 @@ HTTPS provisions itself within a few hours of the domain resolving. If
 
 ### Afterwards, whenever — the request form
 
-The Worker accepts requests from one exact web address, currently the
-`github.io` one, so `request.html` and `review.html` stop working the moment
-the site moves. Nothing else is affected, and it waits as long as you like:
+The Worker accepts requests from one exact web address, so `request.html` and
+`review.html` stop working the moment the site moves. `wrangler.toml` already
+names the new address; it just has to be deployed, which needs the Cloudflare
+login:
 
 ```bash
 cd request-worker
-# set ALLOWED_ORIGIN = "https://theturnlab.org" in wrangler.toml
 npx wrangler deploy
 ```
 
-Until that runs, changes go in through git as normal.
+Until that runs, changes go in through git as normal. Nothing else is
+affected.
 
 ## What Rachel can and cannot do as a collaborator
 
