@@ -52,9 +52,11 @@ Pages, source `main`. The `CNAME` file reattaches the domain. Change the
 `www` record at Namecheap to the new account's `github.io` address. HTTPS
 reissues itself within an hour. Twenty minutes, no data lost.
 
-Verifying the domain under your own GitHub account beforehand (Settings,
-Pages, Add a domain, one TXT record at Namecheap) stops any other account's
-repo from ever claiming it.
+Once the repo is under your own account, verify the domain there (Settings,
+Pages, Add a domain, one TXT record at Namecheap) so no other account's repo
+can ever claim it. Do not verify it while the site is still served from
+Artemis's repo: GitHub releases the domain from any other owner's site the
+moment it is verified, which would take the site down.
 
 ## Gotchas
 
