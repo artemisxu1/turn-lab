@@ -14,8 +14,7 @@
 // Google Drive, Benchling) that require their own sign-in, and put only
 // links and short descriptions on this page.
 //
-// Current password: turnlab-crossroads   <-- change this before sharing
-const PASS_HASH = '82528be40dcfca4e6494b8d806bf71e6c462b9ba0e6344053c790780f24e859a';
+const PASS_HASH = '10af9360a65bd706b966ea074968c5bd3eb6fab648e41c08901438f4f3fc9bf6';
 
 (function () {
   const form = document.getElementById('gateForm');
