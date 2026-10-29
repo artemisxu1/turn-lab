@@ -486,8 +486,9 @@ footer a { color: #eef0ff; }
 @media (max-width: 900px) { .net-items { grid-template-columns: 1fr; } }
 
 /* ---------- HOME: stripped back to the hero ---------- */
-.hero-affil { margin: 0 0 4px; color: var(--muted); font-size: .92rem; }
-.hero-affil i { font-style: normal; opacity: .42; padding: 0 7px; }
+.hero-affil { margin: 0 0 4px; color: var(--muted); font-size: .88rem; letter-spacing: -.005em; }
+.hero-affil i { font-style: normal; opacity: .42; padding: 0 6px; }
+@media (min-width: 900px) { .hero-affil { white-space: nowrap; } }
 .canvas-note { position: absolute; left: 0; right: 0; bottom: 18px; z-index: 3; text-align: center;
   color: rgba(236,237,255,.66); font-size: .7rem; letter-spacing: .02em; padding: 0 24px;
   text-shadow: 0 1px 10px rgba(4,2,18,.95), 0 0 3px rgba(4,2,18,.9); }
